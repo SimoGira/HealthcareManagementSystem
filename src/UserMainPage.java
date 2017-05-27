@@ -18,12 +18,14 @@ public class UserMainPage extends JFrame implements WindowListener {
 	 */
 	private static final long serialVersionUID = 101L;
 	private JPanel contentPane;
+	private JFrame parentFrame;
 
 	/**
 	 * Create the frame.
 	 */
-	public UserMainPage() {
-
+	public UserMainPage(JFrame parentFrame) {
+		
+		this.parentFrame = parentFrame;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		setLocationRelativeTo(null);
@@ -58,6 +60,14 @@ public class UserMainPage extends JFrame implements WindowListener {
 
 		JPanel panelEmployee = new JPanel();
 		contentPane.add(panelEmployee, "EMPLOYEE");
+		panelEmployee.setLayout(new BorderLayout(0, 0));
+		
+		JPanel panel_Employee_north = new JPanel();
+		panelEmployee.add(panel_Employee_north, BorderLayout.NORTH);
+		
+		JLabel lblWelcomeEmployee = new JLabel("WELCOME EMPLOYEE:");
+		lblWelcomeEmployee.setFont(new Font("Tahoma", Font.BOLD, 13));
+		panel_Employee_north.add(lblWelcomeEmployee);
 		//setExtendedState(MAXIMIZED_BOTH);
 		setVisible(true);
 		addWindowListener(this);
@@ -71,8 +81,8 @@ public class UserMainPage extends JFrame implements WindowListener {
 	public void windowClosed(WindowEvent e) {}
 	@Override
 	public void windowClosing(WindowEvent e) {
-		setVisible(true);
-		ApplicationMain.instance.start();
+		parentFrame.setLocationRelativeTo(null);
+		parentFrame.setVisible(true);
 	}
 
 	@Override

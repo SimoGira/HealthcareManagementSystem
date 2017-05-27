@@ -1,6 +1,10 @@
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
@@ -16,8 +21,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 public class ApplicationMain {
 
-	private JFrame frame;
-	public static ApplicationMain instance;
+	public JFrame frame;
 	private JTextField textField_usr;
 	private JTextField textField_passwd;
 
@@ -25,6 +29,7 @@ public class ApplicationMain {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+
 		try {
 			// Set System L&F
 			UIManager.setLookAndFeel(
@@ -34,6 +39,7 @@ public class ApplicationMain {
 		catch (ClassNotFoundException e) {}
 		catch (InstantiationException e) {}
 		catch (IllegalAccessException e) {}
+
 
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -51,7 +57,6 @@ public class ApplicationMain {
 	 * Create the application.
 	 */
 	public ApplicationMain() {
-		instance = this;
 		initialize();
 	}
 
@@ -66,55 +71,84 @@ public class ApplicationMain {
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
 		frame.setLocationRelativeTo(null);
 
-		JPanel panel_north = new JPanel();
-		frame.getContentPane().add(panel_north, BorderLayout.NORTH);
+		JPanel panelNorth = new JPanel();
+		frame.getContentPane().add(panelNorth, BorderLayout.NORTH);
 
 		JLabel lbl_title_application = new JLabel("HEALTHCARE MANAGEMENT SYSTEM");
 		lbl_title_application.setFont(new Font("Tahoma", Font.BOLD, 15));
-		panel_north.add(lbl_title_application);
+		panelNorth.add(lbl_title_application);
 
-		JPanel panel_center = new JPanel();
-		frame.getContentPane().add(panel_center, BorderLayout.CENTER);
+		JPanel panelCenter = new JPanel();
+		frame.getContentPane().add(panelCenter, BorderLayout.CENTER);
+		GridBagLayout gbl_panelCenter = new GridBagLayout();
+		gbl_panelCenter.columnWidths = new int[] {0};
+		gbl_panelCenter.rowHeights = new int[] {0};
+		gbl_panelCenter.columnWeights = new double[]{0.0, 0.0};
+		gbl_panelCenter.rowWeights = new double[]{0.0, 0.0};
+		panelCenter.setLayout(gbl_panelCenter);
 
 		JLabel lblUsername = new JLabel("Username:");
+		GridBagConstraints gbc_lblUsername = new GridBagConstraints();
+		gbc_lblUsername.fill = GridBagConstraints.BOTH;
+		gbc_lblUsername.insets = new Insets(0, 0, 5, 5);
+		gbc_lblUsername.gridx = 0;
+		gbc_lblUsername.gridy = 0;
+		panelCenter.add(lblUsername, gbc_lblUsername);
 		lblUsername.setHorizontalAlignment(SwingConstants.TRAILING);
-		panel_center.add(lblUsername);
+		lblUsername.setAlignmentX(Component.RIGHT_ALIGNMENT);
 
-		textField_usr = new JTextField();
-		panel_center.add(textField_usr);
-		textField_usr.setColumns(10);
-
+		textField_usr = new JTextField(16);
+		GridBagConstraints gbc_textField_usr = new GridBagConstraints();
+		gbc_textField_usr.fill = GridBagConstraints.BOTH;
+		gbc_textField_usr.insets = new Insets(0, 0, 5, 5);
+		gbc_textField_usr.gridx = 1;
+		gbc_textField_usr.gridy = 0;
+		panelCenter.add(textField_usr, gbc_textField_usr);
+		
 		JLabel lblPassword = new JLabel("Password:");
+		GridBagConstraints gbc_lblPassword = new GridBagConstraints();
+		gbc_lblPassword.fill = GridBagConstraints.BOTH;
+		gbc_lblPassword.insets = new Insets(0, 0, 0, 5);
+		gbc_lblPassword.gridx = 0;
+		gbc_lblPassword.gridy = 1;
+		panelCenter.add(lblPassword, gbc_lblPassword);
 		lblPassword.setHorizontalAlignment(SwingConstants.TRAILING);
-		panel_center.add(lblPassword);
+		lblPassword.setAlignmentX(Component.RIGHT_ALIGNMENT);
 
-		textField_passwd = new JTextField();
-		panel_center.add(textField_passwd);
-		textField_passwd.setColumns(10);
+		textField_passwd = new JPasswordField(16);
+		GridBagConstraints gbc_textField_passwd = new GridBagConstraints();
+		gbc_textField_passwd.insets = new Insets(0, 0, 0, 5);
+		gbc_textField_passwd.fill = GridBagConstraints.BOTH;
+		gbc_textField_passwd.gridx = 1;
+		gbc_textField_passwd.gridy = 1;
+		panelCenter.add(textField_passwd, gbc_textField_passwd);
 
-		JPanel panel_btns = new JPanel();
-		frame.getContentPane().add(panel_btns, BorderLayout.SOUTH);
+
+		JPanel panelSouth = new JPanel();
+		frame.getContentPane().add(panelSouth, BorderLayout.SOUTH);
 		JButton btnLogin = new JButton("Login");
-		panel_btns.add(btnLogin);
+		panelSouth.add(btnLogin);
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				new UserMainPage();
+				
+				// check credentials
+				// ...
+				
+				new UserMainPage(frame);
 				frame.setVisible(false);
 			}
 		});
 
+		// close the application
 		JButton btnCancel = new JButton("Cancel");
-		panel_btns.add(btnCancel);
+		panelSouth.add(btnCancel);
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				System.exit(0);
 			}
 		});
 
+		frame.pack();
+		frame.setResizable(false);
 	}
-
-	public void start() {
-		frame.setVisible(true);	
-	}
-
 }
