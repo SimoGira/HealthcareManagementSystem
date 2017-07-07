@@ -25,10 +25,10 @@ VALUES
  ('NEOPLASIE VARIE', 'cp02', 'via alighieri 8', '02235', 'Verona', 'VR', '12/12/1990',' '),
  ('AMBULATORIO CELIACHIA', 'cp03', 'via alighieri 8', '02235', 'Verona', 'VR', '12/12/1990',' ');
  
-INSERT INTO services( ambulatory, company, name )
+INSERT INTO service( ambulatory, company, name )
 VALUES
 ('GENETICA MEDICA', 'cp01', 'visita oncologica'),
 ('GENETICA MEDICA', 'cp01', 'visita geriatrica'),
-('ANGIOEDEMA EREDITARIO ED ALTRE FORME DI ANGIOEDEMA', 'cp02', 'visita angiodema');
+('ANGIOEDEMA EREDITARIO ED ALTRE FORME DI ANGIOEDEMA', 'cp01', 'visita angiodema');
 
  
