@@ -2,12 +2,12 @@ import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-public class Database {
+public class Model {
 	private String url;
 	private String user;
 	private String password;
 
-	public Database() throws ClassNotFoundException, SQLException, ParseException{
+	public Model() throws ClassNotFoundException, SQLException, ParseException{
 		setParameters();
 		updateDb();
 	}
@@ -20,7 +20,7 @@ public class Database {
 	}
 
 	private void updateDb() throws ClassNotFoundException, ParseException {
-		// TODO replace the below code with correct instruction data
+		// TODO replace below instructions code with correct instruction data
 		Class.forName("org.postgresql.Driver");
 		try(Connection con = DriverManager.getConnection(url, user, password)){
 
@@ -42,7 +42,7 @@ public class Database {
 				pst.setString(2, "KARIM");
 				pst.setInt(3, 24);
 				
-				pst.setDate(4, new Date( sdf.parse("16/12/1990").getTime()));
+				pst.setDate(4, new Date( sdf.parse("16/12/1991").getTime()));
 				pst.setString(5, "ADRIANO");
 				pst.setInt(6, 25);
 				

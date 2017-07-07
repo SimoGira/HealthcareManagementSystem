@@ -21,7 +21,7 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-public class ApplicationMain {
+public class View {
 
 	public JFrame frame;
 	private JTextField textField_usr;
@@ -33,8 +33,9 @@ public class ApplicationMain {
 	 */
 	public static void main(String[] args) throws ParseException {
 		
+		// la connessione al database va messa nel DataMapper (come ha fatto posenato) altrimenti nel model(credo)
 		try {
-			Database db = new Database();
+			Model db = new Model();
 		} catch (ClassNotFoundException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -57,7 +58,7 @@ public class ApplicationMain {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ApplicationMain window = new ApplicationMain();
+					View window = new View();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -69,7 +70,7 @@ public class ApplicationMain {
 	/**
 	 * Create the application.
 	 */
-	public ApplicationMain() {
+	public View() {
 		initialize();
 	}
 
@@ -78,7 +79,7 @@ public class ApplicationMain {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(ApplicationMain.class.getResource("/img/caduceus-symbol-128[1].png")));
+		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(View.class.getResource("/img/caduceus-symbol-128[1].png")));
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
@@ -141,16 +142,7 @@ public class ApplicationMain {
 		frame.getContentPane().add(panelSouth, BorderLayout.SOUTH);
 		JButton btnLogin = new JButton("Login");
 		panelSouth.add(btnLogin);
-		btnLogin.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				
-				// check credentials
-				// ...
-				
-				new UserMainPage(frame);
-				frame.setVisible(false);
-			}
-		});
+		
 
 		// close the application
 		JButton btnCancel = new JButton("Cancel");
