@@ -23,6 +23,10 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Panel;
+import javax.swing.JSplitPane;
+import javax.swing.JToolBar;
+import javax.swing.JList;
 
 public class View {
 
@@ -119,7 +123,7 @@ public class View {
 		gbl_panelCenterPatient.rowWeights = new double[] { 0.0, 0.0 };
 		panelCenterPatient.setLayout(gbl_panelCenterPatient);
 
-		JLabel lblCodicefiscale = new JLabel("codicefiscale:");
+		JLabel lblCodicefiscale = new JLabel("Fiscal code:");
 		GridBagConstraints gbc_lblCodicefiscale = new GridBagConstraints();
 		gbc_lblCodicefiscale.insets = new Insets(0, 0, 5, 5);
 		gbc_lblCodicefiscale.anchor = GridBagConstraints.EAST;
@@ -235,6 +239,22 @@ public class View {
 
 		JPanel employeePanel = new JPanel();
 		frame.getContentPane().add(employeePanel, "name_11222990618502");
+		
+		JSplitPane splitPane = new JSplitPane();
+		frame.getContentPane().add(splitPane, "name_18581128151280");
+		
+		JPanel ClinicsPanel = new JPanel();
+		splitPane.setLeftComponent(ClinicsPanel);
+		ClinicsPanel.setLayout(new BorderLayout(0, 0));
+		
+		JToolBar toolBar = new JToolBar();
+		ClinicsPanel.add(toolBar, BorderLayout.NORTH);
+		
+		JList list = new JList();
+		ClinicsPanel.add(list, BorderLayout.CENTER);
+		
+		JPanel ServicesPanel = new JPanel();
+		splitPane.setRightComponent(ServicesPanel);
 
 		frame.pack();
 		frame.setResizable(false);
