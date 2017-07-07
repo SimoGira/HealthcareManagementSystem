@@ -20,6 +20,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import java.awt.CardLayout;
+import javax.swing.JTabbedPane;
 
 public class View {
 
@@ -29,11 +31,13 @@ public class View {
 
 	/**
 	 * Launch the application.
-	 * @throws ParseException 
+	 * 
+	 * @throws ParseException
 	 */
 	public static void main(String[] args) throws ParseException {
-		
-		// la connessione al database va messa nel DataMapper (come ha fatto posenato) altrimenti nel model(credo)
+
+		// la connessione al database va messa nel DataMapper (come ha fatto
+		// posenato) altrimenti nel model(credo)
 		try {
 			Model db = new Model();
 		} catch (ClassNotFoundException e1) {
@@ -46,14 +50,12 @@ public class View {
 
 		try {
 			// Set System L&F
-			UIManager.setLookAndFeel(
-					UIManager.getSystemLookAndFeelClassName());
-		} 
-		catch (UnsupportedLookAndFeelException e) {}
-		catch (ClassNotFoundException e) {}
-		catch (InstantiationException e) {}
-		catch (IllegalAccessException e) {}
-
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (UnsupportedLookAndFeelException e) {
+		} catch (ClassNotFoundException e) {
+		} catch (InstantiationException e) {
+		} catch (IllegalAccessException e) {
+		}
 
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -79,26 +81,42 @@ public class View {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(View.class.getResource("/img/caduceus-symbol-128[1].png")));
-		frame.setBounds(100, 100, 450, 300);
+		frame.setIconImage(
+				Toolkit.getDefaultToolkit().getImage(View.class.getResource("/img/caduceus-symbol-128[1].png")));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(new BorderLayout(0, 0));
 		frame.setLocationRelativeTo(null);
+		frame.getContentPane().setLayout(new CardLayout(0, 0));
+
+		JPanel loginPanel = new JPanel();
+		frame.getContentPane().add(loginPanel, "name_11222847950945");
+		loginPanel.setLayout(new BorderLayout(0, 0));
 
 		JPanel panelNorth = new JPanel();
-		frame.getContentPane().add(panelNorth, BorderLayout.NORTH);
+		loginPanel.add(panelNorth, BorderLayout.NORTH);
+		panelNorth.setLayout(new BorderLayout(0, 0));
 
 		JLabel lbl_title_application = new JLabel("HEALTHCARE MANAGEMENT SYSTEM");
+		lbl_title_application.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_title_application.setFont(new Font("Tahoma", Font.BOLD, 15));
-		panelNorth.add(lbl_title_application);
+		panelNorth.add(lbl_title_application, BorderLayout.NORTH);
+
+		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		panelNorth.add(tabbedPane);
+
+		JPanel patientLogin = new JPanel();
+		tabbedPane.addTab("Patient", null, patientLogin, null);
+
+		JPanel employeeLogin = new JPanel();
+		tabbedPane.addTab("Employee", null, employeeLogin, null);
+		employeeLogin.setLayout(new BorderLayout(0, 0));
 
 		JPanel panelCenter = new JPanel();
-		frame.getContentPane().add(panelCenter, BorderLayout.CENTER);
+		employeeLogin.add(panelCenter, BorderLayout.CENTER);
 		GridBagLayout gbl_panelCenter = new GridBagLayout();
-		gbl_panelCenter.columnWidths = new int[] {0};
-		gbl_panelCenter.rowHeights = new int[] {0};
-		gbl_panelCenter.columnWeights = new double[]{0.0, 0.0};
-		gbl_panelCenter.rowWeights = new double[]{0.0, 0.0};
+		gbl_panelCenter.columnWidths = new int[] { 0 };
+		gbl_panelCenter.rowHeights = new int[] { 0 };
+		gbl_panelCenter.columnWeights = new double[] { 0.0, 0.0 };
+		gbl_panelCenter.rowWeights = new double[] { 0.0, 0.0 };
 		panelCenter.setLayout(gbl_panelCenter);
 
 		JLabel lblUsername = new JLabel("Username:");
@@ -118,7 +136,7 @@ public class View {
 		gbc_textField_usr.gridx = 1;
 		gbc_textField_usr.gridy = 0;
 		panelCenter.add(textField_usr, gbc_textField_usr);
-		
+
 		JLabel lblPassword = new JLabel("Password:");
 		GridBagConstraints gbc_lblPassword = new GridBagConstraints();
 		gbc_lblPassword.fill = GridBagConstraints.BOTH;
@@ -137,12 +155,10 @@ public class View {
 		gbc_textField_passwd.gridy = 1;
 		panelCenter.add(textField_passwd, gbc_textField_passwd);
 
-
 		JPanel panelSouth = new JPanel();
-		frame.getContentPane().add(panelSouth, BorderLayout.SOUTH);
+		employeeLogin.add(panelSouth, BorderLayout.SOUTH);
 		JButton btnLogin = new JButton("Login");
 		panelSouth.add(btnLogin);
-		
 
 		// close the application
 		JButton btnCancel = new JButton("Cancel");
@@ -152,6 +168,12 @@ public class View {
 				System.exit(0);
 			}
 		});
+
+		JPanel userPanel = new JPanel();
+		frame.getContentPane().add(userPanel, "name_11222960382586");
+
+		JPanel employeePanel = new JPanel();
+		frame.getContentPane().add(employeePanel, "name_11222990618502");
 
 		frame.pack();
 		frame.setResizable(false);
