@@ -32,6 +32,8 @@ public class View {
 	public JFrame frame;
 	private JTextField textField_usr;
 	private JTextField textField_passwd;
+	private JTextField textFieldFiscalCode;
+	private JPasswordField passwordFieldPIN;
 
 	/**
 	 * Launch the application.
@@ -114,25 +116,46 @@ public class View {
 		JPanel panelCenterPatient = new JPanel();
 		patientLogin.add(panelCenterPatient, BorderLayout.CENTER);
 		GridBagLayout gbl_panelCenterPatient = new GridBagLayout();
-		gbl_panelCenterPatient.rowHeights = new int[] {0, 0, 0};
-		gbl_panelCenterPatient.columnWidths = new int[] {0, 0};
-		gbl_panelCenterPatient.columnWeights = new double[] { 0.0};
-		gbl_panelCenterPatient.rowWeights = new double[] { 0.0, 0.0};
+		gbl_panelCenterPatient.columnWeights = new double[] { 0.0, 0.0 };
+		gbl_panelCenterPatient.rowWeights = new double[] { 0.0, 0.0 };
 		panelCenterPatient.setLayout(gbl_panelCenterPatient);
-		
+
 		JLabel lblFiscalCode = new JLabel("Fiscal Code:");
+		lblFiscalCode.setHorizontalAlignment(SwingConstants.TRAILING);
+		lblFiscalCode.setAlignmentX(1.0f);
 		GridBagConstraints gbc_lblFiscalCode = new GridBagConstraints();
+		gbc_lblFiscalCode.anchor = GridBagConstraints.EAST;
+		gbc_lblFiscalCode.fill = GridBagConstraints.VERTICAL;
 		gbc_lblFiscalCode.insets = new Insets(0, 0, 5, 5);
 		gbc_lblFiscalCode.gridx = 0;
 		gbc_lblFiscalCode.gridy = 0;
 		panelCenterPatient.add(lblFiscalCode, gbc_lblFiscalCode);
-		
+
+		textFieldFiscalCode = new JTextField(16);
+		GridBagConstraints gbc_textFieldFiscalCode = new GridBagConstraints();
+		gbc_textFieldFiscalCode.insets = new Insets(0, 0, 5, 0);
+		gbc_textFieldFiscalCode.fill = GridBagConstraints.BOTH;
+		gbc_textFieldFiscalCode.gridx = 1;
+		gbc_textFieldFiscalCode.gridy = 0;
+		panelCenterPatient.add(textFieldFiscalCode, gbc_textFieldFiscalCode);
+
 		JLabel lblPin = new JLabel("PIN:");
+		lblPin.setHorizontalAlignment(SwingConstants.TRAILING);
+		lblPin.setAlignmentX(1.0f);
 		GridBagConstraints gbc_lblPin = new GridBagConstraints();
+		gbc_lblPin.anchor = GridBagConstraints.EAST;
 		gbc_lblPin.insets = new Insets(0, 0, 0, 5);
+		gbc_lblPin.fill = GridBagConstraints.VERTICAL;
 		gbc_lblPin.gridx = 0;
-		gbc_lblPin.gridy = 2;
+		gbc_lblPin.gridy = 1;
 		panelCenterPatient.add(lblPin, gbc_lblPin);
+
+		passwordFieldPIN = new JPasswordField(16);
+		GridBagConstraints gbc_passwordFieldPIN = new GridBagConstraints();
+		gbc_passwordFieldPIN.fill = GridBagConstraints.BOTH;
+		gbc_passwordFieldPIN.gridx = 1;
+		gbc_passwordFieldPIN.gridy = 1;
+		panelCenterPatient.add(passwordFieldPIN, gbc_passwordFieldPIN);
 
 		JPanel panelSouthPatient = new JPanel();
 		patientLogin.add(panelSouthPatient, BorderLayout.SOUTH);
@@ -152,7 +175,7 @@ public class View {
 		JPanel panelCenterEmployee = new JPanel();
 		employeeLogin.add(panelCenterEmployee, BorderLayout.CENTER);
 		GridBagLayout gbl_panelCenterEmployee = new GridBagLayout();
-		gbl_panelCenterEmployee.columnWidths = new int[] { 0 };
+		gbl_panelCenterEmployee.columnWidths = new int[] { 0, 0 };
 		gbl_panelCenterEmployee.rowHeights = new int[] { 0 };
 		gbl_panelCenterEmployee.columnWeights = new double[] { 0.0, 0.0 };
 		gbl_panelCenterEmployee.rowWeights = new double[] { 0.0, 0.0 };
