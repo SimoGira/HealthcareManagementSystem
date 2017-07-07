@@ -1,13 +1,13 @@
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.text.ParseException;
 
@@ -16,18 +16,21 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import java.awt.CardLayout;
-import javax.swing.JTabbedPane;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class View {
 
 	public JFrame frame;
 	private JTextField textField_usr;
 	private JTextField textField_passwd;
+	private JTextField textFieldCF;
+	private JTextField textFieldPin;
 
 	/**
 	 * Launch the application.
@@ -91,33 +94,88 @@ public class View {
 		frame.getContentPane().add(loginPanel, "name_11222847950945");
 		loginPanel.setLayout(new BorderLayout(0, 0));
 
-		JPanel panelNorth = new JPanel();
-		loginPanel.add(panelNorth, BorderLayout.NORTH);
-		panelNorth.setLayout(new BorderLayout(0, 0));
+		JPanel panelNorthLogin = new JPanel();
+		loginPanel.add(panelNorthLogin, BorderLayout.NORTH);
+		panelNorthLogin.setLayout(new BorderLayout(0, 0));
 
 		JLabel lbl_title_application = new JLabel("HEALTHCARE MANAGEMENT SYSTEM");
 		lbl_title_application.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_title_application.setFont(new Font("Tahoma", Font.BOLD, 15));
-		panelNorth.add(lbl_title_application, BorderLayout.NORTH);
+		panelNorthLogin.add(lbl_title_application, BorderLayout.NORTH);
 
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		panelNorth.add(tabbedPane);
+		JTabbedPane tabbedPaneLogin = new JTabbedPane(JTabbedPane.TOP);
+		panelNorthLogin.add(tabbedPaneLogin);
 
 		JPanel patientLogin = new JPanel();
-		tabbedPane.addTab("Patient", null, patientLogin, null);
+		tabbedPaneLogin.addTab("Patient", null, patientLogin, null);
+		patientLogin.setLayout(new BorderLayout(0, 0));
+
+		JPanel panelCenterPatient = new JPanel();
+		patientLogin.add(panelCenterPatient, BorderLayout.NORTH);
+		GridBagLayout gbl_panelCenterPatient = new GridBagLayout();
+		//gbl_panelCenterPatient.columnWidths = new int[] { 0, 0, 0 };
+		//gbl_panelCenterPatient.rowHeights = new int[] { 0, 0, 0 };
+		gbl_panelCenterPatient.columnWeights = new double[] { 0.0, 1.0 };
+		gbl_panelCenterPatient.rowWeights = new double[] { 0.0, 0.0 };
+		panelCenterPatient.setLayout(gbl_panelCenterPatient);
+
+		JLabel lblCodicefiscale = new JLabel("codicefiscale:");
+		GridBagConstraints gbc_lblCodicefiscale = new GridBagConstraints();
+		gbc_lblCodicefiscale.insets = new Insets(0, 0, 5, 5);
+		gbc_lblCodicefiscale.anchor = GridBagConstraints.EAST;
+		gbc_lblCodicefiscale.gridx = 0;
+		gbc_lblCodicefiscale.gridy = 0;
+		panelCenterPatient.add(lblCodicefiscale, gbc_lblCodicefiscale);
+
+		textFieldCF = new JTextField();
+		GridBagConstraints gbc_textFieldCF = new GridBagConstraints();
+		gbc_textFieldCF.insets = new Insets(0, 0, 5, 0);
+		gbc_textFieldCF.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textFieldCF.gridx = 1;
+		gbc_textFieldCF.gridy = 0;
+		panelCenterPatient.add(textFieldCF, gbc_textFieldCF);
+		textFieldCF.setColumns(10);
+
+		JLabel lblPIN = new JLabel("PIN:");
+		lblPIN.setHorizontalAlignment(SwingConstants.RIGHT);
+		GridBagConstraints gbc_lblPIN = new GridBagConstraints();
+		gbc_lblPIN.anchor = GridBagConstraints.EAST;
+		gbc_lblPIN.insets = new Insets(0, 0, 0, 5);
+		gbc_lblPIN.gridx = 0;
+		gbc_lblPIN.gridy = 1;
+		panelCenterPatient.add(lblPIN, gbc_lblPIN);
+
+		textFieldPin = new JTextField();
+		GridBagConstraints gbc_textFieldPin = new GridBagConstraints();
+		gbc_textFieldPin.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textFieldPin.gridx = 1;
+		gbc_textFieldPin.gridy = 1;
+		panelCenterPatient.add(textFieldPin, gbc_textFieldPin);
+		textFieldPin.setColumns(10);
+
+		JPanel panelSouthPatient = new JPanel();
+		patientLogin.add(panelSouthPatient, BorderLayout.SOUTH);
+		panelSouthPatient.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+
+		JButton btnLoginPatient = new JButton("login");
+		btnLoginPatient.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		panelSouthPatient.add(btnLoginPatient);
 
 		JPanel employeeLogin = new JPanel();
-		tabbedPane.addTab("Employee", null, employeeLogin, null);
+		tabbedPaneLogin.addTab("Employee", null, employeeLogin, null);
 		employeeLogin.setLayout(new BorderLayout(0, 0));
 
-		JPanel panelCenter = new JPanel();
-		employeeLogin.add(panelCenter, BorderLayout.CENTER);
-		GridBagLayout gbl_panelCenter = new GridBagLayout();
-		gbl_panelCenter.columnWidths = new int[] { 0 };
-		gbl_panelCenter.rowHeights = new int[] { 0 };
-		gbl_panelCenter.columnWeights = new double[] { 0.0, 0.0 };
-		gbl_panelCenter.rowWeights = new double[] { 0.0, 0.0 };
-		panelCenter.setLayout(gbl_panelCenter);
+		JPanel panelCenterEmployee = new JPanel();
+		employeeLogin.add(panelCenterEmployee, BorderLayout.CENTER);
+		GridBagLayout gbl_panelCenterEmployee = new GridBagLayout();
+		gbl_panelCenterEmployee.columnWidths = new int[] { 0 };
+		gbl_panelCenterEmployee.rowHeights = new int[] { 0 };
+		gbl_panelCenterEmployee.columnWeights = new double[] { 0.0, 0.0 };
+		gbl_panelCenterEmployee.rowWeights = new double[] { 0.0, 0.0 };
+		panelCenterEmployee.setLayout(gbl_panelCenterEmployee);
 
 		JLabel lblUsername = new JLabel("Username:");
 		GridBagConstraints gbc_lblUsername = new GridBagConstraints();
@@ -125,7 +183,7 @@ public class View {
 		gbc_lblUsername.insets = new Insets(0, 0, 5, 5);
 		gbc_lblUsername.gridx = 0;
 		gbc_lblUsername.gridy = 0;
-		panelCenter.add(lblUsername, gbc_lblUsername);
+		panelCenterEmployee.add(lblUsername, gbc_lblUsername);
 		lblUsername.setHorizontalAlignment(SwingConstants.TRAILING);
 		lblUsername.setAlignmentX(Component.RIGHT_ALIGNMENT);
 
@@ -135,7 +193,7 @@ public class View {
 		gbc_textField_usr.insets = new Insets(0, 0, 5, 5);
 		gbc_textField_usr.gridx = 1;
 		gbc_textField_usr.gridy = 0;
-		panelCenter.add(textField_usr, gbc_textField_usr);
+		panelCenterEmployee.add(textField_usr, gbc_textField_usr);
 
 		JLabel lblPassword = new JLabel("Password:");
 		GridBagConstraints gbc_lblPassword = new GridBagConstraints();
@@ -143,7 +201,7 @@ public class View {
 		gbc_lblPassword.insets = new Insets(0, 0, 0, 5);
 		gbc_lblPassword.gridx = 0;
 		gbc_lblPassword.gridy = 1;
-		panelCenter.add(lblPassword, gbc_lblPassword);
+		panelCenterEmployee.add(lblPassword, gbc_lblPassword);
 		lblPassword.setHorizontalAlignment(SwingConstants.TRAILING);
 		lblPassword.setAlignmentX(Component.RIGHT_ALIGNMENT);
 
@@ -153,24 +211,21 @@ public class View {
 		gbc_textField_passwd.fill = GridBagConstraints.BOTH;
 		gbc_textField_passwd.gridx = 1;
 		gbc_textField_passwd.gridy = 1;
-		panelCenter.add(textField_passwd, gbc_textField_passwd);
+		panelCenterEmployee.add(textField_passwd, gbc_textField_passwd);
 
-		JPanel panelSouth = new JPanel();
-		employeeLogin.add(panelSouth, BorderLayout.SOUTH);
-		JButton btnLogin = new JButton("Login");
-		panelSouth.add(btnLogin);
+		JPanel panelSouthEmployee = new JPanel();
+		employeeLogin.add(panelSouthEmployee, BorderLayout.SOUTH);
+		JButton btnLoginEmployee = new JButton("Login");
+		panelSouthEmployee.add(btnLoginEmployee);
 
-		// close the application
-		JButton btnCancel = new JButton("Cancel");
-		panelSouth.add(btnCancel);
-		btnCancel.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				System.exit(0);
-			}
-		});
-
-		JPanel userPanel = new JPanel();
-		frame.getContentPane().add(userPanel, "name_11222960382586");
+		JPanel patientPanel = new JPanel();
+		frame.getContentPane().add(patientPanel, "name_11222960382586");
+		
+		JButton btnNewButton = new JButton("New button");
+		patientPanel.add(btnNewButton);
+		
+		JButton btnBookVisit = new JButton("book visit");
+		patientPanel.add(btnBookVisit);
 
 		JPanel employeePanel = new JPanel();
 		frame.getContentPane().add(employeePanel, "name_11222990618502");
