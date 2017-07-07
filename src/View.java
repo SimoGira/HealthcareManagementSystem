@@ -157,7 +157,7 @@ public class View {
 		patientLogin.add(panelSouthPatient, BorderLayout.SOUTH);
 		panelSouthPatient.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
-		JButton btnLoginPatient = new JButton("login");
+		JButton btnLoginPatient = new JButton("Login");
 		btnLoginPatient.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
@@ -217,6 +217,12 @@ public class View {
 		employeeLogin.add(panelSouthEmployee, BorderLayout.SOUTH);
 		JButton btnLoginEmployee = new JButton("Login");
 		panelSouthEmployee.add(btnLoginEmployee);
+		
+		JPanel panelSouthLogin = new JPanel();
+		panelNorthLogin.add(panelSouthLogin, BorderLayout.SOUTH);
+		
+		JButton btnViewClinicAnd = new JButton("View clinic and services");
+		panelSouthLogin.add(btnViewClinicAnd);
 
 		JPanel patientPanel = new JPanel();
 		frame.getContentPane().add(patientPanel, "name_11222960382586");
