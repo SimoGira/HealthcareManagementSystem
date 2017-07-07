@@ -42,6 +42,7 @@ public class View {
 	 */
 	public static void main(String[] args) throws ParseException {
 
+		/*
 		// la connessione al database va messa nel DataMapper (come ha fatto
 		// posenato) altrimenti nel model(credo)
 		try {
@@ -53,6 +54,7 @@ public class View {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		*/
 
 		try {
 			// Set System L&F
@@ -241,6 +243,7 @@ public class View {
 		frame.getContentPane().add(employeePanel, "name_11222990618502");
 
 		JSplitPane splitPane = new JSplitPane();
+		splitPane.setResizeWeight(0.3);
 		frame.getContentPane().add(splitPane, "name_18581128151280");
 
 		JPanel ClinicsPanel = new JPanel();
