@@ -1,0 +1,5 @@
+psql -U postgres
+
+\cd C://Users/adriano/Desktop/Adriano/repository/healthcaremanagementsystem/sql
+\i create.sql
+\i insert.sql

@@ -29,6 +29,6 @@ INSERT INTO services( ambulatory, company, name )
 VALUES
 ('GENETICA MEDICA', 'cp01', 'visita oncologica'),
 ('GENETICA MEDICA', 'cp01', 'visita geriatrica'),
-('ANGIOEDEMA EREDITARIO ED ALTRE FORME DI ANGIOEDEMA', 'cp02', 'visita angiodema')
+('ANGIOEDEMA EREDITARIO ED ALTRE FORME DI ANGIOEDEMA', 'cp02', 'visita angiodema');
 
  
