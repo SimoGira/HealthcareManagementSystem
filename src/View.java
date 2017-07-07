@@ -10,7 +10,6 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
 import java.text.ParseException;
 
 import javax.swing.JButton;
@@ -26,6 +25,7 @@ import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.AbstractListModel;
 
 public class View {
 
@@ -43,18 +43,12 @@ public class View {
 	public static void main(String[] args) throws ParseException {
 
 		/*
-		// la connessione al database va messa nel DataMapper (come ha fatto
-		// posenato) altrimenti nel model(credo)
-		try {
-			Model db = new Model();
-		} catch (ClassNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		*/
+		 * // la connessione al database va messa nel DataMapper (come ha fatto
+		 * // posenato) altrimenti nel model(credo) try { Model db = new
+		 * Model(); } catch (ClassNotFoundException e1) { // TODO Auto-generated
+		 * catch block e1.printStackTrace(); } catch (SQLException e1) { // TODO
+		 * Auto-generated catch block e1.printStackTrace(); }
+		 */
 
 		try {
 			// Set System L&F
@@ -118,8 +112,8 @@ public class View {
 		JPanel panelCenterPatient = new JPanel();
 		patientLogin.add(panelCenterPatient, BorderLayout.CENTER);
 		GridBagLayout gbl_panelCenterPatient = new GridBagLayout();
-		gbl_panelCenterPatient.columnWeights = new double[] { 0.0, 0.0 };
-		gbl_panelCenterPatient.rowWeights = new double[] { 0.0, 0.0 };
+		gbl_panelCenterPatient.columnWidths = new int[] { 0, 0 };
+		gbl_panelCenterPatient.rowHeights = new int[] { 0 };
 		panelCenterPatient.setLayout(gbl_panelCenterPatient);
 
 		JLabel lblFiscalCode = new JLabel("Fiscal Code:");
@@ -179,8 +173,6 @@ public class View {
 		GridBagLayout gbl_panelCenterEmployee = new GridBagLayout();
 		gbl_panelCenterEmployee.columnWidths = new int[] { 0, 0 };
 		gbl_panelCenterEmployee.rowHeights = new int[] { 0 };
-		gbl_panelCenterEmployee.columnWeights = new double[] { 0.0, 0.0 };
-		gbl_panelCenterEmployee.rowWeights = new double[] { 0.0, 0.0 };
 		panelCenterEmployee.setLayout(gbl_panelCenterEmployee);
 
 		JLabel lblUsername = new JLabel("Username:");
@@ -254,7 +246,20 @@ public class View {
 		lblClinics.setHorizontalAlignment(SwingConstants.CENTER);
 		ClinicsPanel.add(lblClinics, BorderLayout.NORTH);
 
-		JList list = new JList();
+		JList<String> list = new JList<String>();
+		list.setModel(new AbstractListModel<String>() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 2626387453652530474L;
+			String[] values = new String[] {"Clinic_1", "Clinic_2", "Clinic_3"};
+			public int getSize() {
+				return values.length;
+			}
+			public String getElementAt(int index) {
+				return values[index];
+			}
+		});
 		ClinicsPanel.add(list, BorderLayout.CENTER);
 
 		JPanel ServicesPanel = new JPanel();
@@ -264,7 +269,7 @@ public class View {
 		JTextPane txtpnclinicsOfJesus = new JTextPane();
 		txtpnclinicsOfJesus.setContentType("text/html");
 		txtpnclinicsOfJesus.setText(
-				"<html>\n\t<head></head>\n\t<body>\n\t\t<h1>Clinics of Jesus</h1>\n\t\t<h3>Services</h3>\n\t\t.....Prova html.....\n\t</body>\n</html>\n");
+				"<html>\r\n\t<head></head>\r\n\t<body>\r\n\t\t<h1>Clinics of Jesus</h1>\r\n\t\t<h3>Services</h3>\r\n\t\t.....Prova html.....\r\n\t</body>\r\n</html>\r\n");
 		ServicesPanel.add(txtpnclinicsOfJesus, BorderLayout.CENTER);
 
 		frame.setSize(500, 400);

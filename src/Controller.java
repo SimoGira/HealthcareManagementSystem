@@ -10,7 +10,7 @@ public class Controller {
 		setUpViewEvents();
 	}
 	
-	public void setUpViewEvents(){
+	public void setUpViewEvents(){/*
 		view.btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
@@ -21,6 +21,7 @@ public class Controller {
 				frame.setVisible(false);
 			}
 		});
+		*/
 	}
 
 }
