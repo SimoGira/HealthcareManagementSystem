@@ -8,33 +8,30 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.text.ParseException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.Panel;
-import javax.swing.JSplitPane;
-import javax.swing.JToolBar;
-import javax.swing.JList;
 
 public class View {
 
 	public JFrame frame;
 	private JTextField textField_usr;
 	private JTextField textField_passwd;
-	private JTextField textFieldCF;
-	private JTextField textFieldPin;
 
 	/**
 	 * Launch the application.
@@ -108,54 +105,34 @@ public class View {
 		panelNorthLogin.add(lbl_title_application, BorderLayout.NORTH);
 
 		JTabbedPane tabbedPaneLogin = new JTabbedPane(JTabbedPane.TOP);
-		panelNorthLogin.add(tabbedPaneLogin);
+		loginPanel.add(tabbedPaneLogin, BorderLayout.CENTER);
 
 		JPanel patientLogin = new JPanel();
 		tabbedPaneLogin.addTab("Patient", null, patientLogin, null);
 		patientLogin.setLayout(new BorderLayout(0, 0));
 
 		JPanel panelCenterPatient = new JPanel();
-		patientLogin.add(panelCenterPatient, BorderLayout.NORTH);
+		patientLogin.add(panelCenterPatient, BorderLayout.CENTER);
 		GridBagLayout gbl_panelCenterPatient = new GridBagLayout();
-		//gbl_panelCenterPatient.columnWidths = new int[] { 0, 0, 0 };
-		//gbl_panelCenterPatient.rowHeights = new int[] { 0, 0, 0 };
-		gbl_panelCenterPatient.columnWeights = new double[] { 0.0, 1.0 };
-		gbl_panelCenterPatient.rowWeights = new double[] { 0.0, 0.0 };
+		gbl_panelCenterPatient.rowHeights = new int[] {0, 0, 0};
+		gbl_panelCenterPatient.columnWidths = new int[] {0, 0};
+		gbl_panelCenterPatient.columnWeights = new double[] { 0.0};
+		gbl_panelCenterPatient.rowWeights = new double[] { 0.0, 0.0};
 		panelCenterPatient.setLayout(gbl_panelCenterPatient);
-
-		JLabel lblCodicefiscale = new JLabel("Fiscal code:");
-		GridBagConstraints gbc_lblCodicefiscale = new GridBagConstraints();
-		gbc_lblCodicefiscale.insets = new Insets(0, 0, 5, 5);
-		gbc_lblCodicefiscale.anchor = GridBagConstraints.EAST;
-		gbc_lblCodicefiscale.gridx = 0;
-		gbc_lblCodicefiscale.gridy = 0;
-		panelCenterPatient.add(lblCodicefiscale, gbc_lblCodicefiscale);
-
-		textFieldCF = new JTextField();
-		GridBagConstraints gbc_textFieldCF = new GridBagConstraints();
-		gbc_textFieldCF.insets = new Insets(0, 0, 5, 0);
-		gbc_textFieldCF.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textFieldCF.gridx = 1;
-		gbc_textFieldCF.gridy = 0;
-		panelCenterPatient.add(textFieldCF, gbc_textFieldCF);
-		textFieldCF.setColumns(10);
-
-		JLabel lblPIN = new JLabel("PIN:");
-		lblPIN.setHorizontalAlignment(SwingConstants.RIGHT);
-		GridBagConstraints gbc_lblPIN = new GridBagConstraints();
-		gbc_lblPIN.anchor = GridBagConstraints.EAST;
-		gbc_lblPIN.insets = new Insets(0, 0, 0, 5);
-		gbc_lblPIN.gridx = 0;
-		gbc_lblPIN.gridy = 1;
-		panelCenterPatient.add(lblPIN, gbc_lblPIN);
-
-		textFieldPin = new JTextField();
-		GridBagConstraints gbc_textFieldPin = new GridBagConstraints();
-		gbc_textFieldPin.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textFieldPin.gridx = 1;
-		gbc_textFieldPin.gridy = 1;
-		panelCenterPatient.add(textFieldPin, gbc_textFieldPin);
-		textFieldPin.setColumns(10);
+		
+		JLabel lblFiscalCode = new JLabel("Fiscal Code:");
+		GridBagConstraints gbc_lblFiscalCode = new GridBagConstraints();
+		gbc_lblFiscalCode.insets = new Insets(0, 0, 5, 5);
+		gbc_lblFiscalCode.gridx = 0;
+		gbc_lblFiscalCode.gridy = 0;
+		panelCenterPatient.add(lblFiscalCode, gbc_lblFiscalCode);
+		
+		JLabel lblPin = new JLabel("PIN:");
+		GridBagConstraints gbc_lblPin = new GridBagConstraints();
+		gbc_lblPin.insets = new Insets(0, 0, 0, 5);
+		gbc_lblPin.gridx = 0;
+		gbc_lblPin.gridy = 2;
+		panelCenterPatient.add(lblPin, gbc_lblPin);
 
 		JPanel panelSouthPatient = new JPanel();
 		patientLogin.add(panelSouthPatient, BorderLayout.SOUTH);
@@ -221,42 +198,51 @@ public class View {
 		employeeLogin.add(panelSouthEmployee, BorderLayout.SOUTH);
 		JButton btnLoginEmployee = new JButton("Login");
 		panelSouthEmployee.add(btnLoginEmployee);
-		
+
 		JPanel panelSouthLogin = new JPanel();
-		panelNorthLogin.add(panelSouthLogin, BorderLayout.SOUTH);
-		
-		JButton btnViewClinicAnd = new JButton("View clinic and services");
+		loginPanel.add(panelSouthLogin, BorderLayout.SOUTH);
+
+		JButton btnViewClinicAnd = new JButton("View clinics and services");
 		panelSouthLogin.add(btnViewClinicAnd);
 
 		JPanel patientPanel = new JPanel();
 		frame.getContentPane().add(patientPanel, "name_11222960382586");
-		
+
 		JButton btnNewButton = new JButton("New button");
 		patientPanel.add(btnNewButton);
-		
+
 		JButton btnBookVisit = new JButton("book visit");
 		patientPanel.add(btnBookVisit);
 
 		JPanel employeePanel = new JPanel();
 		frame.getContentPane().add(employeePanel, "name_11222990618502");
-		
+
 		JSplitPane splitPane = new JSplitPane();
 		frame.getContentPane().add(splitPane, "name_18581128151280");
-		
+
 		JPanel ClinicsPanel = new JPanel();
 		splitPane.setLeftComponent(ClinicsPanel);
 		ClinicsPanel.setLayout(new BorderLayout(0, 0));
-		
-		JToolBar toolBar = new JToolBar();
-		ClinicsPanel.add(toolBar, BorderLayout.NORTH);
-		
+
+		JLabel lblClinics = new JLabel("Clinics");
+		lblClinics.setHorizontalAlignment(SwingConstants.CENTER);
+		ClinicsPanel.add(lblClinics, BorderLayout.NORTH);
+
 		JList list = new JList();
 		ClinicsPanel.add(list, BorderLayout.CENTER);
-		
+
 		JPanel ServicesPanel = new JPanel();
 		splitPane.setRightComponent(ServicesPanel);
+		ServicesPanel.setLayout(new BorderLayout(0, 0));
 
-		frame.pack();
-		frame.setResizable(false);
+		JTextPane txtpnclinicsOfJesus = new JTextPane();
+		txtpnclinicsOfJesus.setContentType("text/html");
+		txtpnclinicsOfJesus.setText(
+				"<html>\n\t<head></head>\n\t<body>\n\t\t<h1>Clinics of Jesus</h1>\n\t\t<h3>Services</h3>\n\t\t.....Prova html.....\n\t</body>\n</html>\n");
+		ServicesPanel.add(txtpnclinicsOfJesus, BorderLayout.CENTER);
+
+		frame.setSize(500, 400);
+		// frame.pack();
+		// frame.setResizable(false);
 	}
 }
