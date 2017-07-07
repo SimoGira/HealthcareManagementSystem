@@ -1,4 +1,4 @@
---  drop table ambulatory, company, employee, patient;
+--  drop table ambulatory, company, employee, patient, service, visit;
 
 create domain jobs as varchar(30)
 check(value in('secretary', 'nurse','oculist', 'orthoptist', 'physiotherapist', 'cardiologist', 'dermatologist', 'oncologist', 'geriatrician' ));
@@ -47,14 +47,14 @@ create table employee(
     name varchar(50) not null,
     surname varchar(50) not null,
     job jobs not null,
-    ambulatory varchar(20),
+    ambulatory varchar,
     company varchar,
     FOREIGN KEY(ambulatory, company) REFERENCES ambulatory(name, company)
 );
 
-create table services (
-	ambulatory VARCHAR(20) REFERENCES ambulatory(name),
-	company varchar references company(id),
+create table service (
+	ambulatory VARCHAR,
+	company varchar,
 	name varchar,
 	FOREIGN KEY(ambulatory, company) REFERENCES ambulatory(name, company),
 	PRIMARY KEY(ambulatory, company, name)
@@ -62,14 +62,16 @@ create table services (
 
 create table visit(
     patient varchar references patient,
-    ambulatory varchar references ambulatory(name),
+	ambulatory VARCHAR,
+	company varchar,
     doctor varchar references employee,
     date date,
 	hour smallint check ( hour > 8 AND hour < 16 ),
     result text,
     urgency varchar check(urgency in('low', 'mid', 'high')),
     regime varchar check(regime in('private', 'paid-back-from-health-system','paid-back-from-private-insurance')),
-    primary key(patient, ambulatory, date)
+	FOREIGN KEY(ambulatory, company) REFERENCES ambulatory(name, company),
+    primary key(patient, ambulatory, company, date)
 )
 
 
