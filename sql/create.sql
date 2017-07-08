@@ -67,14 +67,15 @@ create table visit(
     patient varchar references patient,
 	ambulatory VARCHAR,
 	company varchar,
+	serviceName varchar,
     doctor varchar references employee,
     date date,
 	hour smallint check ( hour >= 8 AND hour <= 16 ),
     urgency varchar check(urgency in('bassa', 'media', 'alta')),
     regime varchar check(regime in('privata', 'rimborsata dal sistema sanitario','rimborsata da assicurazioni private')),
     result text,
-	FOREIGN KEY(ambulatory, company) REFERENCES ambulatory(name, company),
-    primary key(patient, ambulatory, company, date, hour)
+	FOREIGN KEY(ambulatory, company, serviceName) REFERENCES service(ambulatory, company, name),
+    primary key(patient, ambulatory, company, serviceName, date, hour)
 )
 
 
