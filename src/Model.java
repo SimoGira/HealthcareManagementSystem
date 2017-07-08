@@ -40,6 +40,27 @@ public class Model {
 		}
 	}
 	
+	public void updateAmbulatory(Ambulatory amb){
+		try(Connection con = DriverManager.getConnection(url, user, password)){
+
+			String query = "UPDATE SET street = ?, cap = ?, city = ?, province = ?, contractDate = ?, description = ?, WHERE name = ? AND company = ?";
+			try(PreparedStatement pst = con.prepareStatement(query)){
+					pst.clearParameters();
+					pst.setString(0, amb.name);
+					pst.setString(1, amb.company);
+					pst.setString(2, amb.street);
+					pst.setString(3, amb.cap);
+					pst.setString(4, amb.city);
+					pst.setString(5, amb.province);
+					pst.setDate(6, amb.contractDate);
+					pst.setString(7, amb.description);
+			}
+			
+		} catch (SQLException e1) {
+			System.out.println( "Errore durante connessione al database: " + e1.getMessage() );
+		}
+	}
+	
 	private void updateDb() {
 		try(Connection con = DriverManager.getConnection(url, user, password)){
 
