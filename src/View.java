@@ -1,5 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
@@ -10,12 +11,15 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import javax.swing.AbstractListModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -32,6 +36,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
 public class View {
@@ -42,6 +47,11 @@ public class View {
 	private JTextField textFieldFiscalCode;
 	private JPasswordField passwordFieldPIN;
 	private JTable tableHistoryVisits;
+	private JTable tableVisitsFounded;
+	private JTextField textFieldInsertClinicRue;
+	private JTextField textFieldInsertClinicCity;
+	private JTextField textFieldInsertClinicCAP;
+	private JTextField textFieldInsertClinicName;
 
 	/**
 	 * Launch the application.
@@ -260,29 +270,24 @@ public class View {
 		JScrollPane scrollPaneHistory = new JScrollPane();
 		panelHistoryVisit.add(scrollPaneHistory, BorderLayout.CENTER);
 
-		// questa tabella si puo' implementare in maniera piu' pulita una volta completati i metodi con il db, vedi tests fatto su w10 (simone)
+		// questa tabella si puo' implementare in maniera piu' pulita una volta
+		// completati i metodi con il db, vedi tests fatto su w10 (simone)
 		tableHistoryVisits = new JTable();
 		tableHistoryVisits.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tableHistoryVisits.setModel(new DefaultTableModel(
-				new Object[][] {
-					{"13/07/2017", "Oculustica", "privata", "Media"},
-					{"20/08/2017", "Cardiaca", "privata", "Alta"},
-				},
-				new String[] {
-						"Data", "Tipo Visita", "Regime", "Urgenza"
-				}
-				) {
-			boolean[] columnEditables = new boolean[] {
-					false, false, false, false
-			};
+				new Object[][] { { "13/07/2017", null, "Oculustica", "privata", "Media" },
+					{ "20/08/2017", null, "Cardiaca", "privata", "Alta" }, },
+				new String[] { "Data", "Ora", "Tipo Visita", "Regime", "Urgenza" }) {
+			boolean[] columnEditables = new boolean[] { false, true, false, false, false };
+
 			public boolean isCellEditable(int row, int column) {
 				return columnEditables[column];
 			}
 		});
 		tableHistoryVisits.getColumnModel().getColumn(0).setResizable(false);
-		tableHistoryVisits.getColumnModel().getColumn(1).setResizable(false);
 		tableHistoryVisits.getColumnModel().getColumn(2).setResizable(false);
 		tableHistoryVisits.getColumnModel().getColumn(3).setResizable(false);
+		tableHistoryVisits.getColumnModel().getColumn(4).setResizable(false);
 		scrollPaneHistory.setViewportView(tableHistoryVisits);
 
 		JPanel panelHistoryButtons = new JPanel();
@@ -293,17 +298,17 @@ public class View {
 		JButton btnViewSelectedVisit = new JButton("Visualizza");
 		panelHistoryButtons.add(btnViewSelectedVisit);
 
-		JPanel panelResultVisit = new JPanel();
-		panelVisitPatient.add(panelResultVisit, "name_230217349041945");
-		panelResultVisit.setLayout(new BorderLayout(0, 0));
+		JPanel panelVisitResult = new JPanel();
+		panelVisitPatient.add(panelVisitResult, "name_230217349041945");
+		panelVisitResult.setLayout(new BorderLayout(0, 0));
 
 		JTextArea resultVisitTextArea = new JTextArea();
-		panelResultVisit.add(resultVisitTextArea, BorderLayout.CENTER);
+		panelVisitResult.add(resultVisitTextArea, BorderLayout.CENTER);
 
 		JPanel resultVisitSouthpanel = new JPanel();
 		FlowLayout flowLayout = (FlowLayout) resultVisitSouthpanel.getLayout();
 		flowLayout.setAlignment(FlowLayout.RIGHT);
-		panelResultVisit.add(resultVisitSouthpanel, BorderLayout.SOUTH);
+		panelVisitResult.add(resultVisitSouthpanel, BorderLayout.SOUTH);
 
 		JButton btnBeckToHistory = new JButton("Indietro");
 		resultVisitSouthpanel.add(btnBeckToHistory);
@@ -316,56 +321,246 @@ public class View {
 		JPanel panelBookVisit = new JPanel();
 		tabbedPanePatient.addTab("Prenotazione visite", null, panelBookVisit, null);
 		panelBookVisit.setLayout(new BorderLayout(0, 0));
-		
+
 		JPanel bookVisitNorthPanel = new JPanel();
 		panelBookVisit.add(bookVisitNorthPanel, BorderLayout.NORTH);
-		
+
 		JLabel lblBookVisitAnno = new JLabel("Anno:");
 		bookVisitNorthPanel.add(lblBookVisitAnno);
-		
+
 		JComboBox comboBoxBookVisitYear = new JComboBox();
 		bookVisitNorthPanel.add(comboBoxBookVisitYear);
-		
+
 		JLabel lblBookVisitMonth = new JLabel("Mese:");
 		bookVisitNorthPanel.add(lblBookVisitMonth);
-		
+
 		JComboBox comboBoxBookVisitMonth = new JComboBox();
 		bookVisitNorthPanel.add(comboBoxBookVisitMonth);
-		
+
 		JLabel lblBookVisitDay = new JLabel("Giorno:");
 		bookVisitNorthPanel.add(lblBookVisitDay);
-		
+
 		JComboBox comboBoxBookVisitDay = new JComboBox();
 		bookVisitNorthPanel.add(comboBoxBookVisitDay);
-		
+
 		JLabel lblBookVisitHour = new JLabel("Ora:");
 		bookVisitNorthPanel.add(lblBookVisitHour);
-		
+
 		JComboBox comboBoxBookVisitHour = new JComboBox();
 		bookVisitNorthPanel.add(comboBoxBookVisitHour);
 
 		JPanel panelEmployee = new JPanel();
 		frmHealthcareManagementSystem.getContentPane().add(panelEmployee, "name_11222990618502");
 		panelEmployee.setLayout(new BorderLayout(0, 0));
-		
+
 		JPanel panelNorthEmployee = new JPanel();
 		panelEmployee.add(panelNorthEmployee, BorderLayout.NORTH);
-		
+
 		JLabel lblNewLabel = new JLabel("Benvenuto: <nome dipendente>");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 22));
 		panelNorthEmployee.add(lblNewLabel);
-		
+
 		JTabbedPane tabbedPaneEmployee = new JTabbedPane(JTabbedPane.TOP);
 		panelEmployee.add(tabbedPaneEmployee, BorderLayout.CENTER);
-		
+
 		JPanel panelInsertVisitInfo = new JPanel();
-		tabbedPaneEmployee.addTab("New tab", null, panelInsertVisitInfo, null);
-		
+		tabbedPaneEmployee.addTab("Inserisci risultato", null, panelInsertVisitInfo, null);
+		panelInsertVisitInfo.setLayout(new BorderLayout(0, 0));
+
+		JPanel panelInfoVisitInsertion = new JPanel();
+		panelInsertVisitInfo.add(panelInfoVisitInsertion, BorderLayout.CENTER);
+		panelInfoVisitInsertion.setLayout(new BorderLayout(0, 0));
+
+		JPanel panelInfovisitInsertionNorth = new JPanel();
+		FlowLayout fl_panelInfovisitInsertionNorth = (FlowLayout) panelInfovisitInsertionNorth.getLayout();
+		fl_panelInfovisitInsertionNorth.setAlignment(FlowLayout.LEFT);
+		panelInfoVisitInsertion.add(panelInfovisitInsertionNorth, BorderLayout.NORTH);
+
+		JLabel lblDateVisitInsertion = new JLabel("Data:");
+		panelInfovisitInsertionNorth.add(lblDateVisitInsertion);
+
+		DateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		JFormattedTextField formattedTextFieldVisitInsertion = new JFormattedTextField(sdf);
+		formattedTextFieldVisitInsertion.setToolTipText("Inserisci la data della visita nel formato gg/mm/aaaa");
+		formattedTextFieldVisitInsertion.setColumns(10);
+		panelInfovisitInsertionNorth.add(formattedTextFieldVisitInsertion);
+
+		JLabel lblClinicVisitInsertion = new JLabel("Ambulatorio:");
+		panelInfovisitInsertionNorth.add(lblClinicVisitInsertion);
+
+		JComboBox comboBoxClinicVisitInsertion = new JComboBox();
+		panelInfovisitInsertionNorth.add(comboBoxClinicVisitInsertion);
+
+		JButton btnFindVisits = new JButton("Trova");
+		panelInfovisitInsertionNorth.add(btnFindVisits);
+
+		JScrollPane scrollPaneInfoVisitInsertionCenter = new JScrollPane();
+		panelInfoVisitInsertion.add(scrollPaneInfoVisitInsertionCenter, BorderLayout.CENTER);
+
+		tableVisitsFounded = new JTable();
+		tableVisitsFounded.setModel(
+				new DefaultTableModel(new Object[][] { { "Adriano", "Tumminelli", "oculistica", "bassa", "10:00" }, },
+						new String[] { "Nome", "Cognome", "Tipo visita", "Urgenza", "Ora" }) {
+					Class[] columnTypes = new Class[] { Object.class, Object.class, String.class, Object.class,
+							Object.class };
+
+					public Class getColumnClass(int columnIndex) {
+						return columnTypes[columnIndex];
+					}
+				});
+		scrollPaneInfoVisitInsertionCenter.setViewportView(tableVisitsFounded);
+
+		JScrollPane scrollPaneInfoVisitInsertionSouth = new JScrollPane();
+		scrollPaneInfoVisitInsertionSouth.setViewportBorder(
+				new TitledBorder(null, "Risultato visita", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panelInfoVisitInsertion.add(scrollPaneInfoVisitInsertionSouth, BorderLayout.SOUTH);
+
+		JTextArea textAreaVisitResult = new JTextArea();
+		textAreaVisitResult.setRows(3);
+		scrollPaneInfoVisitInsertionSouth.setViewportView(textAreaVisitResult);
+
+		JPanel panelInsertVisitButton = new JPanel();
+		FlowLayout fl_panelInsertVisitButton = (FlowLayout) panelInsertVisitButton.getLayout();
+		fl_panelInsertVisitButton.setAlignment(FlowLayout.RIGHT);
+		panelInsertVisitInfo.add(panelInsertVisitButton, BorderLayout.SOUTH);
+
+		JButton btnInsertNewVisit = new JButton("Inserisci");
+		btnInsertNewVisit.setEnabled(false);
+		panelInsertVisitButton.add(btnInsertNewVisit);
+
 		JPanel panelInsertClinic = new JPanel();
-		tabbedPaneEmployee.addTab("New tab", null, panelInsertClinic, null);
-		
-		JPanel panel = new JPanel();
-		tabbedPaneEmployee.addTab("New tab", null, panel, null);
+		tabbedPaneEmployee.addTab("Inserisci ambulatorio", null, panelInsertClinic, null);
+		panelInsertClinic.setLayout(new BorderLayout(0, 0));
+
+		JPanel panelInsertClinicData = new JPanel();
+		panelInsertClinicData.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Dati",
+				TitledBorder.CENTER, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		panelInsertClinic.add(panelInsertClinicData, BorderLayout.WEST);
+		GridBagLayout gbl_panelInsertClinicData = new GridBagLayout();
+		gbl_panelInsertClinicData.columnWidths = new int[]{150, 0};
+		gbl_panelInsertClinicData.rowHeights = new int[]{20, 14, 20, 14, 20, 14, 20, 14, 20, 14, 20, 14, 20, 0};
+		gbl_panelInsertClinicData.columnWeights = new double[]{0.0, Double.MIN_VALUE};
+		gbl_panelInsertClinicData.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		panelInsertClinicData.setLayout(gbl_panelInsertClinicData);
+
+		JLabel lblInsertClinicName = new JLabel("Nome:");
+		GridBagConstraints gbc_lblInsertClinicName = new GridBagConstraints();
+		gbc_lblInsertClinicName.anchor = GridBagConstraints.WEST;
+		gbc_lblInsertClinicName.insets = new Insets(0, 0, 5, 0);
+		gbc_lblInsertClinicName.gridx = 0;
+		gbc_lblInsertClinicName.gridy = 0;
+		panelInsertClinicData.add(lblInsertClinicName, gbc_lblInsertClinicName);
+
+		textFieldInsertClinicName = new JTextField();
+		GridBagConstraints gbc_textFieldInsertClinicName = new GridBagConstraints();
+		gbc_textFieldInsertClinicName.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textFieldInsertClinicName.insets = new Insets(0, 0, 5, 0);
+		gbc_textFieldInsertClinicName.gridx = 0;
+		gbc_textFieldInsertClinicName.gridy = 1;
+		panelInsertClinicData.add(textFieldInsertClinicName, gbc_textFieldInsertClinicName);
+		textFieldInsertClinicName.setColumns(10);
+
+		JLabel lblInsertClinicRue = new JLabel("Via:");
+		GridBagConstraints gbc_lblInsertClinicRue = new GridBagConstraints();
+		gbc_lblInsertClinicRue.anchor = GridBagConstraints.WEST;
+		gbc_lblInsertClinicRue.insets = new Insets(0, 0, 5, 0);
+		gbc_lblInsertClinicRue.gridx = 0;
+		gbc_lblInsertClinicRue.gridy = 2;
+		panelInsertClinicData.add(lblInsertClinicRue, gbc_lblInsertClinicRue);
+
+		textFieldInsertClinicRue = new JTextField();
+		GridBagConstraints gbc_textFieldInsertClinicRue = new GridBagConstraints();
+		gbc_textFieldInsertClinicRue.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textFieldInsertClinicRue.insets = new Insets(0, 0, 5, 0);
+		gbc_textFieldInsertClinicRue.gridx = 0;
+		gbc_textFieldInsertClinicRue.gridy = 3;
+		panelInsertClinicData.add(textFieldInsertClinicRue, gbc_textFieldInsertClinicRue);
+		textFieldInsertClinicRue.setColumns(10);
+
+		JLabel lblInsertClinicCity = new JLabel("Paese:");
+		GridBagConstraints gbc_lblInsertClinicCity = new GridBagConstraints();
+		gbc_lblInsertClinicCity.anchor = GridBagConstraints.WEST;
+		gbc_lblInsertClinicCity.insets = new Insets(0, 0, 5, 0);
+		gbc_lblInsertClinicCity.gridx = 0;
+		gbc_lblInsertClinicCity.gridy = 4;
+		panelInsertClinicData.add(lblInsertClinicCity, gbc_lblInsertClinicCity);
+
+		textFieldInsertClinicCity = new JTextField();
+		GridBagConstraints gbc_textFieldInsertClinicCity = new GridBagConstraints();
+		gbc_textFieldInsertClinicCity.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textFieldInsertClinicCity.insets = new Insets(0, 0, 5, 0);
+		gbc_textFieldInsertClinicCity.gridx = 0;
+		gbc_textFieldInsertClinicCity.gridy = 5;
+		panelInsertClinicData.add(textFieldInsertClinicCity, gbc_textFieldInsertClinicCity);
+		textFieldInsertClinicCity.setColumns(10);
+
+		JLabel lblInsertClinicCAP = new JLabel("CAP:");
+		GridBagConstraints gbc_lblInsertClinicCAP = new GridBagConstraints();
+		gbc_lblInsertClinicCAP.anchor = GridBagConstraints.WEST;
+		gbc_lblInsertClinicCAP.insets = new Insets(0, 0, 5, 0);
+		gbc_lblInsertClinicCAP.gridx = 0;
+		gbc_lblInsertClinicCAP.gridy = 6;
+		panelInsertClinicData.add(lblInsertClinicCAP, gbc_lblInsertClinicCAP);
+
+		textFieldInsertClinicCAP = new JTextField();
+		GridBagConstraints gbc_textFieldInsertClinicCAP = new GridBagConstraints();
+		gbc_textFieldInsertClinicCAP.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textFieldInsertClinicCAP.insets = new Insets(0, 0, 5, 0);
+		gbc_textFieldInsertClinicCAP.gridx = 0;
+		gbc_textFieldInsertClinicCAP.gridy = 7;
+		panelInsertClinicData.add(textFieldInsertClinicCAP, gbc_textFieldInsertClinicCAP);
+		textFieldInsertClinicCAP.setColumns(10);
+
+		JLabel lblInsertClinicProvince = new JLabel("Provincia:");
+		GridBagConstraints gbc_lblInsertClinicProvince = new GridBagConstraints();
+		gbc_lblInsertClinicProvince.anchor = GridBagConstraints.WEST;
+		gbc_lblInsertClinicProvince.insets = new Insets(0, 0, 5, 0);
+		gbc_lblInsertClinicProvince.gridx = 0;
+		gbc_lblInsertClinicProvince.gridy = 8;
+		panelInsertClinicData.add(lblInsertClinicProvince, gbc_lblInsertClinicProvince);
+
+		JComboBox comboBoxInsertClinicProvince = new JComboBox();
+		GridBagConstraints gbc_comboBoxInsertClinicProvince = new GridBagConstraints();
+		gbc_comboBoxInsertClinicProvince.fill = GridBagConstraints.HORIZONTAL;
+		gbc_comboBoxInsertClinicProvince.insets = new Insets(0, 0, 5, 0);
+		gbc_comboBoxInsertClinicProvince.gridx = 0;
+		gbc_comboBoxInsertClinicProvince.gridy = 9;
+		panelInsertClinicData.add(comboBoxInsertClinicProvince, gbc_comboBoxInsertClinicProvince);
+
+		JLabel lblInsertClinicContractDate = new JLabel("Data Contratto:");
+		GridBagConstraints gbc_lblInsertClinicContractDate = new GridBagConstraints();
+		gbc_lblInsertClinicContractDate.anchor = GridBagConstraints.WEST;
+		gbc_lblInsertClinicContractDate.insets = new Insets(0, 0, 5, 0);
+		gbc_lblInsertClinicContractDate.gridx = 0;
+		gbc_lblInsertClinicContractDate.gridy = 10;
+		panelInsertClinicData.add(lblInsertClinicContractDate, gbc_lblInsertClinicContractDate);
+
+		JFormattedTextField formattedTextFieldInsertClinicContractDate = new JFormattedTextField(sdf);
+		GridBagConstraints gbc_formattedTextFieldInsertClinicContractDate = new GridBagConstraints();
+		gbc_formattedTextFieldInsertClinicContractDate.insets = new Insets(0, 0, 5, 0);
+		gbc_formattedTextFieldInsertClinicContractDate.fill = GridBagConstraints.HORIZONTAL;
+		gbc_formattedTextFieldInsertClinicContractDate.gridx = 0;
+		gbc_formattedTextFieldInsertClinicContractDate.gridy = 11;
+		panelInsertClinicData.add(formattedTextFieldInsertClinicContractDate, gbc_formattedTextFieldInsertClinicContractDate);
+
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBorder(new TitledBorder(null, "Descrizione", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panelInsertClinic.add(scrollPane, BorderLayout.CENTER);
+
+		JTextArea textArea = new JTextArea();
+		scrollPane.setViewportView(textArea);
+
+		JPanel panelInsertClinicButton = new JPanel();
+		FlowLayout fl_panelInsertClinicButton = (FlowLayout) panelInsertClinicButton.getLayout();
+		fl_panelInsertClinicButton.setAlignment(FlowLayout.RIGHT);
+		panelInsertClinic.add(panelInsertClinicButton, BorderLayout.SOUTH);
+
+		JButton btnInsertClinic = new JButton("Inserisci");
+		btnInsertClinic.setEnabled(false);
+		panelInsertClinicButton.add(btnInsertClinic);
+
+		JPanel panelVisitsResultsPerPatient = new JPanel();
+		tabbedPaneEmployee.addTab("Visualizza visite", null, panelVisitsResultsPerPatient, null);
 
 		JSplitPane splitPaneClinics = new JSplitPane();
 		splitPaneClinics.setResizeWeight(0.3);
@@ -407,7 +602,7 @@ public class View {
 				"<html>\r\n\t<head></head>\r\n\t<body>\r\n\t\t<h1>Clinics of Jesus</h1>\r\n\t\t<h3>Services</h3>\r\n\t\t.....Prova html.....\r\n\t</body>\r\n</html>\r\n");
 		ServicesPanel.add(txtpnclinicsOfJesus, BorderLayout.CENTER);
 
-		frmHealthcareManagementSystem.setSize(500, 400);
+		frmHealthcareManagementSystem.setSize(600, 500);
 		// frame.pack();
 		// frame.setResizable(false);
 	}
