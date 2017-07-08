@@ -1,7 +1,8 @@
 --  drop table ambulatory, company, employee, patient, service, visit;
+--  drop domain jobs, provinces;
 
 create domain jobs as varchar(30)
-check(value in('secretary', 'nurse','oculist', 'orthoptist', 'physiotherapist', 'cardiologist', 'dermatologist', 'oncologist', 'geriatrician' ));
+check(value in('dentista', 'segretario', 'infermiere','oculista', 'ortopedista', 'fisioterapista', 'cardiologo', 'dermatologo', 'oncologo', 'geriatra' ));
 
 create domain provinces as char(2)
 check(value in('AG','AL','AN','AO','AR','AP','AT','AV','BA','BT','BL','BN','BG','BI','BO','BZ','BS','BR','CA','CL','CB','CI','CE','CT','CZ','CH','CO','CS','CR','KR','CN','EN','FM','FE','FI','FG','FC','FR','GE','GO','GR','IM','IS','SP','AQ','LT','LE','LC','LI','LO','LU','MC','MN','MS','MT','ME','MI','MO','MB','NA','NO','NU','OT','OR','PD','PA','PR','PV','PG','PU','PE','PC','PI','PT','PN','PZ','PO','RG','RA','RC','RE','RI','RN','RM','RO','SA','VS','SS','SV','SI','SR','SO','TA','TE','TR','TO','OG','TP','TN','TV','TS','UD','VA','VE','VB','VC','VR','VV','VI','VT'));
@@ -33,6 +34,7 @@ create table ambulatory(
 create table patient(
     fiscalcode varchar primary key check(fiscalcode similar to '[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]'),
     healthcarecompany varchar references company(id),
+	pin char(4) CHECK(pin SIMILAR TO '[0-9]{4}') NOT NULL,
     name varchar(50) not null,
     surname varchar(50) not null,
     birthdate date not null,
@@ -43,7 +45,8 @@ create table patient(
 
 create table employee(
     fiscalcode varchar primary key check(fiscalcode similar to '[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]'),
-    employeeCode varchar(8) check(employeeCode similar to 'JOBIT[0-9]{4}'),
+    employeeCode varchar(9) check(employeeCode similar to 'JOBIT[0-9]{4}'),
+	password varchar(30) NOT NULL,
     name varchar(50) not null,
     surname varchar(50) not null,
     job jobs not null,
@@ -66,12 +69,12 @@ create table visit(
 	company varchar,
     doctor varchar references employee,
     date date,
-	hour smallint check ( hour > 8 AND hour < 16 ),
-    result text,
-    urgency varchar check(urgency in('low', 'mid', 'high')),
+	hour smallint check ( hour >= 8 AND hour <= 16 ),
+    urgency varchar check(urgency in('bassa', 'media', 'alta')),
     regime varchar check(regime in('privata', 'rimborsata dal sistema sanitario','rimborsata da assicurazioni private')),
+    result text,
 	FOREIGN KEY(ambulatory, company) REFERENCES ambulatory(name, company),
-    primary key(patient, ambulatory, company, date)
+    primary key(patient, ambulatory, company, date, hour)
 )
 
 
