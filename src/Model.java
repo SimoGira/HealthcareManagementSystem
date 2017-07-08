@@ -1,4 +1,11 @@
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 public class Model {
 	private String url;
@@ -12,7 +19,7 @@ public class Model {
 	private void setParameters() throws ClassNotFoundException {
 		// TODO: replace the below code opening a configuration file and getting the credentials
 		url = "jdbc:postgresql://localhost/dbhms";
-		user = "simonegirardi";
+		user = "postgres";
 		password = "";
 
 		Class.forName("org.postgresql.Driver");
@@ -20,48 +27,27 @@ public class Model {
 
 	public void insertAmbulatory(Ambulatory amb)
 	{
-		try(Connection con = DriverManager.getConnection(url, user, password)){
+		try(Connection con = DriverManager.getConnection(url, user, password)){ // forse la password non è da mettere necessariamente (io accedo senza pswd)
 
 			String query = "INSERT INTO ambulatory (name, company, street, cap, city, province, contractDate, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 			try(PreparedStatement pst = con.prepareStatement(query)){
-					pst.clearParameters();
-					pst.setString(0, amb.name);
-					pst.setString(1, amb.company);
-					pst.setString(2, amb.street);
-					pst.setString(3, amb.cap);
-					pst.setString(4, amb.city);
-					pst.setString(5, amb.province);
-					pst.setDate(6, amb.contractDate);
-					pst.setString(7, amb.description);
+				pst.clearParameters();
+				pst.setString(0, amb.name);
+				pst.setString(1, amb.company);
+				pst.setString(2, amb.street);
+				pst.setString(3, amb.cap);
+				pst.setString(4, amb.city);
+				pst.setString(5, amb.province);
+				pst.setDate(6, amb.contractDate);
+				pst.setString(7, amb.description);
 			}
-			
-		} catch (SQLException e1) {
-			System.out.println( "Errore durante connessione al database: " + e1.getMessage() );
-		}
-	}
-	
-	public void updateAmbulatory(Ambulatory amb){
-		try(Connection con = DriverManager.getConnection(url, user, password)){
 
-			String query = "UPDATE SET street = ?, cap = ?, city = ?, province = ?, contractDate = ?, description = ?, WHERE name = ? AND company = ?";
-			try(PreparedStatement pst = con.prepareStatement(query)){
-					pst.clearParameters();
-					pst.setString(0, amb.name);
-					pst.setString(1, amb.company);
-					pst.setString(2, amb.street);
-					pst.setString(3, amb.cap);
-					pst.setString(4, amb.city);
-					pst.setString(5, amb.province);
-					pst.setDate(6, amb.contractDate);
-					pst.setString(7, amb.description);
-			}
-			
 		} catch (SQLException e1) {
 			System.out.println( "Errore durante connessione al database: " + e1.getMessage() );
 		}
 	}
-	
-	private void updateDb() {
+
+	private void updateDb() throws ParseException {
 		try(Connection con = DriverManager.getConnection(url, user, password)){
 
 			// create tables
@@ -81,11 +67,11 @@ public class Model {
 				pst.setDate(1, new Date( sdf.parse("24/02/1993").getTime()));
 				pst.setString(2, "KARIM");
 				pst.setInt(3, 24);
-				
+
 				pst.setDate(4, new Date( sdf.parse("16/12/1991").getTime()));
 				pst.setString(5, "ADRIANO");
 				pst.setInt(6, 25);
-				
+
 				int n = pst.executeUpdate();
 				System.out.println( "Inserted " + n + " rows" );
 
@@ -94,11 +80,11 @@ public class Model {
 				System.out.println( "Errore durante inserimento dati: " + e.getMessage() );
 				return;
 			}
-			
-			
+
+
 			// TODO: query database 
 			// ...
-			
+
 		} catch (SQLException e1) {
 			System.out.println( "Errore durante connessione al database: " + e1.getMessage() );
 		}
