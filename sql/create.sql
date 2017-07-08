@@ -1,4 +1,5 @@
 --  drop table ambulatory, company, employee, patient, service, visit;
+--  drop domain jobs, provinces;
 
 create domain jobs as varchar(30)
 check(value in('dentista', 'segretario', 'infermiere','oculista', 'ortopedista', 'fisioterapista', 'cardiologo', 'dermatologo', 'oncologo', 'geriatra' ));
@@ -33,7 +34,7 @@ create table ambulatory(
 create table patient(
     fiscalcode varchar primary key check(fiscalcode similar to '[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]'),
     healthcarecompany varchar references company(id),
-	pin char(4) CHECK(pin SIMILAR TO '[0-9]{4}' NOT NULL,
+	pin char(4) CHECK(pin SIMILAR TO '[0-9]{4}') NOT NULL,
     name varchar(50) not null,
     surname varchar(50) not null,
     birthdate date not null,
@@ -44,7 +45,7 @@ create table patient(
 
 create table employee(
     fiscalcode varchar primary key check(fiscalcode similar to '[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]'),
-    employeeCode varchar(8) check(employeeCode similar to 'JOBIT[0-9]{4}'),
+    employeeCode varchar(9) check(employeeCode similar to 'JOBIT[0-9]{4}'),
 	password varchar(30) NOT NULL,
     name varchar(50) not null,
     surname varchar(50) not null,
