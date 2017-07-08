@@ -30,7 +30,11 @@ VALUES
 ('GENETICA MEDICA', 'cp01', 'visita oncologica'),
 ('GENETICA MEDICA', 'cp01', 'visita geriatrica'),
 ('ANGIOEDEMA EREDITARIO ED ALTRE FORME DI ANGIOEDEMA', 'cp01', 'visita angiodema'),
-('IMMUNODEFICIENZE CONGENITE E ACQUISITE (DIVISIONALE)', 'cp01', 'visita polmonare'),('PATOLOGIA RICOSTRUTTIVA DELLA MAMMELLA', 'cp01', 'ricostruzione tessuti mammari'),('NEOPLASIE POLMONARI E TRATTO GASTROENTERICO', 'cp02', 'visita gastroenterica'),('NEOPLASIE POLMONARI E TRATTO GASTROENTERICO', 'cp02', 'visita polmonare'),('NEOPLASIE POLMONARI E TRATTO GASTROENTERICO', 'cp02', 'visita cervello');
+('IMMUNODEFICIENZE CONGENITE E ACQUISITE (DIVISIONALE)', 'cp01', 'visita polmonare'),
+('PATOLOGIA RICOSTRUTTIVA DELLA MAMMELLA', 'cp01', 'ricostruzione tessuti mammari'),
+('NEOPLASIE POLMONARI E TRATTO GASTROENTERICO', 'cp02', 'visita gastroenterica'),
+('NEOPLASIE POLMONARI E TRATTO GASTROENTERICO', 'cp02', 'visita polmonare'),
+('NEOPLASIE POLMONARI E TRATTO GASTROENTERICO', 'cp02', 'visita cervello');
 
 
  
