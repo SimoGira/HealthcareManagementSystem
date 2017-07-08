@@ -438,9 +438,9 @@ public class View {
 		panelInsertClinic.add(panelInsertClinicData, BorderLayout.WEST);
 		GridBagLayout gbl_panelInsertClinicData = new GridBagLayout();
 		gbl_panelInsertClinicData.columnWidths = new int[]{150, 0};
-		gbl_panelInsertClinicData.rowHeights = new int[]{20, 14, 20, 14, 20, 14, 20, 14, 20, 14, 20, 14, 20, 0};
+		gbl_panelInsertClinicData.rowHeights = new int[]{20, 14, 20, 14, 20, 14, 20, 14, 20, 14, 20, 14, 0};
 		gbl_panelInsertClinicData.columnWeights = new double[]{0.0, Double.MIN_VALUE};
-		gbl_panelInsertClinicData.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_panelInsertClinicData.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		panelInsertClinicData.setLayout(gbl_panelInsertClinicData);
 
 		JLabel lblInsertClinicName = new JLabel("Nome:");
@@ -537,18 +537,17 @@ public class View {
 
 		JFormattedTextField formattedTextFieldInsertClinicContractDate = new JFormattedTextField(sdf);
 		GridBagConstraints gbc_formattedTextFieldInsertClinicContractDate = new GridBagConstraints();
-		gbc_formattedTextFieldInsertClinicContractDate.insets = new Insets(0, 0, 5, 0);
 		gbc_formattedTextFieldInsertClinicContractDate.fill = GridBagConstraints.HORIZONTAL;
 		gbc_formattedTextFieldInsertClinicContractDate.gridx = 0;
 		gbc_formattedTextFieldInsertClinicContractDate.gridy = 11;
 		panelInsertClinicData.add(formattedTextFieldInsertClinicContractDate, gbc_formattedTextFieldInsertClinicContractDate);
 
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBorder(new TitledBorder(null, "Descrizione", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panelInsertClinic.add(scrollPane, BorderLayout.CENTER);
+		JScrollPane scrollPaneInsertClinicDescription = new JScrollPane();
+		scrollPaneInsertClinicDescription.setBorder(new TitledBorder(null, "Descrizione", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panelInsertClinic.add(scrollPaneInsertClinicDescription, BorderLayout.CENTER);
 
-		JTextArea textArea = new JTextArea();
-		scrollPane.setViewportView(textArea);
+		JTextArea textAreaInsertClinicDescription = new JTextArea();
+		scrollPaneInsertClinicDescription.setViewportView(textAreaInsertClinicDescription);
 
 		JPanel panelInsertClinicButton = new JPanel();
 		FlowLayout fl_panelInsertClinicButton = (FlowLayout) panelInsertClinicButton.getLayout();
