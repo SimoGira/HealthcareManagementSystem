@@ -34,14 +34,14 @@ public class Database {
 			String query = "INSERT INTO Clinic (name, company, street, cap, city, province, contractDate, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 			try(PreparedStatement pst = con.prepareStatement(query)){
 				pst.clearParameters();
-				pst.setString(0, clinc.name);
-				pst.setString(1, clinc.company);
-				pst.setString(2, clinc.street);
-				pst.setString(3, clinc.cap);
-				pst.setString(4, clinc.city);
-				pst.setString(5, clinc.province);
-				pst.setDate(6, clinc.contractDate);
-				pst.setString(7, clinc.description);
+				pst.setString(1, clinc.name);
+				pst.setString(2, clinc.company);
+				pst.setString(3, clinc.street);
+				pst.setString(4, clinc.cap);
+				pst.setString(5, clinc.city);
+				pst.setString(6, clinc.province);
+				pst.setDate(7, clinc.contractDate);
+				pst.setString(8, clinc.description);
 			}
 
 		} catch (SQLException e1) {
@@ -56,14 +56,14 @@ public class Database {
 			String query = "UPDATE Clinic SET street = ?, cap = ?, city = ?, province = ?, contractDate = ?, description = ? WHERE name = ? AND company = ?";
 			try(PreparedStatement pst = con.prepareStatement(query)){
 				pst.clearParameters();
-				pst.setString(0, clinic.street);
-				pst.setString(1, clinic.cap);
-				pst.setString(2, clinic.city);
-				pst.setString(3, clinic.province);
-				pst.setDate(4, clinic.contractDate);
-				pst.setString(5, clinic.description);
-				pst.setString(6, clinic.name);
-				pst.setString(7, clinic.company);
+				pst.setString(1, clinic.street);
+				pst.setString(2, clinic.cap);
+				pst.setString(3, clinic.city);
+				pst.setString(4, clinic.province);
+				pst.setDate(5, clinic.contractDate);
+				pst.setString(6, clinic.description);
+				pst.setString(7, clinic.name);
+				pst.setString(8, clinic.company);
 			}
 
 		} catch (SQLException e1) {
@@ -78,12 +78,12 @@ public class Database {
 			String query = "SELECT COUNT(*) FROM employee WHERE employeeCode = ? AND password = ?";
 			try(PreparedStatement pst = con.prepareStatement(query)){
 				pst.clearParameters();
-				pst.setString(0, employeeCode); 
-				pst.setString(1, password); 
+				pst.setString(1, employeeCode); 
+				pst.setString(2, password); 
 				ResultSet rs = pst.executeQuery(); 
 				while(rs.next())
 				{
-					if(rs.getInt(0) == 1)
+					if(rs.getInt(1) == 1)
 						return true;
 				} 
 			} 
@@ -128,7 +128,7 @@ public class Database {
 			String query = "SELECT * FROM visit WHERE patient = ? AND result NOT IS NULL";
 			try(PreparedStatement pst = con.prepareStatement(query)){
 				pst.clearParameters();
-				pst.setString(0, fiscalCode); 
+				pst.setString(1, fiscalCode); 
 				ResultSet rs = pst.executeQuery();
 				ArrayList<Visit> visits = new ArrayList<Visit>();
 				while(rs.next())
@@ -165,7 +165,7 @@ public class Database {
 			String query = "SELECT * FROM Clinic WHERE company = ?";
 			try(PreparedStatement pst = con.prepareStatement(query)){
 				pst.clearParameters();
-				pst.setString(0, company); 
+				pst.setString(1, company); 
 				ResultSet rs = pst.executeQuery();
 				ArrayList<Clinic> clinics = new ArrayList<Clinic>();
 				while(rs.next())
