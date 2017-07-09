@@ -7,7 +7,6 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -16,7 +15,7 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Month;
+import java.util.Calendar;
 
 import javax.swing.AbstractListModel;
 import javax.swing.DefaultComboBoxModel;
@@ -41,6 +40,7 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
@@ -61,6 +61,11 @@ public class View {
 	private CardLayout clfrmHealhcareManagementSystem;
 	private Database db;
 	private JLabel lblWeolcomePatient;
+	private JLabel[][] lbldays;
+	private static final int DAYSR = 6;
+	private static final int DAYSC = 7;
+	private JComboBox<Integer> selectedMonth;
+	private JComboBox<String> comboBoxSelectBookVisitMonth;
 
 
 	/**
@@ -386,84 +391,152 @@ public class View {
 		tabbedPanePatient.addTab("Prenotazione visite", null, panelBookVisit, null);
 		panelBookVisit.setLayout(new BorderLayout(0, 0));
 
-		JPanel bookVisitNorthPanel = new JPanel();
-		panelBookVisit.add(bookVisitNorthPanel, BorderLayout.WEST);
-		GridBagLayout gbl_bookVisitNorthPanel = new GridBagLayout();
-		gbl_bookVisitNorthPanel.columnWidths = new int[]{29, 49, 29, 37, 35, 28, 22, 28, 0};
-		gbl_bookVisitNorthPanel.rowHeights = new int[]{20, 0, 0, 0, 0, 0, 0, 0, 0};
-		gbl_bookVisitNorthPanel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gbl_bookVisitNorthPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		bookVisitNorthPanel.setLayout(gbl_bookVisitNorthPanel);
+		JPanel bookVisitCenterPanel = new JPanel();
+		bookVisitCenterPanel.setBorder(new EmptyBorder(5, 5, 0, 0));
+		panelBookVisit.add(bookVisitCenterPanel, BorderLayout.CENTER);
+		GridBagLayout gbl_bookVisitCenterPanel = new GridBagLayout();
+		gbl_bookVisitCenterPanel.columnWidths = new int[]{106, 52, 0, 28, 0, 29, 100, 0, 44, 100, 28, 22, 28, 0};
+		gbl_bookVisitCenterPanel.rowHeights = new int[]{20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_bookVisitCenterPanel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_bookVisitCenterPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		bookVisitCenterPanel.setLayout(gbl_bookVisitCenterPanel);
 
-		JLabel lblBookVisitAnno = new JLabel("Anno:");
-		GridBagConstraints gbc_lblBookVisitAnno = new GridBagConstraints();
-		gbc_lblBookVisitAnno.anchor = GridBagConstraints.WEST;
-		gbc_lblBookVisitAnno.insets = new Insets(0, 0, 5, 5);
-		gbc_lblBookVisitAnno.gridx = 0;
-		gbc_lblBookVisitAnno.gridy = 0;
-		bookVisitNorthPanel.add(lblBookVisitAnno, gbc_lblBookVisitAnno);
+		JLabel lblSelectBookVisitType = new JLabel("Tipo visita:");
+		GridBagConstraints gbc_lblSelectBookVisitType = new GridBagConstraints();
+		gbc_lblSelectBookVisitType.anchor = GridBagConstraints.WEST;
+		gbc_lblSelectBookVisitType.insets = new Insets(0, 0, 5, 5);
+		gbc_lblSelectBookVisitType.gridx = 1;
+		gbc_lblSelectBookVisitType.gridy = 3;
+		bookVisitCenterPanel.add(lblSelectBookVisitType, gbc_lblSelectBookVisitType);
 
-		JComboBox comboBoxBookVisitYear = new JComboBox();
-		comboBoxBookVisitYear.setModel(new DefaultComboBoxModel(new String[] {"2017", "2018"}));
-		GridBagConstraints gbc_comboBoxBookVisitYear = new GridBagConstraints();
-		gbc_comboBoxBookVisitYear.anchor = GridBagConstraints.NORTHWEST;
-		gbc_comboBoxBookVisitYear.insets = new Insets(0, 0, 5, 5);
-		gbc_comboBoxBookVisitYear.gridx = 0;
-		gbc_comboBoxBookVisitYear.gridy = 1;
-		bookVisitNorthPanel.add(comboBoxBookVisitYear, gbc_comboBoxBookVisitYear);
+		JComboBox comboBoxSelectBookVisitType = new JComboBox();
+		GridBagConstraints gbc_comboBoxSelectBookVisitType = new GridBagConstraints();
+		gbc_comboBoxSelectBookVisitType.gridwidth = 5;
+		gbc_comboBoxSelectBookVisitType.fill = GridBagConstraints.HORIZONTAL;
+		gbc_comboBoxSelectBookVisitType.anchor = GridBagConstraints.NORTHWEST;
+		gbc_comboBoxSelectBookVisitType.insets = new Insets(0, 0, 5, 5);
+		gbc_comboBoxSelectBookVisitType.gridx = 2;
+		gbc_comboBoxSelectBookVisitType.gridy = 3;
+		bookVisitCenterPanel.add(comboBoxSelectBookVisitType, gbc_comboBoxSelectBookVisitType);
 
-		JLabel lblBookVisitMonth = new JLabel("Mese:");
-		GridBagConstraints gbc_lblBookVisitMonth = new GridBagConstraints();
-		gbc_lblBookVisitMonth.anchor = GridBagConstraints.WEST;
-		gbc_lblBookVisitMonth.insets = new Insets(0, 0, 5, 5);
-		gbc_lblBookVisitMonth.gridx = 0;
-		gbc_lblBookVisitMonth.gridy = 2;
-		bookVisitNorthPanel.add(lblBookVisitMonth, gbc_lblBookVisitMonth);
+		JLabel lblSelectBookVisitYear = new JLabel("Anno:");
+		GridBagConstraints gbc_lblSelectBookVisitYear = new GridBagConstraints();
+		gbc_lblSelectBookVisitYear.anchor = GridBagConstraints.EAST;
+		gbc_lblSelectBookVisitYear.insets = new Insets(0, 0, 5, 5);
+		gbc_lblSelectBookVisitYear.gridx = 1;
+		gbc_lblSelectBookVisitYear.gridy = 5;
+		bookVisitCenterPanel.add(lblSelectBookVisitYear, gbc_lblSelectBookVisitYear);
 
-		JComboBox<Month> comboBoxBookVisitMonth = new JComboBox<Month>();
-		comboBoxBookVisitMonth.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"}));
-		GridBagConstraints gbc_comboBoxBookVisitMonth = new GridBagConstraints();
-		gbc_comboBoxBookVisitMonth.anchor = GridBagConstraints.NORTHWEST;
-		gbc_comboBoxBookVisitMonth.insets = new Insets(0, 0, 5, 5);
-		gbc_comboBoxBookVisitMonth.gridx = 0;
-		gbc_comboBoxBookVisitMonth.gridy = 3;
-		bookVisitNorthPanel.add(comboBoxBookVisitMonth, gbc_comboBoxBookVisitMonth);
-		JLabel lblBookVisitDay = new JLabel("Urgenza:");
-		GridBagConstraints gbc_lblBookVisitDay = new GridBagConstraints();
-		gbc_lblBookVisitDay.anchor = GridBagConstraints.WEST;
-		gbc_lblBookVisitDay.insets = new Insets(0, 0, 5, 5);
-		gbc_lblBookVisitDay.gridx = 0;
-		gbc_lblBookVisitDay.gridy = 4;
-		bookVisitNorthPanel.add(lblBookVisitDay, gbc_lblBookVisitDay);
+		JComboBox<Integer> comboBoxSelectBookVisitYear = new JComboBox<Integer>();
+		comboBoxSelectBookVisitYear.addItem(Calendar.getInstance().get(Calendar.YEAR));
+		comboBoxSelectBookVisitYear.addItem(Calendar.getInstance().get(Calendar.YEAR)+1);
+		GridBagConstraints gbc_comboBoxSelectBookVisitYear = new GridBagConstraints();
+		gbc_comboBoxSelectBookVisitYear.fill = GridBagConstraints.HORIZONTAL;
+		gbc_comboBoxSelectBookVisitYear.gridwidth = 2;
+		gbc_comboBoxSelectBookVisitYear.anchor = GridBagConstraints.NORTHWEST;
+		gbc_comboBoxSelectBookVisitYear.insets = new Insets(0, 0, 5, 5);
+		gbc_comboBoxSelectBookVisitYear.gridx = 2;
+		gbc_comboBoxSelectBookVisitYear.gridy = 5;
+		bookVisitCenterPanel.add(comboBoxSelectBookVisitYear, gbc_comboBoxSelectBookVisitYear);
 
-		JComboBox comboBoxBookVisitDay = new JComboBox();
-		comboBoxBookVisitDay.setModel(new DefaultComboBoxModel(new String[] {"Bassa", "Medio", "Alta"}));
-		GridBagConstraints gbc_comboBoxBookVisitDay = new GridBagConstraints();
-		gbc_comboBoxBookVisitDay.anchor = GridBagConstraints.NORTHWEST;
-		gbc_comboBoxBookVisitDay.insets = new Insets(0, 0, 5, 5);
-		gbc_comboBoxBookVisitDay.gridx = 0;
-		gbc_comboBoxBookVisitDay.gridy = 5;
-		bookVisitNorthPanel.add(comboBoxBookVisitDay, gbc_comboBoxBookVisitDay);
+		JLabel lblSelectBookVisitMonth = new JLabel("Mese:");
+		GridBagConstraints gbc_lblSelectBookVisitMonth = new GridBagConstraints();
+		gbc_lblSelectBookVisitMonth.anchor = GridBagConstraints.WEST;
+		gbc_lblSelectBookVisitMonth.insets = new Insets(0, 0, 5, 5);
+		gbc_lblSelectBookVisitMonth.gridx = 5;
+		gbc_lblSelectBookVisitMonth.gridy = 5;
+		bookVisitCenterPanel.add(lblSelectBookVisitMonth, gbc_lblSelectBookVisitMonth);
 
-		JLabel lblBookVisitHour = new JLabel("Regime:");
-		GridBagConstraints gbc_lblBookVisitHour = new GridBagConstraints();
-		gbc_lblBookVisitHour.anchor = GridBagConstraints.WEST;
-		gbc_lblBookVisitHour.insets = new Insets(0, 0, 5, 5);
-		gbc_lblBookVisitHour.gridx = 0;
-		gbc_lblBookVisitHour.gridy = 6;
-		bookVisitNorthPanel.add(lblBookVisitHour, gbc_lblBookVisitHour);
+		comboBoxSelectBookVisitMonth = new JComboBox<String>();
+		comboBoxSelectBookVisitMonth.setModel(new DefaultComboBoxModel(Month.values()));
+		GridBagConstraints gbc_comboBoxSelectBookVisitMonth = new GridBagConstraints();
+		gbc_comboBoxSelectBookVisitMonth.fill = GridBagConstraints.HORIZONTAL;
+		gbc_comboBoxSelectBookVisitMonth.anchor = GridBagConstraints.NORTHWEST;
+		gbc_comboBoxSelectBookVisitMonth.insets = new Insets(0, 0, 5, 5);
+		gbc_comboBoxSelectBookVisitMonth.gridx = 6;
+		gbc_comboBoxSelectBookVisitMonth.gridy = 5;
+		bookVisitCenterPanel.add(comboBoxSelectBookVisitMonth, gbc_comboBoxSelectBookVisitMonth);
 
-		JComboBox comboBoxBookVisitHour = new JComboBox();
-		GridBagConstraints gbc_comboBoxBookVisitHour = new GridBagConstraints();
-		gbc_comboBoxBookVisitHour.insets = new Insets(0, 0, 0, 5);
-		gbc_comboBoxBookVisitHour.anchor = GridBagConstraints.NORTHWEST;
-		gbc_comboBoxBookVisitHour.gridx = 0;
-		gbc_comboBoxBookVisitHour.gridy = 7;
-		bookVisitNorthPanel.add(comboBoxBookVisitHour, gbc_comboBoxBookVisitHour);
+		JLabel lblSelectBookVisitDay = new JLabel("Giorno:");
+		GridBagConstraints gbc_lblSelectBookVisitDay = new GridBagConstraints();
+		gbc_lblSelectBookVisitDay.anchor = GridBagConstraints.EAST;
+		gbc_lblSelectBookVisitDay.insets = new Insets(0, 0, 5, 5);
+		gbc_lblSelectBookVisitDay.gridx = 8;
+		gbc_lblSelectBookVisitDay.gridy = 5;
+		bookVisitCenterPanel.add(lblSelectBookVisitDay, gbc_lblSelectBookVisitDay);
 
-		JPanel panel = new JPanel();
-		panelBookVisit.add(panel, BorderLayout.CENTER);
-		panel.setLayout(new GridLayout(6, 6, 0, 0));
+		JComboBox comboBoxSelectBookVisitDAy = new JComboBox();
+		comboBoxSelectBookVisitDAy.setModel(new DefaultComboBoxModel(Days.values()));
+		GridBagConstraints gbc_comboBoxSelectBookVisitDAy = new GridBagConstraints();
+		gbc_comboBoxSelectBookVisitDAy.insets = new Insets(0, 0, 5, 5);
+		gbc_comboBoxSelectBookVisitDAy.fill = GridBagConstraints.HORIZONTAL;
+		gbc_comboBoxSelectBookVisitDAy.gridx = 9;
+		gbc_comboBoxSelectBookVisitDAy.gridy = 5;
+		bookVisitCenterPanel.add(comboBoxSelectBookVisitDAy, gbc_comboBoxSelectBookVisitDAy);
+
+		JLabel lblSelectBookVisitHour = new JLabel("Ora:");
+		GridBagConstraints gbc_lblSelectBookVisitHour = new GridBagConstraints();
+		gbc_lblSelectBookVisitHour.anchor = GridBagConstraints.EAST;
+		gbc_lblSelectBookVisitHour.insets = new Insets(0, 0, 5, 5);
+		gbc_lblSelectBookVisitHour.gridx = 1;
+		gbc_lblSelectBookVisitHour.gridy = 7;
+		bookVisitCenterPanel.add(lblSelectBookVisitHour, gbc_lblSelectBookVisitHour);
+
+		JComboBox comboBoxSelectBookVisitHour = new JComboBox();
+		GridBagConstraints gbc_comboBoxSelectBookVisitHour = new GridBagConstraints();
+		gbc_comboBoxSelectBookVisitHour.fill = GridBagConstraints.HORIZONTAL;
+		gbc_comboBoxSelectBookVisitHour.insets = new Insets(0, 0, 5, 5);
+		gbc_comboBoxSelectBookVisitHour.anchor = GridBagConstraints.NORTHWEST;
+		gbc_comboBoxSelectBookVisitHour.gridx = 2;
+		gbc_comboBoxSelectBookVisitHour.gridy = 7;
+		bookVisitCenterPanel.add(comboBoxSelectBookVisitHour, gbc_comboBoxSelectBookVisitHour);
+		JLabel lblSelectBookVisitUrgency = new JLabel("Urgenza:");
+		GridBagConstraints gbc_lblSelectBookVisitUrgency = new GridBagConstraints();
+		gbc_lblSelectBookVisitUrgency.anchor = GridBagConstraints.EAST;
+		gbc_lblSelectBookVisitUrgency.insets = new Insets(0, 0, 5, 5);
+		gbc_lblSelectBookVisitUrgency.gridx = 1;
+		gbc_lblSelectBookVisitUrgency.gridy = 9;
+		bookVisitCenterPanel.add(lblSelectBookVisitUrgency, gbc_lblSelectBookVisitUrgency);
+
+		JComboBox comboBoxSelectBookVisitUrgency = new JComboBox();
+		comboBoxSelectBookVisitUrgency.setModel(new DefaultComboBoxModel(new String[] {"Bassa", "Medio", "Alta"}));
+		GridBagConstraints gbc_comboBoxSelectBookVisitUrgency = new GridBagConstraints();
+		gbc_comboBoxSelectBookVisitUrgency.anchor = GridBagConstraints.NORTHWEST;
+		gbc_comboBoxSelectBookVisitUrgency.insets = new Insets(0, 0, 5, 5);
+		gbc_comboBoxSelectBookVisitUrgency.gridx = 2;
+		gbc_comboBoxSelectBookVisitUrgency.gridy = 9;
+		bookVisitCenterPanel.add(comboBoxSelectBookVisitUrgency, gbc_comboBoxSelectBookVisitUrgency);
+
+		JLabel lblSelectBookVisitRegime = new JLabel("Regime:");
+		GridBagConstraints gbc_lblSelectBookVisitRegime = new GridBagConstraints();
+		gbc_lblSelectBookVisitRegime.anchor = GridBagConstraints.EAST;
+		gbc_lblSelectBookVisitRegime.insets = new Insets(0, 0, 0, 5);
+		gbc_lblSelectBookVisitRegime.gridx = 1;
+		gbc_lblSelectBookVisitRegime.gridy = 11;
+		bookVisitCenterPanel.add(lblSelectBookVisitRegime, gbc_lblSelectBookVisitRegime);
+
+		JComboBox comboBoxSelectBookVisitRegime = new JComboBox();
+		GridBagConstraints gbc_comboBoxSelectBookVisitRegime = new GridBagConstraints();
+		gbc_comboBoxSelectBookVisitRegime.fill = GridBagConstraints.HORIZONTAL;
+		gbc_comboBoxSelectBookVisitRegime.anchor = GridBagConstraints.NORTHWEST;
+		gbc_comboBoxSelectBookVisitRegime.insets = new Insets(0, 0, 0, 5);
+		gbc_comboBoxSelectBookVisitRegime.gridx = 2;
+		gbc_comboBoxSelectBookVisitRegime.gridy = 11;
+		bookVisitCenterPanel.add(comboBoxSelectBookVisitRegime, gbc_comboBoxSelectBookVisitRegime);
+
+		JLabel lblLuned = new JLabel("Luned\u00EC");
+
+		JLabel lblMarted = new JLabel("Marted\u00EC");
+
+		JPanel bookVisitSouthButtonPanel = new JPanel();
+		bookVisitSouthButtonPanel.setBorder(new LineBorder(Color.LIGHT_GRAY));
+		FlowLayout fl_bookVisitSouthButtonPanel = (FlowLayout) bookVisitSouthButtonPanel.getLayout();
+		fl_bookVisitSouthButtonPanel.setAlignment(FlowLayout.RIGHT);
+		panelBookVisit.add(bookVisitSouthButtonPanel, BorderLayout.SOUTH);
+
+		JButton btnBookVisit = new JButton("Prenota");
+		btnBookVisit.setToolTipText("Clicca per prenotare");
+		bookVisitSouthButtonPanel.add(btnBookVisit);
 
 		JPanel panelEmployee = new JPanel();
 		frmHealthcareManagementSystem.getContentPane().add(panelEmployee, "panelEmployee");
@@ -746,7 +819,7 @@ public class View {
 		btnVisualizza.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("DA IMPLEMENTARE");
-				ArrayList<Clinic> clincs = db.getClinics(Employee.getInstance().getClinic());
+				//ArrayList<Clinic> clincs = db.getClinics(Employee.getInstance().getClinic());
 			}
 		});
 		panelViewVisitPerPatientNorth.add(btnVisualizza);
@@ -806,11 +879,11 @@ public class View {
 		fl_panelpanelViewVisitResultsPerPatientSouth.setAlignment(FlowLayout.RIGHT);
 		panelViewVisitResultsPerPatient.add(panelpanelViewVisitResultsPerPatientSouth, BorderLayout.SOUTH);
 
-		JLabel lblBackToViewVisitPerPatient = new JLabel("Indietro");
-		panelpanelViewVisitResultsPerPatientSouth.add(lblBackToViewVisitPerPatient);
-
-		JButton btnBackToViewVisitPerPatient = new JButton("Stampa");
+		JButton btnBackToViewVisitPerPatient = new JButton("Indietro");
 		panelpanelViewVisitResultsPerPatientSouth.add(btnBackToViewVisitPerPatient);
+
+		JButton btnPrintReaultVisitPatient = new JButton("Stampa");
+		panelpanelViewVisitResultsPerPatientSouth.add(btnPrintReaultVisitPatient);
 
 		JPanel panelEmployeeNorth = new JPanel();
 		panelEmployee.add(panelEmployeeNorth, BorderLayout.NORTH);
@@ -891,7 +964,66 @@ public class View {
 
 		frmHealthcareManagementSystem.setSize(700, 600);
 		frmHealthcareManagementSystem.setLocationRelativeTo(null);
+		initializeCalendar();
 		// frame.pack();
 		// frame.setResizable(false);
+	}
+
+	private void initializeCalendar() {
+		/*
+		// DA CAMBIARE IN GRID BAG LAYOUT
+		lbldays = new JLabel[DAYSR][DAYSC];
+		System.out.println("qui valentina: "+comboBoxSelectBookVisitMonth.getSelectedItem());
+
+		// Get the number of days in that month
+		YearMonth yearMonthObject = YearMonth.of(2017, 1);
+		int daysInMonth = yearMonthObject.lengthOfMonth(); //28
+
+
+		// header
+		for(int i = 0; i < 1; i++){
+			for(int j = 0; j < DAYSC; j++){
+				lbldays[i][j] = new JLabel(""+Days.values()[j], SwingConstants.CENTER);
+				lbldays[i][j].setBorder(new LineBorder(Color.LIGHT_GRAY));
+				lbldays[i][j].setOpaque(true);
+				lbldays[i][j].setBackground(Color.decode("0x87CEEB"));
+
+				GridBagConstraints gbc_lblDays = new GridBagConstraints();
+				gbc_lblDays.insets = new Insets(0, 0, 0, 0);
+				gbc_lblDays.gridx = j;
+				gbc_lblDays.gridy = i;
+				bookVisitCenterCalendarPanel.add(lbldays[i][j], gbc_lblDays);
+			}
+		}
+		 */
+
+		/*
+		// cells
+		int day = 1;
+		for(int i = 1; i < DAYSR; i++){
+			for(int j = 0; j < DAYSC ; j++){
+				 if(day > daysInMonth){
+					 lbldays[i][j] = new JLabel("", SwingConstants.CENTER);
+					 lbldays[i][j].setBorder(new LineBorder(Color.LIGHT_GRAY));
+					 GridBagConstraints gbc_lblDays = new GridBagConstraints();
+					 gbc_lblDays.insets = new Insets(0, 0, 0, 0);
+					 gbc_lblDays.gridx = j;
+					 gbc_lblDays.gridy = i;
+					 bookVisitCenterCalendarPanel.add(lbldays[i][j], gbc_lblDays);
+				 }
+				 else{
+					 lbldays[i][j] = new JLabel(""+day++, SwingConstants.CENTER);
+					 lbldays[i][j].setBorder(new LineBorder(Color.LIGHT_GRAY));
+					 GridBagConstraints gbc_lblDays = new GridBagConstraints();
+					 gbc_lblDays.insets = new Insets(0, 0, 0, 0);
+					 gbc_lblDays.gridx = j;
+					 gbc_lblDays.gridy = i;
+					 bookVisitCenterCalendarPanel.add(lbldays[i][j], gbc_lblDays);
+				 }
+			}
+		}
+		 */
+
+
 	}
 }
