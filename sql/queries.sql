@@ -32,3 +32,5 @@ SET result = ?
 WHERE patient = ? AND clinic = ? AND company = ? AND serviceName = ?
 
 
+SELECT EXTRACT(DAY FROM(date)) as day , COUNT(*) as cnt FROM visit WHERE clinic = 'GENETICA MEDICA' AND company = 'cp01' AND NOT result IS NULL GROUP BY date;
+

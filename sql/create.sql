@@ -71,7 +71,7 @@ create table visit(
 	serviceName varchar,
     doctor varchar references employee,
     date date,
-	hour smallint check ( hour >= 8 AND hour <= 16 ),
+	hour smallint check ( hour >= 8 AND hour < 16 ),
     urgency varchar check(urgency in('bassa', 'media', 'alta')),
     regime varchar check(regime in('privata', 'rimborsata dal sistema sanitario','rimborsata da assicurazioni private')),
     result text,
