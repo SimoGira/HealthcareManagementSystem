@@ -1,20 +1,20 @@
 -- ottiene visite relative a una certa data e ambulatorio (employee)
 SELECT P.name, P.surname, V.serviceName, V.urgency, V.hour
 FROM visit V JOIN paziente P ON V.patient = P.fiscalCode
-WHERE V.date = ? AND V.company = ? AND V.ambulatory = ?;
+WHERE V.date = ? AND V.company = ? AND V.clinic = ?;
 
 -- PRENOTA UNa visita
-INSERT INTO visit (patient, ambulatory, company, doctor, date, hour, urgency, regime, result)
+INSERT INTO visit (patient, clinic, company, doctor, date, hour, urgency, regime, result)
 VALUES
 (?, ?, ?, ?, ?, ?, ?, ?, NULL);
 
 -- inserimento ambulatorio
-INSERT INTO ambulatory (name, company, street, cap, city, province, contractDate, description)
+INSERT INTO clinic (name, company, street, cap, city, province, contractDate, description)
  VALUES
  (?, ?, ?, ?, ?, ?, ?, ?);
  
 -- aggiornamento ambulatorio
-UPDATE ambulatory
+UPDATE clinic
 SET street = ?, cap = ?, city = ?, province = ?, contractDate = ?, description = ?
 WHERE name = ? AND company = ?
 
@@ -24,11 +24,11 @@ FROM visit
 WHERE patient = ? AND result NOT IS NULL
 
 -- per ogni clinica
-SELECT * FROM ambulatory
+SELECT * FROM clinic
 
 -- modifica il risultato di una visita (impiegato)
 UPDATE visit
 SET result = ?
-WHERE patient = ? AND ambulatory = ? AND company = ? AND serviceName = ?
+WHERE patient = ? AND clinic = ? AND company = ? AND serviceName = ?
 
 

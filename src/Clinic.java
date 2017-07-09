@@ -1,6 +1,6 @@
 import java.sql.Date;
 
-public class Ambulatory {
+public class Clinic {
 	public String name;
 	public String company;
 	public String street;

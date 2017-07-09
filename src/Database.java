@@ -27,21 +27,21 @@ public class Database {
 		Class.forName("org.postgresql.Driver");
 	}
 
-	public void insertAmbulatory(Ambulatory amb)
+	public void insertClinic(Clinic clinc)
 	{
 		try(Connection con = DriverManager.getConnection(url, user, password)){ // forse la password non è da mettere necessariamente (io accedo senza pswd)
 
-			String query = "INSERT INTO ambulatory (name, company, street, cap, city, province, contractDate, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+			String query = "INSERT INTO Clinic (name, company, street, cap, city, province, contractDate, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 			try(PreparedStatement pst = con.prepareStatement(query)){
 				pst.clearParameters();
-				pst.setString(0, amb.name);
-				pst.setString(1, amb.company);
-				pst.setString(2, amb.street);
-				pst.setString(3, amb.cap);
-				pst.setString(4, amb.city);
-				pst.setString(5, amb.province);
-				pst.setDate(6, amb.contractDate);
-				pst.setString(7, amb.description);
+				pst.setString(0, clinc.name);
+				pst.setString(1, clinc.company);
+				pst.setString(2, clinc.street);
+				pst.setString(3, clinc.cap);
+				pst.setString(4, clinc.city);
+				pst.setString(5, clinc.province);
+				pst.setDate(6, clinc.contractDate);
+				pst.setString(7, clinc.description);
 			}
 
 		} catch (SQLException e1) {
@@ -49,21 +49,21 @@ public class Database {
 		}
 	}
 
-	public void updateAmbulatory(Ambulatory amb)
+	public void updateClinic(Clinic clinic)
 	{
 		try(Connection con = DriverManager.getConnection(url, user, password))
 		{ 
-			String query = "UPDATE ambulatory SET street = ?, cap = ?, city = ?, province = ?, contractDate = ?, description = ? WHERE name = ? AND company = ?";
+			String query = "UPDATE Clinic SET street = ?, cap = ?, city = ?, province = ?, contractDate = ?, description = ? WHERE name = ? AND company = ?";
 			try(PreparedStatement pst = con.prepareStatement(query)){
 				pst.clearParameters();
-				pst.setString(0, amb.street);
-				pst.setString(1, amb.cap);
-				pst.setString(2, amb.city);
-				pst.setString(3, amb.province);
-				pst.setDate(4, amb.contractDate);
-				pst.setString(5, amb.description);
-				pst.setString(6, amb.name);
-				pst.setString(7, amb.company);
+				pst.setString(0, clinic.street);
+				pst.setString(1, clinic.cap);
+				pst.setString(2, clinic.city);
+				pst.setString(3, clinic.province);
+				pst.setDate(4, clinic.contractDate);
+				pst.setString(5, clinic.description);
+				pst.setString(6, clinic.name);
+				pst.setString(7, clinic.company);
 			}
 
 		} catch (SQLException e1) {
@@ -134,9 +134,9 @@ public class Database {
 				while(rs.next())
 				{
 					Visit v = new Visit();
-					v.ambulatoryName = rs.getString("ambulatory");
+					v.clinicName = rs.getString("Clinic");
 					v.patient = rs.getString("patient");
-					v.ambulatoryName = rs.getString("ambulatory");
+					v.clinicName = rs.getString("Clinic");
 					v.companyId = rs.getString("company");
 					v.serviceName = rs.getString("serviceName");
 					v.doctor = rs.getString("doctor");
@@ -158,19 +158,19 @@ public class Database {
 	}
 
 
-	public ArrayList<Ambulatory> getAmbulatories(String company)
+	public ArrayList<Clinic> getclinics(String company)
 	{
 		try(Connection con = DriverManager.getConnection(url, user, password))
 		{
-			String query = "SELECT * FROM ambulatory WHERE company = ?";
+			String query = "SELECT * FROM Clinic WHERE company = ?";
 			try(PreparedStatement pst = con.prepareStatement(query)){
 				pst.clearParameters();
 				pst.setString(0, company); 
 				ResultSet rs = pst.executeQuery();
-				ArrayList<Ambulatory> ambulatories = new ArrayList<Ambulatory>();
+				ArrayList<Clinic> clinics = new ArrayList<Clinic>();
 				while(rs.next())
 				{
-					Ambulatory a = new Ambulatory();
+					Clinic a = new Clinic();
 					a.name = rs.getString("name");
 					a.company = rs.getString("company");
 					a.street = rs.getString("street");
@@ -179,9 +179,9 @@ public class Database {
 					a.province = rs.getString("province");
 					a.contractDate = rs.getDate("contractDate");
 					a.description = rs.getString("description");
-					ambulatories.add(a);
+					clinics.add(a);
 				}
-				return ambulatories;
+				return clinics;
 			} 
 
 		} catch (SQLException e1) {

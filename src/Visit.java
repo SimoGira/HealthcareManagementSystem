@@ -2,7 +2,7 @@ import java.sql.Date;
 
 public class Visit {
 	String patient;
-	String ambulatoryName;
+	String clinicName;
 	String companyId;
 	String serviceName;
 	String doctor;

@@ -1,5 +1,5 @@
 /*
-drop table ambulatory, company, employee, patient, service, visit;
+drop table clinic, company, employee, patient, service, visit;
 drop domain jobs, provinces;
 */
 
@@ -19,7 +19,7 @@ create table company(
 );
 
 
-create table ambulatory(
+create table clinic(
     name varchar,
     company varchar references company(id),
     street varchar(50) not null,
@@ -51,22 +51,22 @@ create table employee(
     name varchar(50) not null,
     surname varchar(50) not null,
     job jobs not null,
-    ambulatory varchar,
+    clinic varchar,
     company varchar,
-    FOREIGN KEY(ambulatory, company) REFERENCES ambulatory(name, company)
+    FOREIGN KEY(clinic, company) REFERENCES clinic(name, company)
 );
 
 create table service (
-	ambulatory VARCHAR,
+	clinic VARCHAR,
 	company varchar,
 	name varchar,
-	FOREIGN KEY(ambulatory, company) REFERENCES ambulatory(name, company),
-	PRIMARY KEY(ambulatory, company, name)
+	FOREIGN KEY(clinic, company) REFERENCES clinic(name, company),
+	PRIMARY KEY(clinic, company, name)
 );
 
 create table visit(
     patient varchar references patient,
-	ambulatory VARCHAR,
+	clinic VARCHAR,
 	company varchar,
 	serviceName varchar,
     doctor varchar references employee,
@@ -75,8 +75,8 @@ create table visit(
     urgency varchar check(urgency in('bassa', 'media', 'alta')),
     regime varchar check(regime in('privata', 'rimborsata dal sistema sanitario','rimborsata da assicurazioni private')),
     result text,
-	FOREIGN KEY(ambulatory, company, serviceName) REFERENCES service(ambulatory, company, name),
-    primary key(patient, ambulatory, company, serviceName, date, hour)
+	FOREIGN KEY(clinic, company, serviceName) REFERENCES service(clinic, company, name),
+    primary key(patient, clinic, company, serviceName, date, hour)
 )
 
 

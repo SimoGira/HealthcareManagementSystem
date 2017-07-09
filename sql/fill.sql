@@ -21,7 +21,7 @@ VALUES
 ('LXLXLP51A53A303K', 'cp02', '8542', 'maria', 'mariotta', '05/09/1978', 'Firenze', 'VE', 'maria.mariotta@coldmail.com');
 
 
- INSERT INTO ambulatory (name, company, street, cap, city, province, contractDate, description)
+ INSERT INTO clinic (name, company, street, cap, city, province, contractDate, description)
  VALUES
  ('GENETICA MEDICA', 'cp01', 'via alighieri 8', '02235', 'Verona', 'VR', '12/12/1990', ' '),
  ('ANGIOEDEMA EREDITARIO ED ALTRE FORME DI ANGIOEDEMA', 'cp01', 'via alighieri 8', '02235', 'Verona', 'VR', '12/12/1990',' '),
@@ -34,7 +34,7 @@ VALUES
  ('MALATTIE INFETTIVE', 'cp02', 'via cipolla 31', '02235', 'Verona', 'VR', '12/12/1990',' ');
 
 
-INSERT INTO service( ambulatory, company, name )
+INSERT INTO service( clinic, company, name )
 VALUES
 ('GENETICA MEDICA', 'cp01', 'visita oncologica'),
 ('GENETICA MEDICA', 'cp01', 'visita geriatrica'),
@@ -47,7 +47,7 @@ VALUES
 
 
 
-INSERT INTO employee(fiscalcode, employeeCode,password, name, surname, job, ambulatory, company)
+INSERT INTO employee(fiscalcode, employeeCode,password, name, surname, job, clinic, company)
 VALUES
 ('RFCVCV85A42E952E', 'JOBIT0001', 'cane', 'enrico', 'gregorio', 'dermatologo', 'GENETICA MEDICA', 'cp01'),
 ('NDRMSN85A42E952E', 'JOBIT0002', 'gatto', 'andrea', 'masini', 'oncologo', 'GENETICA MEDICA', 'cp01'),
@@ -55,7 +55,7 @@ VALUES
 ('PCCDFG85A42E952E', 'JOBIT0004', 'asd', 'piero', 'verdi', 'dentista', 'NEOPLASIE POLMONARI E TRATTO GASTROENTERICO', 'cp02')
 ;
 
-INSERT INTO visit (patient, ambulatory, company, serviceName, doctor, date, hour, urgency, regime, result)
+INSERT INTO visit (patient, clinic, company, serviceName, doctor, date, hour, urgency, regime, result)
 VALUES
 ('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'visita oncologica', 'RFCVCV85A42E952E', '01/01/2017', 10, 'bassa', 'privata', NULL),
 ('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'visita oncologica', 'RFCVCV85A42E952E', '01/03/2017', 8, 'bassa', 'privata', NULL),
