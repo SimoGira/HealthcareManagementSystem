@@ -259,6 +259,11 @@ public class View {
 		panelLogin.add(panelSouthLogin, BorderLayout.SOUTH);
 
 		JButton btnViewClinicAnd = new JButton("Ambulatori & Servizi");
+		btnViewClinicAnd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				clfrmHealhcareManagementSystem.show(frmHealthcareManagementSystem.getContentPane(), "panelClinicsAndServices");
+			}
+		});
 		panelSouthLogin.add(btnViewClinicAnd);
 
 		JPanel panelPatient = new JPanel();
@@ -763,10 +768,14 @@ public class View {
 
 		JButton btnBackToViewVisitPerPatient = new JButton("Stampa");
 		panelpanelViewVisitResultsPerPatientSouth.add(btnBackToViewVisitPerPatient);
+		
+		JPanel panelClinicsAndServices = new JPanel();
+		frmHealthcareManagementSystem.getContentPane().add(panelClinicsAndServices, "panelClinicsAndServices");
+		panelClinicsAndServices.setLayout(new BorderLayout(0, 0));
 
 		JSplitPane splitPaneClinics = new JSplitPane();
+		panelClinicsAndServices.add(splitPaneClinics, BorderLayout.CENTER);
 		splitPaneClinics.setResizeWeight(0.3);
-		frmHealthcareManagementSystem.getContentPane().add(splitPaneClinics, "splitPaneClinics");
 
 		JPanel ClinicsPanel = new JPanel();
 		splitPaneClinics.setLeftComponent(ClinicsPanel);
@@ -776,8 +785,8 @@ public class View {
 		lblClinics.setHorizontalAlignment(SwingConstants.CENTER);
 		ClinicsPanel.add(lblClinics, BorderLayout.NORTH);
 
-		JList<String> list = new JList<String>();
-		list.setModel(new AbstractListModel<String>() {
+		JList<String> listCLinics = new JList<String>();
+		listCLinics.setModel(new AbstractListModel<String>() {
 			/**
 			 * 
 			 */
@@ -792,7 +801,7 @@ public class View {
 				return values[index];
 			}
 		});
-		ClinicsPanel.add(list, BorderLayout.CENTER);
+		ClinicsPanel.add(listCLinics, BorderLayout.CENTER);
 
 		JPanel ServicesPanel = new JPanel();
 		splitPaneClinics.setRightComponent(ServicesPanel);
@@ -803,6 +812,19 @@ public class View {
 		txtpnclinicsOfJesus.setText(
 				"<html>\r\n\t<head></head>\r\n\t<body>\r\n\t\t<h1>Clinics of Jesus</h1>\r\n\t\t<h3>Services</h3>\r\n\t\t.....Prova html.....\r\n\t</body>\r\n</html>\r\n");
 		ServicesPanel.add(txtpnclinicsOfJesus, BorderLayout.CENTER);
+		
+		JPanel panelClinicAndServicesButton = new JPanel();
+		FlowLayout fl_panelClinicAndServicesButton = (FlowLayout) panelClinicAndServicesButton.getLayout();
+		fl_panelClinicAndServicesButton.setAlignment(FlowLayout.RIGHT);
+		panelClinicsAndServices.add(panelClinicAndServicesButton, BorderLayout.SOUTH);
+		
+		JButton btnBackToLogin = new JButton("Indietro");
+		btnBackToLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				clfrmHealhcareManagementSystem.show(frmHealthcareManagementSystem.getContentPane(), "panelLogin");
+			}
+		});
+		panelClinicAndServicesButton.add(btnBackToLogin);
 
 		frmHealthcareManagementSystem.setSize(700, 600);
 		frmHealthcareManagementSystem.setLocationRelativeTo(null);
