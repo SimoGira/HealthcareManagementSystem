@@ -1,12 +1,8 @@
-import java.sql.Connection;
-import java.sql.Date;
+import java.sql.Connection; 
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.sql.SQLException; 
 import java.util.ArrayList;
 
 public class Database {
@@ -94,28 +90,35 @@ public class Database {
 
 		return false;
 	}
-	
+	 
 	
 	public boolean checkPatient(String fiscalCode, String pin)
 	{
 		try(Connection con = DriverManager.getConnection(url, user, password))
 		{
-			System.out.println("CHECK PATIENT: [fiscalcode] = " + fiscalCode);
-			System.out.println("CHECK PATIENT: [pin] = " + pin);
-			
-			String query = "SELECT COUNT(*) FROM patient WHERE fiscalCode = ? AND pin = ?";
+			String query = "SELECT * FROM patient WHERE fiscalCode = ? AND pin = ?";
 			try(PreparedStatement pst = con.prepareStatement(query)){
 				pst.clearParameters();
 				pst.setString(1, fiscalCode); 
 				pst.setString(2, pin); 
 				ResultSet rs = pst.executeQuery(); 
+
+				Patient p = Patient.getInstance();
 				while(rs.next())
 				{
-					System.out.println("rs.getInt = " + rs.getInt(1));
-					if(rs.getInt(1) == 1)
-						return true;
-				} 
-			} 
+					p.fiscalcode = rs.getString("fiscalcode");
+					p.healthcarecompany = rs.getString("healthcarecompany");
+					p.pin = rs.getString("pin");
+					p.name = rs.getString("name");  
+					p.surname = rs.getString("surname");
+					p.birthdate = rs.getDate("birthdate");
+					p.birthplace = rs.getString("birthplace"); 
+					p.province = rs.getString("province");
+					p.email = rs.getString("email");
+					return true;
+					
+				}
+			}
 
 		} catch (SQLException e1) {
 			System.out.println( "Errore durante connessione al database: " + e1.getMessage() );
