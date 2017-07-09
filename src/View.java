@@ -183,7 +183,6 @@ public class View {
 			public void actionPerformed(ActionEvent e) { 
 				if(db.checkPatient(formattedTextFieldFiscalCode.getText(), new String(passwordFieldPIN.getPassword()))){
 					clfrmHealhcareManagementSystem.show(frmHealthcareManagementSystem.getContentPane(), "panelPatient");
-					System.out.println("ok..");
 				}
 				else{
 					System.out.println("dio can");
