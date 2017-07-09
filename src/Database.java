@@ -9,12 +9,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-public class Model {
+public class Database {
 	private String url;
 	private String user;
 	private String password;
 
-	public Model() throws ClassNotFoundException, SQLException{
+	public Database() throws ClassNotFoundException, SQLException{
 		setParameters();
 	}
 
@@ -70,15 +70,64 @@ public class Model {
 			System.out.println( "Errore durante connessione al database: " + e1.getMessage() );
 		}
 	}
+	
+	public boolean checkEmployee(String employeeCode, String password)
+	{
+		try(Connection con = DriverManager.getConnection(this.url, this.user, this.password))
+		{
+			String query = "SELECT COUNT(*) FROM employee WHERE employeeCode = ? AND password = ?";
+			try(PreparedStatement pst = con.prepareStatement(query)){
+				pst.clearParameters();
+				pst.setString(0, employeeCode); 
+				pst.setString(1, password); 
+				ResultSet rs = pst.executeQuery(); 
+				while(rs.next())
+				{
+					if(rs.getInt(0) == 1)
+						return true;
+				} 
+			} 
 
-	public ArrayList<Visit> getVisitsHistory(String patient)
+		} catch (SQLException e1) {
+			System.out.println( "Errore durante connessione al database: " + e1.getMessage() );
+		}
+
+		return false;
+	}
+	
+	
+	public boolean checkPatient(String fiscalCode, String pin)
+	{
+		try(Connection con = DriverManager.getConnection(url, user, password))
+		{
+			String query = "SELECT COUNT(*) FROM patient WHERE fiscalCode = ? AND pin = ?";
+			try(PreparedStatement pst = con.prepareStatement(query)){
+				pst.clearParameters();
+				pst.setString(0, fiscalCode); 
+				pst.setString(1, pin); 
+				ResultSet rs = pst.executeQuery(); 
+				while(rs.next())
+				{
+					if(rs.getInt(0) == 1)
+						return true;
+				} 
+			} 
+
+		} catch (SQLException e1) {
+			System.out.println( "Errore durante connessione al database: " + e1.getMessage() );
+		}
+
+		return false;
+	}
+	
+	public ArrayList<Visit> getVisitsHistory(String fiscalCode)
 	{
 		try(Connection con = DriverManager.getConnection(url, user, password))
 		{
 			String query = "SELECT * FROM visit WHERE patient = ? AND result NOT IS NULL";
 			try(PreparedStatement pst = con.prepareStatement(query)){
 				pst.clearParameters();
-				pst.setString(0, patient); 
+				pst.setString(0, fiscalCode); 
 				ResultSet rs = pst.executeQuery();
 				ArrayList<Visit> visits = new ArrayList<Visit>();
 				while(rs.next())
@@ -141,5 +190,6 @@ public class Model {
 		return null;
 	}
 
+	
 
 }
