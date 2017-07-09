@@ -114,7 +114,7 @@ public class View {
 		frmHealthcareManagementSystem.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmHealthcareManagementSystem.getContentPane().setLayout(new CardLayout(0, 0));
 		this.clfrmHealhcareManagementSystem = (CardLayout) frmHealthcareManagementSystem.getContentPane().getLayout();
-		
+
 		JPanel panelLogin = new JPanel();
 		frmHealthcareManagementSystem.getContentPane().add(panelLogin, "panelLogin");
 		panelLogin.setLayout(new BorderLayout(0, 0));
@@ -178,11 +178,9 @@ public class View {
 		gbc_btnLoginPatient.gridx = 1;
 		gbc_btnLoginPatient.gridy = 3;
 		panelCenterPatientLogin.add(btnLoginPatient, gbc_btnLoginPatient);
-		 
+
 		btnLoginPatient.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent e) { 
-				Patient.getInstance().fiscalcode = formattedTextFieldFiscalCode.getText();
-				Patient.getInstance().pin = new String(passwordFieldPIN.getPassword());
 				if(db.checkPatient(formattedTextFieldFiscalCode.getText(), new String(passwordFieldPIN.getPassword()))){
 					clfrmHealhcareManagementSystem.show(frmHealthcareManagementSystem.getContentPane(), "panelPatient");
 					System.out.println("ok..");
@@ -271,32 +269,26 @@ public class View {
 		frmHealthcareManagementSystem.getContentPane().add(panelPatient, "panelPatient");
 		panelPatient.setLayout(new BorderLayout(0, 0));
 
-		JPanel panelNorthPatient = new JPanel();
-		panelPatient.add(panelNorthPatient, BorderLayout.NORTH);
-		GridBagLayout gbl_panelNorthPatient = new GridBagLayout();
-		gbl_panelNorthPatient.columnWidths = new int[]{160, 326, 33, 0, 0, 0, 0, 0, 0, 0, 36};
-		gbl_panelNorthPatient.rowHeights = new int[]{27, 0};
-		gbl_panelNorthPatient.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gbl_panelNorthPatient.rowWeights = new double[]{0.0, Double.MIN_VALUE};
-		panelNorthPatient.setLayout(gbl_panelNorthPatient);
+		JPanel panelPatientNorth = new JPanel();
+		panelPatient.add(panelPatientNorth, BorderLayout.NORTH);
+		panelPatientNorth.setLayout(new BorderLayout(0, 0));
 
-		JLabel lblWelcomePatient = new JLabel("Benvenuto:<nome paziente>");
-		lblWelcomePatient.setHorizontalAlignment(SwingConstants.CENTER);
-		lblWelcomePatient.setFont(new Font("Tahoma", Font.BOLD, 22));
-		GridBagConstraints gbc_lblWelcomePatient = new GridBagConstraints();
-		gbc_lblWelcomePatient.anchor = GridBagConstraints.NORTHWEST;
-		gbc_lblWelcomePatient.insets = new Insets(0, 0, 0, 5);
-		gbc_lblWelcomePatient.gridx = 1;
-		gbc_lblWelcomePatient.gridy = 0;
-		panelNorthPatient.add(lblWelcomePatient, gbc_lblWelcomePatient);
+		JLabel lblWeolcomePatient = new JLabel("Benvenuto " + Patient.getInstance().name);
+		lblWeolcomePatient.setHorizontalAlignment(SwingConstants.CENTER);
+		panelPatientNorth.add(lblWeolcomePatient, BorderLayout.CENTER);
+		lblWeolcomePatient.setFont(new Font("Tahoma", Font.BOLD, 22));
 
-		JLabel lblNewLabel_1 = new JLabel("<HTML>\r\n\t<p style=\"color:blue;\"><u>Logout</u></p>\r\n</HTML>");
-		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
-		gbc_lblNewLabel_1.gridwidth = 4;
-		gbc_lblNewLabel_1.insets = new Insets(0, 0, 0, 5);
-		gbc_lblNewLabel_1.gridx = 6;
-		gbc_lblNewLabel_1.gridy = 0;
-		panelNorthPatient.add(lblNewLabel_1, gbc_lblNewLabel_1);
+		JPanel panelPatientNorthRightLabels = new JPanel();
+		FlowLayout fl_panelPatientNorthRightLabels = (FlowLayout) panelPatientNorthRightLabels.getLayout();
+		fl_panelPatientNorthRightLabels.setHgap(10);
+		fl_panelPatientNorthRightLabels.setVgap(10);
+		panelPatientNorth.add(panelPatientNorthRightLabels, BorderLayout.EAST);
+
+		JLabel lblLogoutPatient = new JLabel("<HTML>\r\n\t<p style=\"color:blue;\"><u>Logout</u></p>\r\n</HTML>");
+		panelPatientNorthRightLabels.add(lblLogoutPatient);
+		lblLogoutPatient.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblLogoutPatient.setHorizontalAlignment(SwingConstants.CENTER);
+
 
 		JTabbedPane tabbedPanePatient = new JTabbedPane(JTabbedPane.TOP);
 		panelPatient.add(tabbedPanePatient, BorderLayout.CENTER);
@@ -407,32 +399,6 @@ public class View {
 		JPanel panelEmployee = new JPanel();
 		frmHealthcareManagementSystem.getContentPane().add(panelEmployee, "panelEmployee");
 		panelEmployee.setLayout(new BorderLayout(0, 0));
-
-		JPanel panelNorthEmployee = new JPanel();
-		panelEmployee.add(panelNorthEmployee, BorderLayout.NORTH);
-		GridBagLayout gbl_panelNorthEmployee = new GridBagLayout();
-		gbl_panelNorthEmployee.columnWidths = new int[]{135, 362, 0, 0, 0, 0, 0, 0, 0, 0};
-		gbl_panelNorthEmployee.rowHeights = new int[]{27, 0};
-		gbl_panelNorthEmployee.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gbl_panelNorthEmployee.rowWeights = new double[]{0.0, Double.MIN_VALUE};
-		panelNorthEmployee.setLayout(gbl_panelNorthEmployee);
-
-		JLabel lblNewLabel = new JLabel("Benvenuto: <nome dipendente>");
-		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 22));
-		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
-		gbc_lblNewLabel.anchor = GridBagConstraints.NORTHWEST;
-		gbc_lblNewLabel.insets = new Insets(0, 0, 0, 5);
-		gbc_lblNewLabel.gridx = 1;
-		gbc_lblNewLabel.gridy = 0;
-		panelNorthEmployee.add(lblNewLabel, gbc_lblNewLabel);
-
-		JLabel lbllogout = new JLabel("<HTML>\r\n\t<p style=\"color:blue;\"><u>Logout</u></p>\r\n</HTML>");
-		GridBagConstraints gbc_lbllogout = new GridBagConstraints();
-		gbc_lbllogout.gridwidth = 3;
-		gbc_lbllogout.insets = new Insets(0, 0, 0, 5);
-		gbc_lbllogout.gridx = 6;
-		gbc_lbllogout.gridy = 0;
-		panelNorthEmployee.add(lbllogout, gbc_lbllogout);
 
 		JTabbedPane tabbedPaneEmployee = new JTabbedPane(JTabbedPane.TOP);
 		panelEmployee.add(tabbedPaneEmployee, BorderLayout.CENTER);
@@ -770,6 +736,26 @@ public class View {
 		JButton btnBackToViewVisitPerPatient = new JButton("Stampa");
 		panelpanelViewVisitResultsPerPatientSouth.add(btnBackToViewVisitPerPatient);
 		
+		JPanel panelEmployeeNorth = new JPanel();
+		panelEmployee.add(panelEmployeeNorth, BorderLayout.NORTH);
+		panelEmployeeNorth.setLayout(new BorderLayout(0, 0));
+		
+		JLabel lblWeolcomeEmployee = new JLabel("Benvenuto");
+		lblWeolcomeEmployee.setHorizontalAlignment(SwingConstants.CENTER);
+		lblWeolcomeEmployee.setFont(new Font("Tahoma", Font.BOLD, 22));
+		panelEmployeeNorth.add(lblWeolcomeEmployee, BorderLayout.CENTER);
+		
+		JPanel panelEmployeeNorthRightLabels = new JPanel();
+		FlowLayout flowLayout_1 = (FlowLayout) panelEmployeeNorthRightLabels.getLayout();
+		flowLayout_1.setVgap(10);
+		flowLayout_1.setHgap(10);
+		panelEmployeeNorth.add(panelEmployeeNorthRightLabels, BorderLayout.EAST);
+		
+		JLabel lblLogoutEmployee = new JLabel("<HTML>\r\n\t<p style=\"color:blue;\"><u>Logout</u></p>\r\n</HTML>");
+		lblLogoutEmployee.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblLogoutEmployee.setHorizontalAlignment(SwingConstants.CENTER);
+		panelEmployeeNorthRightLabels.add(lblLogoutEmployee);
+
 		JPanel panelClinicsAndServices = new JPanel();
 		frmHealthcareManagementSystem.getContentPane().add(panelClinicsAndServices, "panelClinicsAndServices");
 		panelClinicsAndServices.setLayout(new BorderLayout(0, 0));
@@ -813,12 +799,12 @@ public class View {
 		txtpnclinicsOfJesus.setText(
 				"<html>\r\n\t<head></head>\r\n\t<body>\r\n\t\t<h1>Clinics of Jesus</h1>\r\n\t\t<h3>Services</h3>\r\n\t\t.....Prova html.....\r\n\t</body>\r\n</html>\r\n");
 		ServicesPanel.add(txtpnclinicsOfJesus, BorderLayout.CENTER);
-		
+
 		JPanel panelClinicAndServicesButton = new JPanel();
 		FlowLayout fl_panelClinicAndServicesButton = (FlowLayout) panelClinicAndServicesButton.getLayout();
 		fl_panelClinicAndServicesButton.setAlignment(FlowLayout.RIGHT);
 		panelClinicsAndServices.add(panelClinicAndServicesButton, BorderLayout.SOUTH);
-		
+
 		JButton btnBackToLogin = new JButton("Indietro");
 		btnBackToLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
