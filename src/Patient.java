@@ -11,15 +11,15 @@ public class Patient {
 		return instance;
 	} 
 
-	public String fiscalcode;
-	public String healthcarecompany;
-	public String pin;
-	public String name;  
-	public String surname;
-	public Date birthdate;
-	public String birthplace; 
-	public String province;
-	public String email;
+	private String fiscalcode;
+	private String healthcarecompany;
+	private String pin;
+	private String name;  
+	private String surname;
+	private Date birthdate;
+	private String birthplace; 
+	private String province;
+	private String email;
 
 	public String getFiscalcode() {
 		return fiscalcode;

@@ -30,14 +30,14 @@ public class Database {
 			String query = "INSERT INTO Clinic (name, company, street, cap, city, province, contractDate, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 			try(PreparedStatement pst = con.prepareStatement(query)){
 				pst.clearParameters();
-				pst.setString(1, clinc.name);
-				pst.setString(2, clinc.company);
-				pst.setString(3, clinc.street);
-				pst.setString(4, clinc.cap);
-				pst.setString(5, clinc.city);
-				pst.setString(6, clinc.province);
-				pst.setDate(7, clinc.contractDate);
-				pst.setString(8, clinc.description);
+				pst.setString(1, clinc.getName());
+				pst.setString(2, clinc.getCompany());
+				pst.setString(3, clinc.getStreet());
+				pst.setString(4, clinc.getCap());
+				pst.setString(5, clinc.getCity());
+				pst.setString(6, clinc.getProvince());
+				pst.setDate(7, clinc.getContractDate());
+				pst.setString(8, clinc.getDescription());
 			}
 
 		} catch (SQLException e1) {
@@ -52,14 +52,14 @@ public class Database {
 			String query = "UPDATE Clinic SET street = ?, cap = ?, city = ?, province = ?, contractDate = ?, description = ? WHERE name = ? AND company = ?";
 			try(PreparedStatement pst = con.prepareStatement(query)){
 				pst.clearParameters();
-				pst.setString(1, clinic.street);
-				pst.setString(2, clinic.cap);
-				pst.setString(3, clinic.city);
-				pst.setString(4, clinic.province);
-				pst.setDate(5, clinic.contractDate);
-				pst.setString(6, clinic.description);
-				pst.setString(7, clinic.name);
-				pst.setString(8, clinic.company);
+				pst.setString(1, clinic.getStreet());
+				pst.setString(2, clinic.getCap());
+				pst.setString(3, clinic.getCity());
+				pst.setString(4, clinic.getProvince());
+				pst.setDate(5, clinic.getContractDate());
+				pst.setString(6, clinic.getDescription());
+				pst.setString(7, clinic.getName());
+				pst.setString(8, clinic.getCompany());
 			}
 
 		} catch (SQLException e1) {
@@ -140,17 +140,17 @@ public class Database {
 				while(rs.next())
 				{
 					Visit v = new Visit();
-					v.clinicName = rs.getString("Clinic");
-					v.patient = rs.getString("patient");
-					v.clinicName = rs.getString("Clinic");
-					v.companyId = rs.getString("company");
-					v.serviceName = rs.getString("serviceName");
-					v.doctor = rs.getString("doctor");
-					v.date = rs.getDate("date");
-					v.hour = rs.getInt("hour");
-					v.urgency = rs.getString("urgency");
-					v.regime = rs.getString("regime");
-					v.result = rs.getString("result");
+					v.setClinicName(rs.getString("Clinic"));
+					v.setPatient(rs.getString("patient"));
+					v.setClinicName(rs.getString("Clinic"));
+					v.setCompanyId(rs.getString("company"));
+					v.setServiceName(rs.getString("serviceName"));
+					v.setDoctor(rs.getString("doctor"));
+					v.setDate(rs.getDate("date"));
+					v.setHour(rs.getInt("hour"));
+					v.setUrgency(rs.getString("urgency"));
+					v.setRegime(rs.getString("regime"));
+					v.setResult(rs.getString("result"));
 					visits.add(v);
 				}
 				return visits;
@@ -177,14 +177,14 @@ public class Database {
 				while(rs.next())
 				{
 					Clinic a = new Clinic();
-					a.name = rs.getString("name");
-					a.company = rs.getString("company");
-					a.street = rs.getString("street");
-					a.cap = rs.getString("cap");
-					a.city = rs.getString("city");  
-					a.province = rs.getString("province");
-					a.contractDate = rs.getDate("contractDate");
-					a.description = rs.getString("description");
+					a.setName(rs.getString("name"));
+					a.setCompany(rs.getString("company"));
+					a.setStreet(rs.getString("street"));
+					a.setCap(rs.getString("cap"));
+					a.setCity(rs.getString("city"));  
+					a.setProvince(rs.getString("province"));
+					a.setContractDate(rs.getDate("contractDate"));
+					a.setDescription(rs.getString("description"));
 					clinics.add(a);
 				}
 				return clinics;
