@@ -197,6 +197,32 @@ public class Database {
 		return null;
 	}
 
-	
+	// for each day of this month, get the number of visits in this day (min 0 - max 8)
+	public int[] getVisitsInMonth(int year, int month, String clinic, String company)
+	{
+		try(Connection con = DriverManager.getConnection(url, user, password))
+		{
+			String query = "SELECT EXTRACT(DAY FROM(date)) as day , COUNT(*) as cnt FROM visit WHERE clinic = ? AND company = ? AND result NOT IS NULL GROUP BY date";
+			try(PreparedStatement pst = con.prepareStatement(query)){
+				pst.clearParameters();
+				pst.setString(1, clinic);
+				pst.setString(2, company); 
+				pst.setInt(2, year); 
+				pst.setInt(2, month); 
+				ResultSet rs = pst.executeQuery();
+				int[] result = new int[31];
+				while(rs.next())
+				{ 
+					int day = rs.getInt("day");
+					result[day] =  rs.getInt("cnt");
+				} 
+			} 
+
+		} catch (SQLException e1) {
+			System.out.println( "Errore durante connessione al database: " + e1.getMessage() );
+		}
+
+		return null;
+	}
 
 }
