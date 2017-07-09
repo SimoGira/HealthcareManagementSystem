@@ -78,19 +78,17 @@ public class Database {
 				pst.setString(1, employeeCode); 
 				pst.setString(2, password); 
 				ResultSet rs = pst.executeQuery(); 
+				Employee e = Employee.getInstance();
 				while(rs.next())
-				{
-					Employee e = Employee.getInstance();
-					while(rs.next())
-					{
-						e.setFiscalcode(rs.getString("fiscalcode")); 
-						e.setName(rs.getString("name"));  
-						e.setClinic(rs.getString("clinic"));
-						e.setCompany(rs.getString("company"));
-						e.setJob(rs.getString("job"));
-						e.setSurname(rs.getString("surname")); 
-						return true;
-					}
+				{ 
+					e.setFiscalcode(rs.getString("fiscalcode")); 
+					e.setName(rs.getString("name"));  
+					e.setClinic(rs.getString("clinic"));
+					e.setCompany(rs.getString("company"));
+					e.setJob(rs.getString("job"));
+					e.setSurname(rs.getString("surname")); 
+					return true;
+				
 				} 
 			} 
 
@@ -178,7 +176,7 @@ public class Database {
 	{
 		try(Connection con = DriverManager.getConnection(url, user, password))
 		{
-			String query = "SELECT * FROM visit WHERE patient = ? AND result NOT IS NULL";
+			String query = "SELECT * FROM visit WHERE patient = ? AND NOT result IS NULL";
 			try(PreparedStatement pst = con.prepareStatement(query)){
 				pst.clearParameters();
 				pst.setString(1, fiscalCode); 
@@ -186,6 +184,7 @@ public class Database {
 				ArrayList<Visit> visits = new ArrayList<Visit>();
 				while(rs.next())
 				{
+					System.out.println("adding");
 					Visit v = new Visit();
 					v.setClinicName(rs.getString("clinic"));
 					v.setPatient(rs.getString("patient")); 

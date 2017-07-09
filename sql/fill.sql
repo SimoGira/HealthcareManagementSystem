@@ -57,7 +57,7 @@ VALUES
 
 INSERT INTO visit (patient, clinic, company, serviceName, doctor, date, hour, urgency, regime, result)
 VALUES
-('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'visita oncologica', 'RFCVCV85A42E952E', '01/01/2017', 10, 'bassa', 'privata', NULL),
+('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'visita oncologica', 'RFCVCV85A42E952E', '01/01/2017', 10, 'bassa', 'privata', 'la visita è ok'),
 ('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'visita oncologica', 'RFCVCV85A42E952E', '01/03/2017', 8, 'bassa', 'privata', NULL),
 ('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'visita oncologica', 'RFCVCV85A42E952E', '01/03/2017', 9, 'bassa', 'privata', NULL),
 ('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'visita oncologica', 'RFCVCV85A42E952E', '01/03/2017', 10, 'bassa', 'privata', NULL),

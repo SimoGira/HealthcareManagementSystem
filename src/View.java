@@ -11,11 +11,15 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Month;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Vector;
 
 import javax.swing.AbstractListModel;
 import javax.swing.DefaultComboBoxModel;
@@ -117,6 +121,7 @@ public class View {
 	/**
 	 * Initialize the contents of the frame.
 	 */
+	@SuppressWarnings("serial")
 	private void initialize() {
 		frmHealthcareManagementSystem = new JFrame("HEALTHCARE MANAGEMENT SYSTEM");
 		frmHealthcareManagementSystem.setIconImage(Toolkit.getDefaultToolkit().getImage(View.class.getResource("/img/caduceus.png")));
@@ -257,12 +262,14 @@ public class View {
 		JButton btnLoginEmployee = new JButton("Login");
 		btnLoginEmployee.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) { 
-				if(db.checkEmployee(textField_usr.getText(), new String(textField_passwd.getPassword()))){ 
+				String user = textField_usr.getText();
+				String pass = new String(textField_passwd.getPassword());
+				if(db.checkEmployee(user, pass)){ 
 					System.out.println("ok");
 					clfrmHealhcareManagementSystem.show(frmHealthcareManagementSystem.getContentPane(), "panelEmployee");
 				}
 				else{
-					System.out.println("dio can");
+					System.out.println("wrong credentials: " + user + " " + pass );
 				}
 			}
 		});
@@ -573,16 +580,52 @@ public class View {
 		JComboBox<String> comboBoxClinicVisitInsertion = new JComboBox<String>();
 		panelInfovisitInsertionNorth.add(comboBoxClinicVisitInsertion);
 
+		DefaultTableModel employeeInsertModel = new DefaultTableModel(new String[] {  "Nome", "Cognome", "Tipo visita", "Urgenza", "Ora" }, 0);
+
 		JButton btnFindVisits = new JButton("Trova");
+		btnFindVisits.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//free table
+				while(employeeInsertModel.getRowCount() > 0)
+					employeeInsertModel.removeRow(0);
+
+				String date  = formattedTextFieldVisitInsertion.getText();
+
+				ArrayList<Visit> visits = null;
+				try {
+					visits = db.getBookedVisits( Employee.getInstance().getCompany(), (String)comboBoxClinicVisitInsertion.getSelectedItem(), new Date(sdf.parse(date).getTime()));
+				}
+				catch (ParseException e1) {
+					e1.printStackTrace();
+				}
+				if(visits != null)
+				{
+					System.out.println("visits is not null " + visits.size());
+					for (Visit c : visits)
+					{
+						System.out.println("element i");
+						Vector<Object> vector = new Vector<Object>();
+
+						vector.add(c.getDate().toString());
+						vector.add(c.getHour());
+						vector.add(c.getServiceName());
+						vector.add(c.getRegime());
+						vector.add(c.getUrgency());
+						employeeInsertModel.addRow(vector);
+					}
+				}
+			}
+		});
 		panelInfovisitInsertionNorth.add(btnFindVisits);
 
 		JScrollPane scrollPaneInfoVisitInsertionCenter = new JScrollPane();
 		panelInfoVisitInsertion.add(scrollPaneInfoVisitInsertionCenter, BorderLayout.CENTER);
 
+
 		tableVisitsFounded = new JTable();
 		tableVisitsFounded.setModel(
 				new DefaultTableModel(new Object[][] { { "Adriano", "Tumminelli", "oculistica", "bassa", "10:00" }, },
-						new String[] { "Nome", "Cognome", "Tipo visita", "Urgenza", "Ora" }) {
+						new String[] { }) {
 					Class[] columnTypes = new Class[] { Object.class, Object.class, String.class, Object.class,
 							Object.class };
 
@@ -814,12 +857,34 @@ public class View {
 		panelViewVisitPerPatientNorth.add(searchPatientTextField);
 		searchPatientTextField.setColumns(16);
 
+		DefaultTableModel employeeHistoryModel = new DefaultTableModel(new String[] { "Data", "Ora", "Tipo visita", "Regime", "Urgenza" }, 0);
+
+
 		//visualizza le visite di un paziente
 		JButton btnVisualizza = new JButton("Cerca");
 		btnVisualizza.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("DA IMPLEMENTARE");
-				//ArrayList<Clinic> clincs = db.getClinics(Employee.getInstance().getClinic());
+			public void actionPerformed(ActionEvent e) {		
+				//free table
+				while(employeeHistoryModel.getRowCount() > 0)
+					employeeHistoryModel.removeRow(0);
+
+				ArrayList<Visit> visits = db.getVisitsHistory(searchPatientTextField.getText());
+				if(visits != null)
+				{
+					System.out.println("visits is not null " + visits.size());
+					for (Visit c : visits)
+					{
+						System.out.println("element i");
+						Vector<Object> vector = new Vector<Object>();
+
+						vector.add(c.getDate().toString());
+						vector.add(c.getHour());
+						vector.add(c.getServiceName());
+						vector.add(c.getRegime());
+						vector.add(c.getUrgency());
+						employeeHistoryModel.addRow(vector);
+					}
+				}
 			}
 		});
 		panelViewVisitPerPatientNorth.add(btnVisualizza);
@@ -828,27 +893,7 @@ public class View {
 		panelViewVisitPerPatient.add(scrollPaneViewVisitPerPatient, BorderLayout.CENTER);
 
 		tableVisitsPatientResults = new JTable();
-		tableVisitsPatientResults.setModel(new DefaultTableModel(
-				new Object[][] {
-					{"17/5/17", "13:30", "oncologica", "privata", "alta"},
-				},
-				new String[] {
-						"Data", "Ora", "Tipo visita", "Regime", "Urgenza"
-				}
-				) {
-			Class[] columnTypes = new Class[] {
-					String.class, String.class, String.class, String.class, String.class
-			};
-			public Class getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
-			}
-			boolean[] columnEditables = new boolean[] {
-					false, false, false, false, false
-			};
-			public boolean isCellEditable(int row, int column) {
-				return columnEditables[column];
-			}
-		});
+		tableVisitsPatientResults.setModel(employeeHistoryModel);
 		tableVisitsPatientResults.getColumnModel().getColumn(0).setResizable(false);
 		tableVisitsPatientResults.getColumnModel().getColumn(1).setResizable(false);
 		tableVisitsPatientResults.getColumnModel().getColumn(2).setResizable(false);
