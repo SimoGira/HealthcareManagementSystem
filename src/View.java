@@ -58,6 +58,8 @@ public class View {
 	private JTable tableVisitsPatientResults;
 	private CardLayout clfrmHealhcareManagementSystem;
 	private Database db;
+	private JLabel lblWeolcomePatient;
+	
 
 	/**
 	 * Launch the application.
@@ -182,6 +184,7 @@ public class View {
 		btnLoginPatient.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent e) { 
 				if(db.checkPatient(formattedTextFieldFiscalCode.getText(), new String(passwordFieldPIN.getPassword()))){
+					lblWeolcomePatient.setText(lblWeolcomePatient.getText() + " " + Patient.getInstance().getName() + " " + Patient.getInstance().getSurname()); 
 					clfrmHealhcareManagementSystem.show(frmHealthcareManagementSystem.getContentPane(), "panelPatient");
 				}
 				else{
@@ -272,7 +275,7 @@ public class View {
 		panelPatient.add(panelPatientNorth, BorderLayout.NORTH);
 		panelPatientNorth.setLayout(new BorderLayout(0, 0));
 
-		JLabel lblWeolcomePatient = new JLabel("Benvenuto " + Patient.getInstance().name);
+		lblWeolcomePatient = new JLabel("Benvenuto ");
 		lblWeolcomePatient.setHorizontalAlignment(SwingConstants.CENTER);
 		panelPatientNorth.add(lblWeolcomePatient, BorderLayout.CENTER);
 		lblWeolcomePatient.setFont(new Font("Tahoma", Font.BOLD, 22));

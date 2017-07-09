@@ -106,15 +106,15 @@ public class Database {
 				Patient p = Patient.getInstance();
 				while(rs.next())
 				{
-					p.fiscalcode = rs.getString("fiscalcode");
-					p.healthcarecompany = rs.getString("healthcarecompany");
-					p.pin = rs.getString("pin");
-					p.name = rs.getString("name");  
-					p.surname = rs.getString("surname");
-					p.birthdate = rs.getDate("birthdate");
-					p.birthplace = rs.getString("birthplace"); 
-					p.province = rs.getString("province");
-					p.email = rs.getString("email");
+					p.setFiscalcode(rs.getString("fiscalcode"));
+					p.setHealthcarecompany(rs.getString("healthcarecompany"));
+					p.setPin(rs.getString("pin"));
+					p.setName(rs.getString("name"));  
+					p.setSurname(rs.getString("surname"));
+					p.setBirthdate(rs.getDate("birthdate"));
+					p.setBirthplace(rs.getString("birthplace")); 
+					p.setProvince(rs.getString("province"));
+					p.setEmail(rs.getString("email"));
 					return true;
 					
 				}
