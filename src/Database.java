@@ -100,6 +100,9 @@ public class Database {
 	{
 		try(Connection con = DriverManager.getConnection(url, user, password))
 		{
+			System.out.println("CHECK PATIENT: [fiscalcode] = " + fiscalCode);
+			System.out.println("CHECK PATIENT: [pin] = " + pin);
+			
 			String query = "SELECT COUNT(*) FROM patient WHERE fiscalCode = ? AND pin = ?";
 			try(PreparedStatement pst = con.prepareStatement(query)){
 				pst.clearParameters();

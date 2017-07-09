@@ -181,8 +181,8 @@ public class View {
 		btnLoginPatient.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Patient.getInstance().fiscalcode = formattedTextFieldFiscalCode.getText();
-				Patient.getInstance().pin = passwordFieldPIN.getPassword();
-				if(db.checkPatient(formattedTextFieldFiscalCode.getText(), passwordFieldPIN.getPassword().toString())){
+				Patient.getInstance().pin = new String(passwordFieldPIN.getPassword());
+				if(db.checkPatient(formattedTextFieldFiscalCode.getText(), new String(passwordFieldPIN.getPassword()))){
 					clfrmHealhcareManagementSystem.show(frmHealthcareManagementSystem.getContentPane(), "panelPatient");
 					System.out.println("ok..");
 				}
