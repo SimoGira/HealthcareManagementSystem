@@ -255,12 +255,14 @@ public class View {
 		JButton btnLoginEmployee = new JButton("Login");
 		btnLoginEmployee.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) { 
-				if(db.checkEmployee(textField_usr.getText(), new String(textField_passwd.getPassword()))){ 
+				String user = textField_usr.getText();
+				String pass = new String(textField_passwd.getPassword());
+				if(db.checkEmployee(user, pass)){ 
 					System.out.println("ok");
 					clfrmHealhcareManagementSystem.show(frmHealthcareManagementSystem.getContentPane(), "panelEmployee");
 				}
 				else{
-					System.out.println("dio can");
+					System.out.println("wrong credentials: " + user + " " + pass );
 				}
 			}
 		});

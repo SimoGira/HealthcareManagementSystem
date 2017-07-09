@@ -78,9 +78,9 @@ public class Database {
 				pst.setString(1, employeeCode); 
 				pst.setString(2, password); 
 				ResultSet rs = pst.executeQuery(); 
+				Employee e = Employee.getInstance();
 				while(rs.next())
 				{
-					Employee e = Employee.getInstance();
 					while(rs.next())
 					{
 						e.setFiscalcode(rs.getString("fiscalcode")); 
