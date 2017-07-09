@@ -1,4 +1,5 @@
-import java.sql.Connection; 
+import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -66,12 +67,12 @@ public class Database {
 			System.out.println( "Errore durante connessione al database: " + e1.getMessage() );
 		}
 	}
-	
+
 	public boolean checkEmployee(String employeeCode, String password)
 	{
 		try(Connection con = DriverManager.getConnection(this.url, this.user, this.password))
 		{
-			String query = "SELECT COUNT(*) FROM employee WHERE employeeCode = ? AND password = ?";
+			String query = "SELECT * FROM employee WHERE employeeCode = ? AND password = ?";
 			try(PreparedStatement pst = con.prepareStatement(query)){
 				pst.clearParameters();
 				pst.setString(1, employeeCode); 
@@ -79,8 +80,17 @@ public class Database {
 				ResultSet rs = pst.executeQuery(); 
 				while(rs.next())
 				{
-					if(rs.getInt(1) == 1)
+					Employee e = Employee.getInstance();
+					while(rs.next())
+					{
+						e.setFiscalcode(rs.getString("fiscalcode")); 
+						e.setName(rs.getString("name"));  
+						e.setClinic(rs.getString("clinic"));
+						e.setCompany(rs.getString("company"));
+						e.setJob(rs.getString("job"));
+						e.setSurname(rs.getString("surname")); 
 						return true;
+					}
 				} 
 			} 
 
@@ -90,8 +100,8 @@ public class Database {
 
 		return false;
 	}
-	 
-	
+
+
 	public boolean checkPatient(String fiscalCode, String pin)
 	{
 		try(Connection con = DriverManager.getConnection(url, user, password))
@@ -116,7 +126,6 @@ public class Database {
 					p.setProvince(rs.getString("province"));
 					p.setEmail(rs.getString("email"));
 					return true;
-					
 				}
 			}
 
@@ -126,6 +135,44 @@ public class Database {
 
 		return false;
 	}
+
+	public ArrayList<Visit> getBookedVisits(String company, String clinic, Date date)
+	{
+		try(Connection con = DriverManager.getConnection(url, user, password))
+		{
+			String query = "SELECT * FROM visit WHERE company = ? AND clinic = ? AND result IS NULL AND date = ?";
+			try(PreparedStatement pst = con.prepareStatement(query)){
+				pst.clearParameters();
+				pst.setString(1, company); 
+				pst.setString(2, clinic); 
+				pst.setDate(3, date); 
+				ResultSet rs = pst.executeQuery();
+				ArrayList<Visit> visits = new ArrayList<Visit>();
+				while(rs.next())
+				{
+					Visit v = new Visit(); 
+					v.setPatient(rs.getString("patient"));
+					v.setClinicName(rs.getString("clinic"));
+					v.setCompanyId(rs.getString("company"));
+					v.setServiceName(rs.getString("servicename"));
+					v.setDoctor(rs.getString("doctor"));
+					v.setDate(rs.getDate("date"));
+					v.setHour(rs.getInt("hour"));
+					v.setUrgency(rs.getString("urgency"));
+					v.setRegime(rs.getString("regime"));
+					v.setResult(rs.getString("result"));
+					visits.add(v);
+				}
+				return visits;
+			} 
+
+		} catch (SQLException e1) {
+			System.out.println( "Errore durante connessione al database: " + e1.getMessage() );
+		}
+
+		return null;
+	}
+
 	
 	public ArrayList<Visit> getVisitsHistory(String fiscalCode)
 	{
@@ -140,11 +187,10 @@ public class Database {
 				while(rs.next())
 				{
 					Visit v = new Visit();
-					v.setClinicName(rs.getString("Clinic"));
-					v.setPatient(rs.getString("patient"));
-					v.setClinicName(rs.getString("Clinic"));
+					v.setClinicName(rs.getString("clinic"));
+					v.setPatient(rs.getString("patient")); 
 					v.setCompanyId(rs.getString("company"));
-					v.setServiceName(rs.getString("serviceName"));
+					v.setServiceName(rs.getString("servicename"));
 					v.setDoctor(rs.getString("doctor"));
 					v.setDate(rs.getDate("date"));
 					v.setHour(rs.getInt("hour"));
@@ -183,7 +229,7 @@ public class Database {
 					a.setCap(rs.getString("cap"));
 					a.setCity(rs.getString("city"));  
 					a.setProvince(rs.getString("province"));
-					a.setContractDate(rs.getDate("contractDate"));
+					a.setContractDate(rs.getDate("contractdate"));
 					a.setDescription(rs.getString("description"));
 					clinics.add(a);
 				}
@@ -207,14 +253,44 @@ public class Database {
 				pst.clearParameters();
 				pst.setString(1, visitType);
 				pst.setString(2, company); 
-				pst.setInt(2, year); 
-				pst.setInt(2, month); 
+				pst.setInt(3, year); 
+				pst.setInt(4, month); 
 				ResultSet rs = pst.executeQuery();
-				int[] result = new int[31];
+				int[] result = new int[32];
 				while(rs.next())
 				{ 
-					int day = rs.getInt("day");
+					int day = rs.getInt("day") - 1; //start from 0
 					result[day] =  rs.getInt("cnt");
+				} 
+				return result;
+			} 
+
+		} catch (SQLException e1) {
+			System.out.println( "Errore durante connessione al database: " + e1.getMessage() );
+		}
+
+		return null;
+	}
+
+	
+	public boolean[] getBookedVisitsInDay(int year, int month, int day, String visitType, String company)
+	{
+		try(Connection con = DriverManager.getConnection(url, user, password))
+		{
+			String query = "SELECT hour as cnt FROM visit WHERE serviceName = ? AND company = ? AND result IS NULL AND EXTRACT(MONTH FROM(date)) = ?  AND EXTRACT(YEAR FROM(date)) = ? AND EXTRACT(DAY FROM(date)) = ?  GROUP BY date";
+			try(PreparedStatement pst = con.prepareStatement(query)){
+				pst.clearParameters();
+				pst.setString(1, visitType);
+				pst.setString(2, company); 
+				pst.setInt(3, year); 
+				pst.setInt(4, month);
+				pst.setInt(5, day); 
+				ResultSet rs = pst.executeQuery();
+				boolean[] result = new boolean[24];
+				while(rs.next())
+				{ 
+					int hour = rs.getInt("hour");
+					result[hour] =  true;
 				} 
 				return result;
 			} 
