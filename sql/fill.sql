@@ -55,17 +55,17 @@ VALUES
 ('PCCDFG85A42E952E', 'JOBIT0004', 'asd', 'piero', 'verdi', 'dentista', 'NEOPLASIE POLMONARI E TRATTO GASTROENTERICO', 'cp02')
 ;
 
-INSERT INTO visit (patient, ambulatory, company, doctor, date, hour, urgency, regime, result)
+INSERT INTO visit (patient, ambulatory, company, serviceName, doctor, date, hour, urgency, regime, result)
 VALUES
-('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'RFCVCV85A42E952E', '01/01/2017', 10, 'bassa', 'privata', NULL),
-('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'RFCVCV85A42E952E', '01/03/2017', 8, 'bassa', 'privata', NULL),
-('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'RFCVCV85A42E952E', '01/03/2017', 9, 'bassa', 'privata', NULL),
-('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'RFCVCV85A42E952E', '01/03/2017', 10, 'bassa', 'privata', NULL),
-('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'RFCVCV85A42E952E', '01/03/2017', 11, 'bassa', 'privata', NULL),
-('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'RFCVCV85A42E952E', '01/03/2017', 12, 'bassa', 'privata', NULL),
-('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'RFCVCV85A42E952E', '01/03/2017', 13, 'bassa', 'privata', NULL),
-('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'RFCVCV85A42E952E', '01/03/2017', 14, 'bassa', 'privata', NULL),
-('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'RFCVCV85A42E952E', '01/03/2017', 15, 'bassa', 'privata', NULL),
-('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'RFCVCV85A42E952E', '01/03/2017', 16, 'bassa', 'privata', NULL);
+('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'visita oncologica', 'RFCVCV85A42E952E', '01/01/2017', 10, 'bassa', 'privata', NULL),
+('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'visita oncologica', 'RFCVCV85A42E952E', '01/03/2017', 8, 'bassa', 'privata', NULL),
+('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'visita oncologica', 'RFCVCV85A42E952E', '01/03/2017', 9, 'bassa', 'privata', NULL),
+('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'visita oncologica', 'RFCVCV85A42E952E', '01/03/2017', 10, 'bassa', 'privata', NULL),
+('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'visita oncologica', 'RFCVCV85A42E952E', '01/03/2017', 11, 'bassa', 'privata', NULL),
+('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'visita oncologica', 'RFCVCV85A42E952E', '01/03/2017', 12, 'bassa', 'privata', NULL),
+('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'visita oncologica', 'RFCVCV85A42E952E', '01/03/2017', 13, 'bassa', 'privata', NULL),
+('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'visita oncologica', 'RFCVCV85A42E952E', '01/03/2017', 14, 'bassa', 'privata', NULL),
+('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'visita oncologica', 'RFCVCV85A42E952E', '01/03/2017', 15, 'bassa', 'privata', NULL),
+('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'visita oncologica', 'RFCVCV85A42E952E', '01/03/2017', 16, 'bassa', 'privata', NULL);
 
 
