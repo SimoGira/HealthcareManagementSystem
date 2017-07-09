@@ -164,7 +164,7 @@ public class Database {
 	}
 
 
-	public ArrayList<Clinic> getclinics(String company)
+	public ArrayList<Clinic> getClinics(String company)
 	{
 		try(Connection con = DriverManager.getConnection(url, user, password))
 		{
@@ -197,6 +197,57 @@ public class Database {
 		return null;
 	}
 
+	// for each day of this month, get the number of visits in this day (min 0 - max 8)
+	public int[] getVisitsInMonth(int year, int month, String visitType, String company)
+	{
+		try(Connection con = DriverManager.getConnection(url, user, password))
+		{
+			String query = "SELECT EXTRACT(DAY FROM(date)) as day , COUNT(*) as cnt FROM visit WHERE serviceName = ? AND company = ? AND result IS NULL AND EXTRACT(MONTH FROM(date)) = ?  AND EXTRACT(YEAR FROM(date)) = ?  GROUP BY date";
+			try(PreparedStatement pst = con.prepareStatement(query)){
+				pst.clearParameters();
+				pst.setString(1, visitType);
+				pst.setString(2, company); 
+				pst.setInt(2, year); 
+				pst.setInt(2, month); 
+				ResultSet rs = pst.executeQuery();
+				int[] result = new int[31];
+				while(rs.next())
+				{ 
+					int day = rs.getInt("day");
+					result[day] =  rs.getInt("cnt");
+				} 
+				return result;
+			} 
+
+		} catch (SQLException e1) {
+			System.out.println( "Errore durante connessione al database: " + e1.getMessage() );
+		}
+
+		return null;
+	}
 	
+	public ArrayList<String> getServices(String company)
+	{
+		try(Connection con = DriverManager.getConnection(url, user, password))
+		{
+			String query = "SELECT DISTINCT name FROM service WHERE company = ?";
+			try(PreparedStatement pst = con.prepareStatement(query)){
+				pst.clearParameters();
+				pst.setString(1, company); 
+				ResultSet rs = pst.executeQuery();
+				ArrayList<String> result = new ArrayList<String>();
+				while(rs.next())
+				{ 
+					result.add(rs.getString("name"));
+				} 
+				return result;
+			} 
+
+		} catch (SQLException e1) {
+			System.out.println( "Errore durante connessione al database: " + e1.getMessage() );
+		}
+
+		return null;
+	}
 
 }
