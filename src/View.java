@@ -48,7 +48,7 @@ public class View {
 
 	public JFrame frmHealthcareManagementSystem;
 	private JTextField textField_usr;
-	private JTextField textField_passwd;
+	private JPasswordField textField_passwd;
 	private JPasswordField passwordFieldPIN;
 	private JTable tableHistoryVisits;
 	private JTable tableVisitsFounded;
@@ -185,12 +185,14 @@ public class View {
 
 		btnLoginPatient.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent e) { 
-				if(db.checkPatient(formattedTextFieldFiscalCode.getText(), new String(passwordFieldPIN.getPassword()))){
+				String username = formattedTextFieldFiscalCode.getText();
+				String passwd = new String(passwordFieldPIN.getPassword());
+				if(db.checkPatient(username, passwd)){
 					lblWeolcomePatient.setText(lblWeolcomePatient.getText() + " " + Patient.getInstance().getName() + " " + Patient.getInstance().getSurname()); 
 					clfrmHealhcareManagementSystem.show(frmHealthcareManagementSystem.getContentPane(), "panelPatient");
 				}
 				else{
-					System.out.println("dio can");
+					System.out.println("credenziali errate: " + username + " " + passwd );
 				}
 			}
 		});
@@ -248,6 +250,17 @@ public class View {
 		gbc_textField_passwd.gridy = 1;
 		panelCenterEmployeeLogin.add(textField_passwd, gbc_textField_passwd);
 		JButton btnLoginEmployee = new JButton("Login");
+		btnLoginEmployee.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) { 
+				if(db.checkEmployee(textField_usr.getText(), new String(textField_passwd.getPassword()))){ 
+					System.out.println("ok");
+					clfrmHealhcareManagementSystem.show(frmHealthcareManagementSystem.getContentPane(), "panelEmployee");
+				}
+				else{
+					System.out.println("dio can");
+				}
+			}
+		});
 		GridBagConstraints gbc_btnLoginEmployee = new GridBagConstraints();
 		gbc_btnLoginEmployee.gridx = 1;
 		gbc_btnLoginEmployee.gridy = 3;
@@ -724,11 +737,18 @@ public class View {
 		panelViewVisitPerPatientNorth.add(lblPaziente);
 
 
-		JFormattedTextField formattedTextField = new JFormattedTextField();
-		panelViewVisitPerPatientNorth.add(formattedTextField);
-		formattedTextField.setColumns(16);
+		JFormattedTextField searchPatientTextField = new JFormattedTextField();
+		panelViewVisitPerPatientNorth.add(searchPatientTextField);
+		searchPatientTextField.setColumns(16);
 
+		//visualizza le visite di un paziente
 		JButton btnVisualizza = new JButton("Cerca");
+		btnVisualizza.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("DA IMPLEMENTARE");
+				ArrayList<Clinic> clincs = db.getClinics(Employee.getInstance().getClinic());
+			}
+		});
 		panelViewVisitPerPatientNorth.add(btnVisualizza);
 
 		JScrollPane scrollPaneViewVisitPerPatient = new JScrollPane();

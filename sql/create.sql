@@ -26,7 +26,7 @@ create table clinic(
     cap char(5) check(cap similar to '[0-9]{5}') not null,
     city varchar(50) not null,
     province provinces not null,
-    contractDate date not null,
+    contractdate date not null,
     description text not null,
     primary key(name, company)
 );
