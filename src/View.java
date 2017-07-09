@@ -11,6 +11,7 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -55,6 +56,8 @@ public class View {
 	private JTextField textFieldInsertClinicName;
 	private JTable tableClinics;
 	private JTable tableVisitsPatientResults;
+	private CardLayout clfrmHealhcareManagementSystem;
+	private Database db;
 
 	/**
 	 * Launch the application.
@@ -94,8 +97,11 @@ public class View {
 
 	/**
 	 * Create the application.
+	 * @throws SQLException 
+	 * @throws ClassNotFoundException 
 	 */
-	public View() {
+	public View() throws ClassNotFoundException, SQLException {
+		this.db = new Database();
 		initialize();
 	}
 
@@ -107,9 +113,10 @@ public class View {
 		frmHealthcareManagementSystem.setIconImage(Toolkit.getDefaultToolkit().getImage(View.class.getResource("/img/caduceus.png")));
 		frmHealthcareManagementSystem.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmHealthcareManagementSystem.getContentPane().setLayout(new CardLayout(0, 0));
-
+		this.clfrmHealhcareManagementSystem = (CardLayout) frmHealthcareManagementSystem.getContentPane().getLayout();
+		
 		JPanel panelLogin = new JPanel();
-		frmHealthcareManagementSystem.getContentPane().add(panelLogin, "name_11222847950945");
+		frmHealthcareManagementSystem.getContentPane().add(panelLogin, "panelLogin");
 		panelLogin.setLayout(new BorderLayout(0, 0));
 
 		JTabbedPane tabbedPaneLogin = new JTabbedPane(JTabbedPane.TOP);
@@ -173,6 +180,15 @@ public class View {
 		panelCenterPatientLogin.add(btnLoginPatient, gbc_btnLoginPatient);
 		btnLoginPatient.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				Patient.getInstance().fiscalcode = formattedTextFieldFiscalCode.getText();
+				Patient.getInstance().pin = passwordFieldPIN.getPassword();
+				if(db.checkPatient(formattedTextFieldFiscalCode.getText(), passwordFieldPIN.getPassword().toString())){
+					clfrmHealhcareManagementSystem.show(frmHealthcareManagementSystem.getContentPane(), "panelPatient");
+					System.out.println("ok..");
+				}
+				else{
+					System.out.println("dio can");
+				}
 			}
 		});
 
@@ -246,7 +262,7 @@ public class View {
 		panelSouthLogin.add(btnViewClinicAnd);
 
 		JPanel panelPatient = new JPanel();
-		frmHealthcareManagementSystem.getContentPane().add(panelPatient, "name_11222960382586");
+		frmHealthcareManagementSystem.getContentPane().add(panelPatient, "panelPatient");
 		panelPatient.setLayout(new BorderLayout(0, 0));
 
 		JPanel panelNorthPatient = new JPanel();
@@ -284,7 +300,7 @@ public class View {
 		panelVisitPatient.setLayout(new CardLayout(0, 0));
 
 		JPanel panelHistoryVisitPatient = new JPanel();
-		panelVisitPatient.add(panelHistoryVisitPatient, "name_230301853210624");
+		panelVisitPatient.add(panelHistoryVisitPatient, "panelHistoryVisitPatient");
 		panelHistoryVisitPatient.setLayout(new BorderLayout(0, 0));
 
 		JPanel panelHistoryNorth = new JPanel();
@@ -332,7 +348,7 @@ public class View {
 		panelHistoryButtons.add(btnViewSelectedVisit);
 
 		JPanel panelVisitResultPatient = new JPanel();
-		panelVisitPatient.add(panelVisitResultPatient, "name_230217349041945");
+		panelVisitPatient.add(panelVisitResultPatient, "panelVisitResultPatient");
 		panelVisitResultPatient.setLayout(new BorderLayout(0, 0));
 
 		JTextArea resultVisitTextArea = new JTextArea();
@@ -383,7 +399,7 @@ public class View {
 		bookVisitNorthPanel.add(comboBoxBookVisitHour);
 
 		JPanel panelEmployee = new JPanel();
-		frmHealthcareManagementSystem.getContentPane().add(panelEmployee, "name_11222990618502");
+		frmHealthcareManagementSystem.getContentPane().add(panelEmployee, "panelEmployee");
 		panelEmployee.setLayout(new BorderLayout(0, 0));
 
 		JPanel panelNorthEmployee = new JPanel();
@@ -668,7 +684,7 @@ public class View {
 		panelVisitsResultsPerPatientMaster.setLayout(new CardLayout(0, 0));
 
 		JPanel panelViewVisitPerPatient = new JPanel();
-		panelVisitsResultsPerPatientMaster.add(panelViewVisitPerPatient, "name_286532839662654");
+		panelVisitsResultsPerPatientMaster.add(panelViewVisitPerPatient, "panelViewVisitPerPatient");
 		panelViewVisitPerPatient.setLayout(new BorderLayout(0, 0));
 
 		JPanel panelViewVisitPerPatientNorth = new JPanel();
@@ -728,7 +744,7 @@ public class View {
 		panelViewVisitPerPatientSouth.add(btnDettagli);
 
 		JPanel panelViewVisitResultsPerPatient = new JPanel();
-		panelVisitsResultsPerPatientMaster.add(panelViewVisitResultsPerPatient, "name_287041379689787");
+		panelVisitsResultsPerPatientMaster.add(panelViewVisitResultsPerPatient, "panelViewVisitResultsPerPatient");
 		panelViewVisitResultsPerPatient.setLayout(new BorderLayout(0, 0));
 
 		JScrollPane scrollPanepanelViewVisitResultsPerPatient = new JScrollPane();
@@ -750,7 +766,7 @@ public class View {
 
 		JSplitPane splitPaneClinics = new JSplitPane();
 		splitPaneClinics.setResizeWeight(0.3);
-		frmHealthcareManagementSystem.getContentPane().add(splitPaneClinics, "name_18581128151280");
+		frmHealthcareManagementSystem.getContentPane().add(splitPaneClinics, "splitPaneClinics");
 
 		JPanel ClinicsPanel = new JPanel();
 		splitPaneClinics.setLeftComponent(ClinicsPanel);

@@ -13,7 +13,7 @@ public class Patient {
 
 	public String fiscalcode;
 	public String healthcarecompany;
-	public String pin;
+	public char[] pin;
 	public String name;  
 	public String surname;
 	public Date birthdate;

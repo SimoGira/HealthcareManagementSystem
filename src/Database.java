@@ -103,12 +103,13 @@ public class Database {
 			String query = "SELECT COUNT(*) FROM patient WHERE fiscalCode = ? AND pin = ?";
 			try(PreparedStatement pst = con.prepareStatement(query)){
 				pst.clearParameters();
-				pst.setString(0, fiscalCode); 
-				pst.setString(1, pin); 
+				pst.setString(1, fiscalCode); 
+				pst.setString(2, pin); 
 				ResultSet rs = pst.executeQuery(); 
 				while(rs.next())
 				{
-					if(rs.getInt(0) == 1)
+					System.out.println("rs.getInt = " + rs.getInt(1));
+					if(rs.getInt(1) == 1)
 						return true;
 				} 
 			} 
