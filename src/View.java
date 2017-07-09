@@ -178,8 +178,9 @@ public class View {
 		gbc_btnLoginPatient.gridx = 1;
 		gbc_btnLoginPatient.gridy = 3;
 		panelCenterPatientLogin.add(btnLoginPatient, gbc_btnLoginPatient);
-		btnLoginPatient.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		 
+		btnLoginPatient.addActionListener(new ActionListener() { 
+			public void actionPerformed(ActionEvent e) { 
 				Patient.getInstance().fiscalcode = formattedTextFieldFiscalCode.getText();
 				Patient.getInstance().pin = new String(passwordFieldPIN.getPassword());
 				if(db.checkPatient(formattedTextFieldFiscalCode.getText(), new String(passwordFieldPIN.getPassword()))){
