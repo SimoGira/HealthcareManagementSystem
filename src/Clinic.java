@@ -1,4 +1,5 @@
 import java.sql.Date;
+import java.util.ArrayList;
 
 public class Clinic {
 	private String name;
@@ -70,7 +71,7 @@ public class Clinic {
 	private String description;
 	 */
 	
-	public String getCompleteDescription(String[] services){
+	public String getCompleteDescription(ArrayList<String> services){
 		
 		
 		String head =  "<table border=\"0\" cellpadding=\"2\" cellspacing=\"1\">"

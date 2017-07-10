@@ -1072,13 +1072,6 @@ public class View {
 
 		comboBoxSelectCompany = new JComboBox<String>();
 		listClinics = new JList<String>();
-		listClinics.addListSelectionListener(new ListSelectionListener() {
-			public void valueChanged(ListSelectionEvent e) {
-				System.out.println(listClinics.getSelectedIndex());
-			}
-		});
-		
-		
 		
 		comboBoxSelectCompany.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -1102,8 +1095,6 @@ public class View {
 
 				});
 				
-				
-				
 			}
 		});
 		panelClinicsAndServicesNorth.add(comboBoxSelectCompany);
@@ -1113,33 +1104,15 @@ public class View {
 		splitPaneClinics.setResizeWeight(0.3);
 
 		JPanel ClinicsPanel = new JPanel();
-		ClinicsPanel.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent arg0) {
-			}
-		});
 		splitPaneClinics.setLeftComponent(ClinicsPanel);
 		ClinicsPanel.setLayout(new BorderLayout(0, 0));
 
 		JLabel lblClinics = new JLabel("Ambulatori");
 		lblClinics.setHorizontalAlignment(SwingConstants.CENTER);
 		ClinicsPanel.add(lblClinics, BorderLayout.NORTH);
-
-		/*ListSelectionModel listSelectionModel = listClinics.getSelectionModel();
-		
-		listSelectionModel.addListSelectionListener(new ListSelectionListener() {
-
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				System.out.println(clinics.get(e.getFirstIndex()).getName());
-			}
-			
-		});*/
-		
-		
-		
+				
 		ClinicsPanel.add(listClinics, BorderLayout.CENTER);
-
+		
 		JPanel ServicesPanel = new JPanel();
 		splitPaneClinics.setRightComponent(ServicesPanel);
 		ServicesPanel.setLayout(new BorderLayout(0, 0));
@@ -1147,10 +1120,22 @@ public class View {
 		JTextPane txtClinic = new JTextPane();
 		txtClinic.setContentType("text/html");
 		
-		txtClinic.setText(
-				"<html>\r\n\t<head></head>\r\n\t<body>\r\n\t\t<h1>Clinics of Jesus</h1>\r\n\t\t<h3>Services</h3>\r\n\t\t.....Prova html.....\r\n\t</body>\r\n</html>\r\n");
-		ServicesPanel.add(txtClinic, BorderLayout.CENTER);
-
+		listClinics.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent e) {
+				
+				int comboBoxIndex = comboBoxSelectCompany.getSelectedIndex();
+				String companyID = companiesList.get(comboBoxIndex)[0]; //[0] è il primo parametro, ovvero l'id della clinica
+				
+				ArrayList<Clinic> clinics = db.getClinics(companyID);
+				int selectedIndex = listClinics.getSelectedIndex();
+				
+				if (selectedIndex != -1) { //quando cambio contenuto in combobox mi ritorna -1 e mi fa segfault in clinics.get
+					txtClinic.setText(clinics.get(selectedIndex).getCompleteDescription(db.getClinicServices(companyID, clinics.get(selectedIndex).getName())));
+					ServicesPanel.add(txtClinic, BorderLayout.CENTER);
+				}
+			}
+		});
+		
 		JPanel panelClinicAndServicesButton = new JPanel();
 		FlowLayout fl_panelClinicAndServicesButton = (FlowLayout) panelClinicAndServicesButton.getLayout();
 		fl_panelClinicAndServicesButton.setAlignment(FlowLayout.RIGHT);
