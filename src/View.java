@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Vector;
 
+import javax.swing.AbstractButton;
 import javax.swing.AbstractListModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
@@ -82,7 +83,7 @@ public class View {
 	private JTable tableVisitsPatientResults;
 	private CardLayout clfrmHealhcareManagementSystem;
 	private Database db;
-	private JLabel lblWeolcomePatient;
+	private JLabel lblWelcomePatient;
 	private ArrayList<Visit> patientVisits;
 
 	private final String company = "cp02";
@@ -92,7 +93,7 @@ public class View {
 	private static final int DAYSC = 7;
 	private JComboBox<Integer> selectedMonth;
 	private JComboBox<String> comboBoxSelectBookVisitMonth;
-	JComboBox<String> comboBoxClinicVisitInsertion;
+	private JComboBox<String> comboBoxClinicVisitInsertion;
 	private JComboBox<String> comboBoxVisitsYear;
 	private DefaultTableModel visitsHistoryModel;
 	private JButton btnViewVisitsPatient;
@@ -104,6 +105,7 @@ public class View {
 	private JComboBox<String> comboBoxSelectCompany;
 
 	private JTextPane txtpnVisitResultInfo;
+	protected AbstractButton lblWelcomeEmployee;
 
 
 	/**
@@ -226,20 +228,19 @@ public class View {
 		panelCenterPatientLogin.add(passwordFieldPIN, gbc_passwordFieldPIN);
 
 		JButton btnLoginPatient = new JButton("Login");
+		frmHealthcareManagementSystem.getRootPane().setDefaultButton(btnLoginPatient);
 		GridBagConstraints gbc_btnLoginPatient = new GridBagConstraints();
 		gbc_btnLoginPatient.gridx = 1;
 		gbc_btnLoginPatient.gridy = 3;
 		panelCenterPatientLogin.add(btnLoginPatient, gbc_btnLoginPatient);
 
 		btnLoginPatient.addActionListener(new ActionListener() {
-			
 			public void actionPerformed(ActionEvent e) {
 				String fiscalCode = formattedTextFieldFiscalCode.getText();
 				String passwd = new String(passwordFieldPIN.getPassword());
 
 				if (db.checkPatient(fiscalCode, passwd)) {
-					lblWeolcomePatient.setText(lblWeolcomePatient.getText() + " " + Patient.getInstance().getName()
-							+ " " + Patient.getInstance().getSurname());
+					lblWelcomePatient.setText(lblWelcomePatient.getText() + Patient.getInstance().getName()+ " " + Patient.getInstance().getSurname());
 					clfrmHealhcareManagementSystem.show(frmHealthcareManagementSystem.getContentPane(), "panelPatient");
 
 					// clean fiscal code and password
@@ -268,11 +269,9 @@ public class View {
 							visitsHistoryModel.addRow(row);
 						}
 					}
-
-
 				} else {
 					System.out.println("credenziali errate: " + fiscalCode + " " + passwd);
-
+					JOptionPane.showMessageDialog(null, "Nome utente o password errati o mancanti", "Errore accesso", JOptionPane.WARNING_MESSAGE);
 				}
 			}
 		});
@@ -331,12 +330,14 @@ public class View {
 		gbc_textField_passwd.gridy = 1;
 		panelCenterEmployeeLogin.add(textField_passwd, gbc_textField_passwd);
 		JButton btnLoginEmployee = new JButton("Login");
+		//frmHealthcareManagementSystem.getRootPane().setDefaultButton(btnLoginPatient); ------- sistemare (memo per me (simone))
 		btnLoginEmployee.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String user = textField_usr.getText();
 				String pass = new String(textField_passwd.getPassword());
 				if (db.checkEmployee(user, pass)) {
 					System.out.println("ok");
+					lblWelcomeEmployee.setText(lblWelcomeEmployee + Employee.getInstance().getName() + Employee.getInstance().getSurname());
 					clfrmHealhcareManagementSystem.show(frmHealthcareManagementSystem.getContentPane(), "panelEmployee");
 					//add clinics
 					ArrayList<Clinic> clinics = db.getClinics(Employee.getInstance().getCompany());
@@ -388,10 +389,10 @@ public class View {
 		panelPatient.add(panelPatientNorth, BorderLayout.NORTH);
 		panelPatientNorth.setLayout(new BorderLayout(0, 0));
 
-		lblWeolcomePatient = new JLabel("Benvenuto ");
-		lblWeolcomePatient.setHorizontalAlignment(SwingConstants.CENTER);
-		panelPatientNorth.add(lblWeolcomePatient, BorderLayout.CENTER);
-		lblWeolcomePatient.setFont(new Font("Tahoma", Font.BOLD, 22));
+		lblWelcomePatient = new JLabel("Benvenuto ");
+		lblWelcomePatient.setHorizontalAlignment(SwingConstants.CENTER);
+		panelPatientNorth.add(lblWelcomePatient, BorderLayout.CENTER);
+		lblWelcomePatient.setFont(new Font("Tahoma", Font.BOLD, 22));
 
 		JPanel panelPatientNorthRightLabels = new JPanel();
 		FlowLayout fl_panelPatientNorthRightLabels = (FlowLayout) panelPatientNorthRightLabels.getLayout();
@@ -444,11 +445,14 @@ public class View {
 		JScrollPane scrollPaneHistory = new JScrollPane();
 		panelHistoryVisitPatient.add(scrollPaneHistory, BorderLayout.CENTER);
 
-		// questa tabella si puo' implementare in maniera piu' pulita una volta
-		// completati i metodi con il db, vedi tests fatto su w10 (simone)
 		tableHistoryVisits = new JTable();
 		tableHistoryVisits.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		visitsHistoryModel = new DefaultTableModel(new String[] { "N\u00B0", "Data", "Ora", "Tipo Visita", "Regime", "Urgenza" }, 0);
+		visitsHistoryModel = new DefaultTableModel(new String[] { "N\u00B0", "Data", "Ora", "Tipo Visita", "Regime", "Urgenza" }, 0){
+			@Override
+		    public boolean isCellEditable(int row, int column) {
+		        return false;
+		    }
+		};
 		tableHistoryVisits.setModel(visitsHistoryModel);
 		tableHistoryVisits.getColumnModel().getColumn(0).setPreferredWidth(25);
 		tableHistoryVisits.getColumnModel().getColumn(0).setMaxWidth(25);
@@ -710,14 +714,18 @@ public class View {
 		comboBoxClinicVisitInsertion.setMaximumRowCount(10);
 		panelInfovisitInsertionNorth.add(comboBoxClinicVisitInsertion);
 
-		DefaultTableModel employeeInsertModel = new DefaultTableModel(new String[] {  "Codice Fiscale", "Tipo visita", "Urgenza", "Ora" }, 0);
-
+		DefaultTableModel employeeInsertVisitModel = new DefaultTableModel(new String[] {  "Codice Fiscale", "Tipo visita", "Urgenza", "Ora" }, 0){
+			@Override
+		    public boolean isCellEditable(int row, int column) {
+		        return false;
+		    }
+		};
 		JButton btnFindVisits = new JButton("Trova");
 		btnFindVisits.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// free table
-				while (employeeInsertModel.getRowCount() > 0)
-					employeeInsertModel.removeRow(0);
+				while (employeeInsertVisitModel.getRowCount() > 0)
+					employeeInsertVisitModel.removeRow(0);
 
 				String date = formattedTextFieldVisitInsertion.getText();
 
@@ -740,7 +748,7 @@ public class View {
 						vector.add(c.getServiceName());
 						vector.add(c.getUrgency());
 						vector.add(c.getHour()); 
-						employeeInsertModel.addRow(vector);
+						employeeInsertVisitModel.addRow(vector);
 					}
 				}
 			}
@@ -751,7 +759,7 @@ public class View {
 		panelInfoVisitInsertion.add(scrollPaneInfoVisitInsertionCenter, BorderLayout.CENTER);
 
 		tableVisitsFounded = new JTable();
-		tableVisitsFounded.setModel(employeeInsertModel);
+		tableVisitsFounded.setModel(employeeInsertVisitModel);
 		tableVisitsFounded.getTableHeader().setReorderingAllowed(false);
 
 		scrollPaneInfoVisitInsertionCenter.setViewportView(tableVisitsFounded);
@@ -925,16 +933,14 @@ public class View {
 		gbc_scrollPaneViewClinics.gridy = 1;
 		panelInsertClinicMaster.add(scrollPaneViewClinics, gbc_scrollPaneViewClinics);
 
-		tableClinics = new JTable();
-		tableClinics.setModel(new DefaultTableModel(new Object[][] { { null, null, null, null, null, null, null }, },
-				new String[] { "Nome", "Via", "Paese", "CAP", "Provincia", "Data contratto", "" }) {
-			Class[] columnTypes = new Class[] { String.class, String.class, String.class, String.class, String.class,
-					String.class, Object.class };
-
-			public Class getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
-			}
-		});
+		TableModel insertClinicModel = new DefaultTableModel(new String[] { "Nome", "Via", "Paese", "CAP", "Provincia", "Data contratto", "" },0){
+			@Override
+		    public boolean isCellEditable(int row, int column) {
+		        return false;
+		    }
+		}; 
+		tableClinics = new JTable(insertClinicModel);
+		tableClinics.getTableHeader().setReorderingAllowed(false);
 		scrollPaneViewClinics.setViewportView(tableClinics);
 
 		JPanel panelInsertClinicButton = new JPanel();
@@ -964,15 +970,19 @@ public class View {
 		fl_panelViewVisitPerPatientNorth.setAlignment(FlowLayout.LEFT);
 		panelViewVisitPerPatient.add(panelViewVisitPerPatientNorth, BorderLayout.NORTH);
 
-		JLabel lblPaziente = new JLabel("Inserisci codice fiscale paziente:");
+		JLabel lblPaziente = new JLabel("Codice fiscale paziente:");
 		panelViewVisitPerPatientNorth.add(lblPaziente);
 
 		JFormattedTextField searchPatientTextField = new JFormattedTextField();
 		panelViewVisitPerPatientNorth.add(searchPatientTextField);
 		searchPatientTextField.setColumns(16);
 
-		DefaultTableModel employeeHistoryModel = new DefaultTableModel(
-				new String[] { "Data", "Ora", "Tipo visita", "Regime", "Urgenza" }, 0);
+		DefaultTableModel employeeHistoryModel = new DefaultTableModel(new String[] { "Data", "Ora", "Tipo visita", "Regime", "Urgenza" }, 0){
+			@Override
+		    public boolean isCellEditable(int row, int column) {
+		        return false;
+		    }
+		};
 
 		// visualizza le visite di un paziente
 		JButton btnVisualizza = new JButton("Cerca");
@@ -1042,10 +1052,10 @@ public class View {
 		panelEmployee.add(panelEmployeeNorth, BorderLayout.NORTH);
 		panelEmployeeNorth.setLayout(new BorderLayout(0, 0));
 
-		JLabel lblWeolcomeEmployee = new JLabel("Benvenuto");
-		lblWeolcomeEmployee.setHorizontalAlignment(SwingConstants.CENTER);
-		lblWeolcomeEmployee.setFont(new Font("Tahoma", Font.BOLD, 22));
-		panelEmployeeNorth.add(lblWeolcomeEmployee, BorderLayout.CENTER);
+		JLabel lblWelcomeEmployee = new JLabel("Benvenuto ");
+		lblWelcomeEmployee.setHorizontalAlignment(SwingConstants.CENTER);
+		lblWelcomeEmployee.setFont(new Font("Tahoma", Font.BOLD, 22));
+		panelEmployeeNorth.add(lblWelcomeEmployee, BorderLayout.CENTER);
 
 		JPanel panelEmployeeNorthRightLabels = new JPanel();
 		FlowLayout flowLayout_1 = (FlowLayout) panelEmployeeNorthRightLabels.getLayout();
