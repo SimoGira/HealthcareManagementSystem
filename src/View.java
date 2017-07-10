@@ -105,7 +105,7 @@ public class View {
 	private JComboBox<String> comboBoxSelectCompany;
 
 	private JTextPane txtpnVisitResultInfo;
-	protected AbstractButton lblWelcomeEmployee;
+	private JLabel lblWelcomeEmployee; 
 
 
 	/**
@@ -337,7 +337,7 @@ public class View {
 				String pass = new String(textField_passwd.getPassword());
 				if (db.checkEmployee(user, pass)) {
 					System.out.println("ok");
-					lblWelcomeEmployee.setText(lblWelcomeEmployee + Employee.getInstance().getName() + Employee.getInstance().getSurname());
+					lblWelcomeEmployee.setText(lblWelcomeEmployee.getText() + Employee.getInstance().getName() + Employee.getInstance().getSurname());
 					clfrmHealhcareManagementSystem.show(frmHealthcareManagementSystem.getContentPane(), "panelEmployee");
 					//add clinics
 					ArrayList<Clinic> clinics = db.getClinics(Employee.getInstance().getCompany());
@@ -347,7 +347,6 @@ public class View {
 				}
 				else{
 					System.out.println("wrong credentials: " + user + " " + pass );
-
 				}
 			}
 		});
@@ -1052,7 +1051,7 @@ public class View {
 		panelEmployee.add(panelEmployeeNorth, BorderLayout.NORTH);
 		panelEmployeeNorth.setLayout(new BorderLayout(0, 0));
 
-		JLabel lblWelcomeEmployee = new JLabel("Benvenuto ");
+		lblWelcomeEmployee = new JLabel("Benvenuto ");
 		lblWelcomeEmployee.setHorizontalAlignment(SwingConstants.CENTER);
 		lblWelcomeEmployee.setFont(new Font("Tahoma", Font.BOLD, 22));
 		panelEmployeeNorth.add(lblWelcomeEmployee, BorderLayout.CENTER);
