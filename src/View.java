@@ -110,12 +110,14 @@ public class View {
 	private JLabel lblWelcomeEmployee;
  
 	private JComboBox<String> comboBoxSelectBookVisitType;
-	private JComboBox<Integer> comboBoxSelectBookVisitDAy; 
+	private JComboBox<Integer> comboBoxSelectBookVisitDay; 
  
 	private JButton btnLoginPatient;
 	private JButton btnLoginEmployee;
 	private JComboBox<Integer> comboBoxSelectBookVisitYear; 
-
+	private ArrayList<String[]> serviceInfos;
+	private JComboBox<String> comboBoxSelectBookVisitClinic;
+	private JComboBox<Integer> comboBoxSelectBookVisitHour;
 
 	/**
 	 * Launch the application.
@@ -165,6 +167,24 @@ public class View {
 		return cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 	}
 	
+	private void updateBookingDays()
+	{
+		//da modificare 
+		int[] days = db.getVisitsInMonth(
+				(int)comboBoxSelectBookVisitYear.getSelectedItem(),
+				(int)comboBoxSelectBookVisitMonth.getSelectedIndex() + 1, 
+				(String)comboBoxSelectBookVisitType.getSelectedItem(),
+				(String)comboBoxSelectBookVisitClinic.getSelectedItem(),
+				Patient.getInstance().getHealthcarecompany());
+		
+		comboBoxSelectBookVisitDay.removeAllItems();
+		for(int i = 1; i < 32; i++)
+		{
+			if(days[i] < 8)
+				comboBoxSelectBookVisitDay.addItem((int)i);
+		} 
+		System.out.print("\n");
+	}
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -283,10 +303,8 @@ public class View {
 					//fill table (visits history) 
 					int i = 1;
 					patientVisits = db.getVisitsHistory(fiscalCode);
-					if (patientVisits != null) {
-						System.out.println("visits is not null " + patientVisits.size());
-						for (Visit c : patientVisits) {
-							System.out.println("element i");
+					if (patientVisits != null) { 
+						for (Visit c : patientVisits) { 
 							Vector<Object> row = new Vector<Object>();
 							row.add(i++);
 							row.add(c.getDate().toString());
@@ -300,9 +318,7 @@ public class View {
 					 
 					// initialize book visit panel
 					ArrayList<String> services = db.getServices(Patient.getInstance().getHealthcarecompany());
-					
-					System.out.println(Employee.getInstance().getCompany());
-					System.out.println(services);
+					  
 					for(String s : services)
 						comboBoxSelectBookVisitType.addItem(s);
 						
@@ -571,31 +587,38 @@ public class View {
 		lblSelectBookVisitType.setHorizontalAlignment(SwingConstants.RIGHT);
 
 		comboBoxSelectBookVisitType = new JComboBox<String>();
+		comboBoxSelectBookVisitType.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				comboBoxSelectBookVisitClinic.removeAllItems();
+				serviceInfos = db.getServiceInfos(Patient.getInstance().getHealthcarecompany(), comboBoxSelectBookVisitType.getSelectedItem().toString());
+				for(String[] info : serviceInfos)
+					comboBoxSelectBookVisitClinic.addItem(info[0]);
+				updateBookingDays();
+			}
+		});
 
 		JLabel lblSelectBookVisitYear = new JLabel("Anno:");
 		lblSelectBookVisitYear.setHorizontalAlignment(SwingConstants.RIGHT);
 
 		comboBoxSelectBookVisitYear = new JComboBox<Integer>();
-		int year = Calendar.getInstance().get(Calendar.YEAR);
+		int year = Calendar.getInstance().get(Calendar.YEAR); 
 		comboBoxSelectBookVisitYear.addItem(year);
 		comboBoxSelectBookVisitYear.addItem(year + 1);
 		
 		comboBoxSelectBookVisitYear.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//da modificare
+			public void actionPerformed(ActionEvent e) { 
 				System.out.println("modified year");
+				updateBookingDays();
 			}
-		});
-		comboBoxSelectBookVisitYear.addItem(Calendar.getInstance().get(Calendar.YEAR));
-		comboBoxSelectBookVisitYear.addItem(Calendar.getInstance().get(Calendar.YEAR) + 1);
+		}); 
 
 		JLabel lblSelectBookVisitMonth = new JLabel("Mese:");
 
 		comboBoxSelectBookVisitMonth = new JComboBox<String>();
 		comboBoxSelectBookVisitMonth.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// da modificare
+			public void actionPerformed(ActionEvent e) { 
 				System.out.println("modified month");
+				updateBookingDays();
 			}
 		});
 		comboBoxSelectBookVisitMonth.setModel(new DefaultComboBoxModel(Month.values()));
@@ -603,19 +626,35 @@ public class View {
 		JLabel lblSelectBookVisitDay = new JLabel("Giorno:");
 		lblSelectBookVisitDay.setHorizontalAlignment(SwingConstants.RIGHT);
 
-		comboBoxSelectBookVisitDAy = new JComboBox<Integer>();
-		comboBoxSelectBookVisitDAy.addActionListener(new ActionListener() {
+		comboBoxSelectBookVisitDay = new JComboBox<Integer>();
+		comboBoxSelectBookVisitDay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// da modificare 
 				System.out.println("modified day");
+				if(comboBoxSelectBookVisitDay.getSelectedItem() == null)
+					return;
+				
+				boolean[] hours = db.getBookedVisitsInDay(
+						(int)comboBoxSelectBookVisitYear.getSelectedItem(),
+						(int)comboBoxSelectBookVisitMonth.getSelectedIndex() + 1,
+						(int)comboBoxSelectBookVisitDay.getSelectedItem(), 
+						(String)comboBoxSelectBookVisitType.getSelectedItem(),
+						(String)comboBoxSelectBookVisitClinic.getSelectedItem(),
+						Patient.getInstance().getHealthcarecompany());
+				
+				comboBoxSelectBookVisitHour.removeAllItems(); 
+				
+				for(int i = 8; i < 16; i++)
+					if(!hours[i])
+						comboBoxSelectBookVisitHour.addItem((int)i);
+					
+				
 			}
 		});
-		comboBoxSelectBookVisitDAy.setEnabled(false);
 
 		JLabel lblSelectBookVisitHour = new JLabel("Ora:");
 
-		JComboBox comboBoxSelectBookVisitHour = new JComboBox();
-		comboBoxSelectBookVisitHour.setEnabled(false);
+		comboBoxSelectBookVisitHour = new JComboBox<Integer>();
 		JLabel lblSelectBookVisitUrgency = new JLabel("Urgenza:");
 		lblSelectBookVisitUrgency.setHorizontalAlignment(SwingConstants.RIGHT);
 
@@ -630,8 +669,13 @@ public class View {
 		JLabel lblAmbultorio = new JLabel("Ambulatorio:");
 		lblAmbultorio.setHorizontalAlignment(SwingConstants.RIGHT);
 
-		JComboBox comboBoxSelectBookVisitClinic = new JComboBox();
-		comboBoxSelectBookVisitClinic.setEnabled(false);
+		comboBoxSelectBookVisitClinic = new JComboBox<String>();
+		comboBoxSelectBookVisitClinic.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				updateBookingDays();
+			}
+		});
+		
 		GroupLayout gl_bookVisitCenterPanel = new GroupLayout(bookVisitCenterPanel);
 		gl_bookVisitCenterPanel.setHorizontalGroup(
 				gl_bookVisitCenterPanel.createParallelGroup(Alignment.TRAILING)
@@ -656,7 +700,7 @@ public class View {
 														.addPreferredGap(ComponentPlacement.RELATED)
 														.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.TRAILING)
 																.addComponent(comboBoxSelectBookVisitYear, 0, 92, Short.MAX_VALUE)
-																.addComponent(comboBoxSelectBookVisitDAy, Alignment.LEADING, 0, 92, Short.MAX_VALUE))))
+																.addComponent(comboBoxSelectBookVisitDay, Alignment.LEADING, 0, 92, Short.MAX_VALUE))))
 										.addGap(28)
 										.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.TRAILING)
 												.addComponent(lblSelectBookVisitMonth)
@@ -709,7 +753,7 @@ public class View {
 										.addPreferredGap(ComponentPlacement.RELATED)))
 						.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.TRAILING)
 								.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.BASELINE)
-										.addComponent(comboBoxSelectBookVisitDAy, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(comboBoxSelectBookVisitDay, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addComponent(lblSelectBookVisitDay))
 								.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.BASELINE)
 										.addComponent(lblSelectBookVisitHour)
@@ -1059,10 +1103,8 @@ public class View {
 					employeeHistoryModel.removeRow(0);
 
 				ArrayList<Visit> visits = db.getVisitsHistory(searchPatientTextField.getText());
-				if (visits != null) {
-					System.out.println("visits is not null " + visits.size());
-					for (Visit c : visits) {
-						System.out.println("element i");
+				if (visits != null) { 
+					for (Visit c : visits) { 
 						Vector<Object> vector = new Vector<Object>();
 
 						vector.add(c.getDate().toString());
