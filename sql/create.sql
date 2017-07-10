@@ -1,7 +1,3 @@
-/*
-drop table clinic, company, employee, patient, service, visit;
-drop domain jobs, provinces;
-*/
 
 create domain jobs as varchar(30)
 check(value in('dentista', 'segretario', 'infermiere','oculista', 'ortopedista', 'fisioterapista', 'cardiologo', 'dermatologo', 'oncologo', 'geriatra' ));

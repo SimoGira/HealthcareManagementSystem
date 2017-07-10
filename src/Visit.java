@@ -11,7 +11,7 @@ public class Visit {
 	private String urgency;
 	private String regime;
 	private String result;
-	
+
 	public String getPatient() {
 		return patient;
 	}
@@ -72,4 +72,27 @@ public class Visit {
 	public void setResult(String result) {
 		this.result = result;
 	}
+
+	public String toString()
+	{
+		return  "<table border=\"0\" cellpadding=\"2\" cellspacing=\"1\">"
+				+ "<tr>" + "<td align=\"right\"><b>" + "Appuntamento per:" + "</b></td>" + "<td>" + patient + "</td>" + "</tr>" 
+				+ "<tr>" + "<td align=\"right\"><b>" + "Prestazione:" + "</b></td>" + "<td>" + serviceName + "</td>" + "</tr>" 
+				+ "<tr>" + "<td align=\"right\"><b>" + "Unita' erogatrice:" + "</b></td>" + "<td>" + clinicName + "</td>" + "</tr>"  
+				+ "</table>"
+				+ "<p><hr/><b>Risultato</b><hr/></p>"
+				+ result;
+	}
+
+	public String toHTML(String name, String surname)
+	{
+		return  "<table border=\"0\" cellpadding=\"2\" cellspacing=\"1\">"
+				+ "<tr>" + "<td align=\"right\"><b>" + "Appuntamento per:" + "</b></td>" + "<td>" + name + " "  + surname + "</td>" + "</tr>" 
+				+ "<tr>" + "<td align=\"right\"><b>" + "Prestazione:" + "</b></td>" + "<td>" + serviceName + "</td>" + "</tr>" 
+				+ "<tr>" + "<td align=\"right\"><b>" + "Unita' erogatrice:" + "</b></td>" + "<td>" + clinicName + "</td>" + "</tr>"  
+				+ "</table>"
+				+ "<p><hr/><b>Risultato</b><hr/></p>"
+				+ result;
+	}
+
 }
