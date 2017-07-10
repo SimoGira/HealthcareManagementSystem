@@ -77,6 +77,7 @@ public class View {
 	private static final int DAYSC = 7;
 	private JComboBox<Integer> selectedMonth;
 	private JComboBox<String> comboBoxSelectBookVisitMonth;
+	protected Component btnViewSelectedVisit;
 
 
 	/**
@@ -397,6 +398,7 @@ public class View {
 				// print first column value from selected row
 				if ( !event.getValueIsAdjusting() ){
 					System.out.println(tableHistoryVisits.getValueAt(tableHistoryVisits.getSelectedRow(), 0).toString());
+					btnViewSelectedVisit.setEnabled(true);
 				}
 
 			}
@@ -408,7 +410,7 @@ public class View {
 		fl_panelHistoryButtons.setAlignment(FlowLayout.RIGHT);
 		panelHistoryVisitPatient.add(panelHistoryButtons, BorderLayout.SOUTH);
 
-		JButton btnViewSelectedVisit = new JButton("Visualizza");
+		btnViewSelectedVisit = new JButton("Visualizza");
 		btnViewSelectedVisit.setEnabled(false);
 		panelHistoryButtons.add(btnViewSelectedVisit);
 
@@ -563,6 +565,7 @@ public class View {
 		panelBookVisit.add(bookVisitSouthButtonPanel, BorderLayout.SOUTH);
 
 		JButton btnBookVisit = new JButton("Prenota");
+		btnBookVisit.setEnabled(false);
 		btnBookVisit.setToolTipText("Clicca per prenotare");
 		bookVisitSouthButtonPanel.add(btnBookVisit);
 
