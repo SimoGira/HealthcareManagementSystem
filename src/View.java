@@ -76,6 +76,7 @@ public class View {
 	private CardLayout clfrmHealhcareManagementSystem;
 	private Database db;
 	private JLabel lblWeolcomePatient;
+	private ArrayList<Visit> patientVisits;
 
 	private final String company = "cp01";
 
@@ -90,6 +91,7 @@ public class View {
 	private JButton btnViewVisitsPatient;
 	private CardLayout clpanelVisitPatient;
 	private JPanel panelVisitPatient;
+	private JTextPane txtpnVisitResultInfo;
 
 	/**
 	 * Launch the application.
@@ -217,8 +219,7 @@ public class View {
 		panelCenterPatientLogin.add(btnLoginPatient, gbc_btnLoginPatient);
 
 		btnLoginPatient.addActionListener(new ActionListener() {
-			private ArrayList<Visit> patientVisits;
-
+			
 			public void actionPerformed(ActionEvent e) {
 				String fiscalCode = formattedTextFieldFiscalCode.getText();
 				String passwd = new String(passwordFieldPIN.getPassword());
@@ -456,7 +457,10 @@ public class View {
 
 			public void actionPerformed(ActionEvent e) {
 				clpanelVisitPatient.next(panelVisitPatient);
-				//clfrmHealhcareManagementSystem.show(panelVisitResultPatient.getContentPane(), "panelVisitResultPatient");
+				int visitIndex = (int)tableHistoryVisits.getValueAt(tableHistoryVisits.getSelectedRow(), 0) - 1;
+				Visit v = patientVisits.get(visitIndex);
+				txtpnVisitResultInfo.setText(v.toString(Patient.getInstance().getName(), Patient.getInstance().getSurname()));
+				//patientVisits
 			}
 		});
 		panelHistoryButtons.add(btnViewVisitsPatient);
@@ -485,10 +489,10 @@ public class View {
 		btnPrintVisitResult.setAlignmentX(Component.CENTER_ALIGNMENT);
 		resultVisitSouthpanel.add(btnPrintVisitResult);
 
-		JTextPane txtpnAccattiemmeelle = new JTextPane();
-		txtpnAccattiemmeelle.setEditable(false);
-		txtpnAccattiemmeelle.setContentType("text/html");
-		panelVisitResultPatient.add(txtpnAccattiemmeelle, BorderLayout.CENTER);
+		txtpnVisitResultInfo = new JTextPane();
+		txtpnVisitResultInfo.setEditable(false);
+		txtpnVisitResultInfo.setContentType("text/html");
+		panelVisitResultPatient.add(txtpnVisitResultInfo, BorderLayout.CENTER);
 
 		JPanel panelBookVisit = new JPanel();
 		tabbedPanePatient.addTab("Prenotazione visite", null, panelBookVisit, null);
