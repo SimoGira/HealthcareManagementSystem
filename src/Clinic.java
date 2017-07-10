@@ -60,17 +60,7 @@ public class Clinic {
 		this.description = description;
 	}
 
-	/*
-	 * 	private String name;
-	private String company;
-	private String street;
-	private String cap;
-	private String city;
-	private String province;
-	private Date contractDate;
-	private String description;
-	 */
- 
+
 	public String getCompleteDescription(ArrayList<String> services)
 	{
 		String head =  "<table border=\"0\" cellpadding=\"2\" cellspacing=\"1\">"
