@@ -52,6 +52,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -106,8 +108,12 @@ public class View {
 
 	private JTextPane txtpnVisitResultInfo;
 	private JLabel lblWelcomeEmployee;
+ 
 	private JComboBox<String> comboBoxSelectBookVisitType;
 	private JComboBox<Integer> comboBoxSelectBookVisitDAy; 
+ 
+	private JButton btnLoginPatient;
+	private JButton btnLoginEmployee; 
 
 
 	/**
@@ -165,16 +171,26 @@ public class View {
 	private void initialize() {
 		frmHealthcareManagementSystem = new JFrame("HEALTHCARE MANAGEMENT SYSTEM");
 		frmHealthcareManagementSystem
-		.setIconImage(Toolkit.getDefaultToolkit().getImage(View.class.getResource("/img/caduceus.png")));
+		.setIconImage(Toolkit.getDefaultToolkit().getImage(View.class.getResource("/img/healthcare-icon.png")));
 		frmHealthcareManagementSystem.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmHealthcareManagementSystem.getContentPane().setLayout(new CardLayout(0, 0));
 		this.clfrmHealhcareManagementSystem = (CardLayout) frmHealthcareManagementSystem.getContentPane().getLayout();
+		
 
 		JPanel panelLogin = new JPanel();
 		frmHealthcareManagementSystem.getContentPane().add(panelLogin, "panelLogin");
 		panelLogin.setLayout(new BorderLayout(0, 0));
 
 		JTabbedPane tabbedPaneLogin = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPaneLogin.addChangeListener(new ChangeListener() {	
+			@Override
+	        public void stateChanged(ChangeEvent e) {
+	            if(tabbedPaneLogin.getSelectedIndex() == 0)
+	            	frmHealthcareManagementSystem.getRootPane().setDefaultButton(btnLoginPatient);
+	            else
+	            	frmHealthcareManagementSystem.getRootPane().setDefaultButton(btnLoginEmployee);
+	        }
+	    });
 		panelLogin.add(tabbedPaneLogin, BorderLayout.CENTER);
 
 		JPanel panelPatientLogin = new JPanel();
@@ -238,7 +254,7 @@ public class View {
 		gbc_passwordFieldPIN.gridy = 1;
 		panelCenterPatientLogin.add(passwordFieldPIN, gbc_passwordFieldPIN);
 
-		JButton btnLoginPatient = new JButton("Login");
+		btnLoginPatient = new JButton("Login");
 		frmHealthcareManagementSystem.getRootPane().setDefaultButton(btnLoginPatient);
 		GridBagConstraints gbc_btnLoginPatient = new GridBagConstraints();
 		gbc_btnLoginPatient.gridx = 1;
@@ -350,8 +366,7 @@ public class View {
 		gbc_textField_passwd.gridx = 1;
 		gbc_textField_passwd.gridy = 1;
 		panelCenterEmployeeLogin.add(textField_passwd, gbc_textField_passwd);
-		JButton btnLoginEmployee = new JButton("Login");
-		//frmHealthcareManagementSystem.getRootPane().setDefaultButton(btnLoginPatient); ------- sistemare (memo per me (simone))
+		btnLoginEmployee = new JButton("Login");
 		btnLoginEmployee.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -359,8 +374,7 @@ public class View {
 				String pass = new String(textField_passwd.getPassword());
 				
 				if (db.checkEmployee(user, pass)) {
-					System.out.println("ok");
-					lblWelcomeEmployee.setText(lblWelcomeEmployee.getText() + Employee.getInstance().getName() + " "+Employee.getInstance().getSurname());
+					lblWelcomeEmployee.setText(lblWelcomeEmployee.getText() + Employee.getInstance().getName() + " " +  Employee.getInstance().getSurname());
 					clfrmHealhcareManagementSystem.show(frmHealthcareManagementSystem.getContentPane(), "panelEmployee");
 					
 					//add clinics
@@ -430,6 +444,8 @@ public class View {
 			public void mouseClicked(MouseEvent arg0) {
 				System.out.println("Patient clicked on Logout");
 				clfrmHealhcareManagementSystem.show(frmHealthcareManagementSystem.getContentPane(), "panelLogin");
+				
+				// qui va chiamata una funzione per resettare tutti i parametri quindi distruggere tutti i pannelli dell'utente loggato.
 			}
 
 			@Override
@@ -1109,6 +1125,22 @@ public class View {
 		panelEmployeeNorth.add(panelEmployeeNorthRightLabels, BorderLayout.EAST);
 
 		JLabel lblLogoutEmployee = new JLabel("<HTML>\r\n\t<p style=\"color:blue;\"><u>Logout</u></p>\r\n</HTML>");
+		lblLogoutEmployee.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				System.out.println("Employee clicked on Logout");
+				clfrmHealhcareManagementSystem.show(frmHealthcareManagementSystem.getContentPane(), "panelLogin");
+				
+				// qui va chiamata una funzione per resettare tutti i parametri quindi distruggere tutti i pannelli dell'utente loggato.
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				lblLogoutEmployee.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			}	
+		});
+		
 		lblLogoutEmployee.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblLogoutEmployee.setHorizontalAlignment(SwingConstants.CENTER);
 		panelEmployeeNorthRightLabels.add(lblLogoutEmployee);
@@ -1127,19 +1159,15 @@ public class View {
 		panelClinicsAndServicesNorth.add(lblSelectCompany);
 
 		comboBoxSelectCompany = new JComboBox<String>();
+		comboBoxSelectCompany.setPreferredSize(new Dimension(150, 27));
 		listClinics = new JList<String>();
 
 		comboBoxSelectCompany.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-
 				int comboBoxIndex = comboBoxSelectCompany.getSelectedIndex();
 				String companyID = companiesList.get(comboBoxIndex)[0];
-
 				ArrayList<Clinic> clinics = db.getClinics(companyID);
-
 				listClinics.setModel(new AbstractListModel<String>() {
-
 					@Override
 					public String getElementAt(int index) {
 						return clinics.get(index).getName();
@@ -1148,9 +1176,8 @@ public class View {
 					public int getSize() {
 						return clinics.size();
 					}
-
 				});
-
+				listClinics.setSelectedIndex(0);
 			}
 		});
 		panelClinicsAndServicesNorth.add(comboBoxSelectCompany);
@@ -1180,7 +1207,7 @@ public class View {
 			public void valueChanged(ListSelectionEvent e) {
 
 				int comboBoxIndex = comboBoxSelectCompany.getSelectedIndex();
-				String companyID = companiesList.get(comboBoxIndex)[0]; //[0] è il primo parametro, ovvero l'id della clinica
+				String companyID = companiesList.get(comboBoxIndex)[0]; //[0] ï¿½ il primo parametro, ovvero l'id della clinica
 
 				ArrayList<Clinic> clinics = db.getClinics(companyID);
 				int selectedIndex = listClinics.getSelectedIndex();
