@@ -345,7 +345,7 @@ public class Database {
 		return null;
 	}
 
-	
+
 	public ArrayList<String> getClinicServices(String company, String clinic)
 	{
 		try(Connection con = DriverManager.getConnection(url, user, password))
@@ -370,15 +370,16 @@ public class Database {
 	}
 	
 	
-	public ArrayList<String[]> getCompanies(String company, String clinic)
+	/**
+	 * @return array of elements like  new String[] {String id, String name}
+	 */
+	public ArrayList<String[]> getCompanies()
 	{
 		try(Connection con = DriverManager.getConnection(url, user, password))
 		{
-			String query = "SELECT DISTINCT id, name FROM service WHERE company = ? AND clinic = ?";
+			String query = "SELECT id, name FROM company";
 			try(PreparedStatement pst = con.prepareStatement(query)){
 				pst.clearParameters();
-				pst.setString(1, company); 
-				pst.setString(2, clinic); 
 				ResultSet rs = pst.executeQuery();
 				ArrayList<String[]> result = new ArrayList<String[]>();
 				while(rs.next()) 
