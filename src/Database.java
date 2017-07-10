@@ -164,7 +164,32 @@ public class Database {
 
 		return false;
 	}
+	
+	public void bookVisit(Visit v)
+	{
+		try(Connection con = DriverManager.getConnection(url, user, password))
+		{
+			String query = "INSERT INTO visit (patient, clinic, company, serviceName, doctor, date, hour, urgency, regime, result) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, NULL)";
+			try(PreparedStatement pst = con.prepareStatement(query)){
+				pst.clearParameters();
+				pst.setString(1, v.getPatient()); 
+				pst.setString(2, v.getClinicName()); 
+				pst.setString(3, v.getCompanyId()); 
+				pst.setString(4, v.getServiceName()); 
+				pst.setString(5, "CSBCRL74R10L781B"); 
+				pst.setDate(6, v.getDate());
+				pst.setInt(6, v.getHour());
+				pst.setString(7, v.getUrgency());
+				pst.setString(8, v.getRegime());
+				
+			}
+		}
+		catch (SQLException e1) {
+			System.out.println( "Errore durante connessione al database: " + e1.getMessage() );
+		}
 
+	}
+	
 	public ArrayList<Visit> getBookedVisits(String company, String clinic, Date date)
 	{
 		try(Connection con = DriverManager.getConnection(url, user, password))
