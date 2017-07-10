@@ -46,6 +46,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class View {
 
@@ -64,6 +66,7 @@ public class View {
 	private CardLayout clfrmHealhcareManagementSystem;
 	private Database db;
 	private JLabel lblWeolcomePatient;
+	JComboBox<String> comboBoxClinicVisitInsertion;
 
 
 	/**
@@ -192,8 +195,12 @@ public class View {
 				String username = formattedTextFieldFiscalCode.getText();
 				String passwd = new String(passwordFieldPIN.getPassword());
 				if(db.checkPatient(username, passwd)){
+
+					
+					
 					lblWeolcomePatient.setText(lblWeolcomePatient.getText() + " " + Patient.getInstance().getName() + " " + Patient.getInstance().getSurname()); 
 					clfrmHealhcareManagementSystem.show(frmHealthcareManagementSystem.getContentPane(), "panelPatient");
+					
 				}
 				else{
 					System.out.println("credenziali errate: " + username + " " + passwd );
@@ -261,6 +268,11 @@ public class View {
 				if(db.checkEmployee(user, pass)){ 
 					System.out.println("ok");
 					clfrmHealhcareManagementSystem.show(frmHealthcareManagementSystem.getContentPane(), "panelEmployee");
+					//add clinics
+					ArrayList<Clinic> clinics = db.getClinics(Employee.getInstance().getCompany());
+					System.out.println(clinics.size() + "  " + Employee.getInstance().getCompany());
+					for(Clinic c : clinics)
+						comboBoxClinicVisitInsertion.addItem(c.getName());
 				}
 				else{
 					System.out.println("wrong credentials: " + user + " " + pass );
@@ -487,6 +499,7 @@ public class View {
 		panelInfoVisitInsertion.setLayout(new BorderLayout(0, 0));
 
 		JPanel panelInfovisitInsertionNorth = new JPanel();
+	 
 		FlowLayout fl_panelInfovisitInsertionNorth = (FlowLayout) panelInfovisitInsertionNorth.getLayout();
 		fl_panelInfovisitInsertionNorth.setAlignment(FlowLayout.LEFT);
 		panelInfoVisitInsertion.add(panelInfovisitInsertionNorth, BorderLayout.NORTH);
@@ -503,10 +516,11 @@ public class View {
 		JLabel lblClinicVisitInsertion = new JLabel("Ambulatorio:");
 		panelInfovisitInsertionNorth.add(lblClinicVisitInsertion);
 
-		JComboBox<String> comboBoxClinicVisitInsertion = new JComboBox<String>();
+		comboBoxClinicVisitInsertion = new JComboBox<String>();
 		panelInfovisitInsertionNorth.add(comboBoxClinicVisitInsertion);
 		
-		DefaultTableModel employeeInsertModel = new DefaultTableModel(new String[] {  "Nome", "Cognome", "Tipo visita", "Urgenza", "Ora" }, 0);
+		
+		DefaultTableModel employeeInsertModel = new DefaultTableModel(new String[] {  "Codice Fiscale", "Tipo visita", "Urgenza", "Ora" }, 0);
 
 		JButton btnFindVisits = new JButton("Trova");
 		btnFindVisits.addActionListener(new ActionListener() {
@@ -532,11 +546,10 @@ public class View {
 						System.out.println("element i");
 						Vector<Object> vector = new Vector<Object>();
 
-						vector.add(c.getDate().toString());
-						vector.add(c.getHour());
+						vector.add(c.getPatient());
 						vector.add(c.getServiceName());
-						vector.add(c.getRegime());
 						vector.add(c.getUrgency());
+						vector.add(c.getHour()); 
 						employeeInsertModel.addRow(vector);
 					}
 				}
@@ -549,16 +562,7 @@ public class View {
 
 		
 		tableVisitsFounded = new JTable();
-		tableVisitsFounded.setModel(
-				new DefaultTableModel(new Object[][] { { "Adriano", "Tumminelli", "oculistica", "bassa", "10:00" }, },
-						new String[] { }) {
-					Class[] columnTypes = new Class[] { Object.class, Object.class, String.class, Object.class,
-							Object.class };
-
-					public Class getColumnClass(int columnIndex) {
-						return columnTypes[columnIndex];
-					}
-				});
+		tableVisitsFounded.setModel(employeeInsertModel);
 		scrollPaneInfoVisitInsertionCenter.setViewportView(tableVisitsFounded);
 
 		JScrollPane scrollPaneInfoVisitInsertionSouth = new JScrollPane();
