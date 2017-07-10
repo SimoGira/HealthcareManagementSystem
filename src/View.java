@@ -114,7 +114,8 @@ public class View {
 	private JComboBox<Integer> comboBoxSelectBookVisitYear; 
 	private ArrayList<String[]> serviceInfos;
 	private JComboBox<String> comboBoxSelectBookVisitClinic;
-	private JComboBox<Integer> comboBoxSelectBookVisitHour; 
+	private JComboBox<Integer> comboBoxSelectBookVisitHour;
+	private JComboBox<String> comboBoxSelectBookVisitRegime; 
 
 	/**
 	 * Launch the application.
@@ -586,6 +587,7 @@ public class View {
 				serviceInfos = db.getServiceInfos(Patient.getInstance().getHealthcarecompany(), comboBoxSelectBookVisitType.getSelectedItem().toString());
 				for(String[] info : serviceInfos)
 					comboBoxSelectBookVisitClinic.addItem(info[0]);
+				
 				updateBookingDays();
 			}
 		});
@@ -658,7 +660,7 @@ public class View {
 		JLabel lblSelectBookVisitRegime = new JLabel("Regime:");
 		lblSelectBookVisitRegime.setHorizontalAlignment(SwingConstants.RIGHT);
 
-		JComboBox comboBoxSelectBookVisitRegime = new JComboBox();
+		 comboBoxSelectBookVisitRegime = new JComboBox<String>();
 
 		JLabel lblAmbultorio = new JLabel("Ambulatorio:");
 		lblAmbultorio.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -666,6 +668,11 @@ public class View {
 		comboBoxSelectBookVisitClinic = new JComboBox<String>();
 		comboBoxSelectBookVisitClinic.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+
+				//SIMONE DEVI MODIFICARE QUI
+				int idx = comboBoxSelectBookVisitClinic.getSelectedIndex();
+				String[] info = serviceInfos.get(idx); 
+				//inserisci info[1] nel label regime (che devi sostituire al combobox)
 				updateBookingDays();
 			}
 		});
