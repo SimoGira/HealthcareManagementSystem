@@ -322,13 +322,11 @@ public class Database {
 				pst.setString(3, clinic); 
 				pst.setInt(4, year); 
 				pst.setInt(5, month);
-				pst.setInt(6, day); 
-				System.out.println(pst.toString());
+				pst.setInt(6, day);  
 				ResultSet rs = pst.executeQuery();
 				boolean[] result = new boolean[24];
 				while(rs.next())
-				{ 
-					System.out.println("AAAAAAA: " + rs.getInt("hour"));
+				{  
 					int hour = rs.getInt("hour");
 					result[hour] =  true;
 				} 
