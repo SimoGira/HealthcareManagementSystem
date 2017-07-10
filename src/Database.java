@@ -3,8 +3,9 @@ import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException; 
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class Database {
 	private String url;
@@ -20,13 +21,18 @@ public class Database {
 		url = "jdbc:postgresql://localhost/dbhms";
 		user = "postgres";
 		password = "";
+		
+		String OS = System.getProperty("os.name", "generic").toLowerCase(Locale.ENGLISH);
+		if ((OS.indexOf("mac") >= 0) || (OS.indexOf("darwin") >= 0)) {
+			user = "simonegirardi";
+		}
 
 		Class.forName("org.postgresql.Driver");
 	}
 
 	public void insertClinic(Clinic clinc)
 	{
-		try(Connection con = DriverManager.getConnection(url, user, password)){ // forse la password non è da mettere necessariamente (io accedo senza pswd)
+		try(Connection con = DriverManager.getConnection(url, user, password)){ // forse la password non ï¿½ da mettere necessariamente (io accedo senza pswd)
 
 			String query = "INSERT INTO Clinic (name, company, street, cap, city, province, contractDate, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 			try(PreparedStatement pst = con.prepareStatement(query)){
