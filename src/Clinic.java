@@ -65,7 +65,7 @@ public class Clinic {
 	{
 		String head =  "<table border=\"0\" cellpadding=\"2\" cellspacing=\"1\">"
 				+ "<tr>" + "<td align=\"right\"><b>" + "Nome Ambulatorio:" + "</b></td>" + "<td>" + name + "</td>" + "</tr>" 
-				+ "<tr>" + "<td align=\"right\"><b>" + "Indirizzo:" + "</b></td>" + "<td>" + street + "," + cap + " " + city + " (" + province + ")" + "</td>" + "</tr>"
+				+ "<tr>" + "<td align=\"right\"><b>" + "Indirizzo:" + "</b></td>" + "<td>" + street + ", " + cap + " " + city + " (" + province + ")" + "</td>" + "</tr>"
 				+ "<tr>" + "<td align=\"right\"><b>" + "Data contratto:" + "</b></td>" + "<td>" + contractDate + "</td>" + "</tr>"  
 				+ "</table>"
 				+ "<p><hr/><b>Descrizione</b><hr/></p>"
