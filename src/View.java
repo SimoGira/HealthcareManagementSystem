@@ -64,6 +64,7 @@ public class View {
 	private CardLayout clfrmHealhcareManagementSystem;
 	private Database db;
 	private JLabel lblWeolcomePatient;
+	private final String company = "cp01";
 
 
 	/**
@@ -889,7 +890,7 @@ public class View {
 		splitPaneClinics.setLeftComponent(ClinicsPanel);
 		ClinicsPanel.setLayout(new BorderLayout(0, 0));
 
-		JLabel lblClinics = new JLabel("Clinics");
+		JLabel lblClinics = new JLabel("Ambulatori");
 		lblClinics.setHorizontalAlignment(SwingConstants.CENTER);
 		ClinicsPanel.add(lblClinics, BorderLayout.NORTH);
 
@@ -899,15 +900,17 @@ public class View {
 			 * 
 			 */
 			private static final long serialVersionUID = 2626387453652530474L;
-			String[] values = new String[] { "Clinic_1", "Clinic_2", "Clinic_3" };
-
-			public int getSize() {
-				return values.length;
-			}
-
+			ArrayList<Clinic> clinics = db.getClinics(company);
+			
+			@Override
 			public String getElementAt(int index) {
-				return values[index];
+				return clinics.get(index).getName();
 			}
+			@Override
+			public int getSize() {
+				return clinics.size();
+			}
+
 		});
 		ClinicsPanel.add(listCLinics, BorderLayout.CENTER);
 
@@ -933,6 +936,17 @@ public class View {
 			}
 		});
 		panelClinicAndServicesButton.add(btnBackToLogin);
+		
+		JPanel panelClinicsAndServicesNorth = new JPanel();
+		FlowLayout fl_panelClinicsAndServicesNorth = (FlowLayout) panelClinicsAndServicesNorth.getLayout();
+		fl_panelClinicsAndServicesNorth.setAlignment(FlowLayout.LEFT);
+		panelClinicsAndServices.add(panelClinicsAndServicesNorth, BorderLayout.NORTH);
+		
+		JLabel lblSelectCompany = new JLabel("Seleziona azienda:");
+		panelClinicsAndServicesNorth.add(lblSelectCompany);
+		
+		JComboBox comboBoxSelectCompany = new JComboBox();
+		panelClinicsAndServicesNorth.add(comboBoxSelectCompany);
 
 		frmHealthcareManagementSystem.setSize(700, 600);
 		frmHealthcareManagementSystem.setLocationRelativeTo(null);
