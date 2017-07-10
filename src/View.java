@@ -58,6 +58,8 @@ import javax.swing.table.TableModel;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 public class View {
 
@@ -77,7 +79,7 @@ public class View {
 	private Database db;
 	private JLabel lblWeolcomePatient;
 
-	private final String company = "cp01";
+	private final String company = "cp02";
 
 	private JLabel[][] lbldays;
 	private static final int DAYSR = 6;
@@ -90,6 +92,9 @@ public class View {
 	private JButton btnViewVisitsPatient;
 	private CardLayout clpanelVisitPatient;
 	private JPanel panelVisitPatient;
+	private JList<String> listClinics;
+	private ArrayList<String[]> companiesList;
+	private JComboBox<String> comboBoxSelectCompany;
 
 	/**
 	 * Launch the application.
@@ -353,6 +358,13 @@ public class View {
 		JButton btnViewClinicAnd = new JButton("Ambulatori & Servizi");
 		btnViewClinicAnd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				
+				companiesList = db.getCompanies();
+				
+				for (String[] o: companiesList) {
+					comboBoxSelectCompany.addItem(o[1]);
+				}
+				
 				clfrmHealhcareManagementSystem.show(frmHealthcareManagementSystem.getContentPane(),
 						"panelClinicsAndServices");
 			}
@@ -1041,12 +1053,64 @@ public class View {
 		JPanel panelClinicsAndServices = new JPanel();
 		frmHealthcareManagementSystem.getContentPane().add(panelClinicsAndServices, "panelClinicsAndServices");
 		panelClinicsAndServices.setLayout(new BorderLayout(0, 0));
+		
+		JPanel panelClinicsAndServicesNorth = new JPanel();
+		//sezione nord, combo box companies
+		FlowLayout fl_panelClinicsAndServicesNorth = (FlowLayout) panelClinicsAndServicesNorth.getLayout();
+		fl_panelClinicsAndServicesNorth.setAlignment(FlowLayout.LEFT);
+		panelClinicsAndServices.add(panelClinicsAndServicesNorth, BorderLayout.NORTH);
 
+		JLabel lblSelectCompany = new JLabel("Seleziona azienda:");
+		panelClinicsAndServicesNorth.add(lblSelectCompany);
+
+		comboBoxSelectCompany = new JComboBox<String>();
+		listClinics = new JList<String>();
+		listClinics.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent e) {
+				System.out.println(listClinics.getSelectedIndex());
+			}
+		});
+		
+		
+		
+		comboBoxSelectCompany.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				
+				int comboBoxIndex = comboBoxSelectCompany.getSelectedIndex();
+				String companyID = companiesList.get(comboBoxIndex)[0];
+				
+				ArrayList<Clinic> clinics = db.getClinics(companyID);
+
+				listClinics.setModel(new AbstractListModel<String>() {
+					
+					@Override
+					public String getElementAt(int index) {
+						return clinics.get(index).getName();
+					}
+					@Override
+					public int getSize() {
+						return clinics.size();
+					}
+
+				});
+				
+				
+				
+			}
+		});
+		panelClinicsAndServicesNorth.add(comboBoxSelectCompany);
+		
 		JSplitPane splitPaneClinics = new JSplitPane();
 		panelClinicsAndServices.add(splitPaneClinics, BorderLayout.CENTER);
 		splitPaneClinics.setResizeWeight(0.3);
 
 		JPanel ClinicsPanel = new JPanel();
+		ClinicsPanel.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent arg0) {
+			}
+		});
 		splitPaneClinics.setLeftComponent(ClinicsPanel);
 		ClinicsPanel.setLayout(new BorderLayout(0, 0));
 
@@ -1054,35 +1118,31 @@ public class View {
 		lblClinics.setHorizontalAlignment(SwingConstants.CENTER);
 		ClinicsPanel.add(lblClinics, BorderLayout.NORTH);
 
-		JList<String> listCLinics = new JList<String>();
-		listCLinics.setModel(new AbstractListModel<String>() {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 2626387453652530474L;
-			ArrayList<Clinic> clinics = db.getClinics(company);
+		/*ListSelectionModel listSelectionModel = listClinics.getSelectionModel();
+		
+		listSelectionModel.addListSelectionListener(new ListSelectionListener() {
 
 			@Override
-			public String getElementAt(int index) {
-				return clinics.get(index).getName();
+			public void valueChanged(ListSelectionEvent e) {
+				System.out.println(clinics.get(e.getFirstIndex()).getName());
 			}
-			@Override
-			public int getSize() {
-				return clinics.size();
-			}
-
-		});
-		ClinicsPanel.add(listCLinics, BorderLayout.CENTER);
+			
+		});*/
+		
+		
+		
+		ClinicsPanel.add(listClinics, BorderLayout.CENTER);
 
 		JPanel ServicesPanel = new JPanel();
 		splitPaneClinics.setRightComponent(ServicesPanel);
 		ServicesPanel.setLayout(new BorderLayout(0, 0));
 
-		JTextPane txtpnclinicsOfJesus = new JTextPane();
-		txtpnclinicsOfJesus.setContentType("text/html");
-		txtpnclinicsOfJesus.setText(
+		JTextPane txtClinic = new JTextPane();
+		txtClinic.setContentType("text/html");
+		
+		txtClinic.setText(
 				"<html>\r\n\t<head></head>\r\n\t<body>\r\n\t\t<h1>Clinics of Jesus</h1>\r\n\t\t<h3>Services</h3>\r\n\t\t.....Prova html.....\r\n\t</body>\r\n</html>\r\n");
-		ServicesPanel.add(txtpnclinicsOfJesus, BorderLayout.CENTER);
+		ServicesPanel.add(txtClinic, BorderLayout.CENTER);
 
 		JPanel panelClinicAndServicesButton = new JPanel();
 		FlowLayout fl_panelClinicAndServicesButton = (FlowLayout) panelClinicAndServicesButton.getLayout();
@@ -1097,16 +1157,7 @@ public class View {
 		});
 		panelClinicAndServicesButton.add(btnBackToLogin);
 
-		JPanel panelClinicsAndServicesNorth = new JPanel();
-		FlowLayout fl_panelClinicsAndServicesNorth = (FlowLayout) panelClinicsAndServicesNorth.getLayout();
-		fl_panelClinicsAndServicesNorth.setAlignment(FlowLayout.LEFT);
-		panelClinicsAndServices.add(panelClinicsAndServicesNorth, BorderLayout.NORTH);
-
-		JLabel lblSelectCompany = new JLabel("Seleziona azienda:");
-		panelClinicsAndServicesNorth.add(lblSelectCompany);
-
-		JComboBox comboBoxSelectCompany = new JComboBox();
-		panelClinicsAndServicesNorth.add(comboBoxSelectCompany);
+		
 
 		frmHealthcareManagementSystem.setSize(700, 600);
 		frmHealthcareManagementSystem.setLocationRelativeTo(null);
