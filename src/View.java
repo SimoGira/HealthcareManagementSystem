@@ -19,7 +19,6 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Vector;
@@ -54,8 +53,11 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class View {
 
@@ -82,6 +84,8 @@ public class View {
 	private JComboBox<String> comboBoxSelectBookVisitMonth;
 	protected Component btnViewSelectedVisit;
 	JComboBox<String> comboBoxClinicVisitInsertion;
+	private JComboBox<String> comboBoxVisitsYear;
+	private DefaultTableModel visitsHistoryModel;
 
 	/**
 	 * Launch the application.
@@ -210,10 +214,10 @@ public class View {
 
 		btnLoginPatient.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String username = formattedTextFieldFiscalCode.getText();
+				String fiscalCode = formattedTextFieldFiscalCode.getText();
 				String passwd = new String(passwordFieldPIN.getPassword());
  
-				if (db.checkPatient(username, passwd)) {
+				if (db.checkPatient(fiscalCode, passwd)) {
 					lblWeolcomePatient.setText(lblWeolcomePatient.getText() + " " + Patient.getInstance().getName()
 							+ " " + Patient.getInstance().getSurname());
 					clfrmHealhcareManagementSystem.show(frmHealthcareManagementSystem.getContentPane(), "panelPatient");
@@ -221,8 +225,33 @@ public class View {
 					// clean fiscal code and password
 					formattedTextFieldFiscalCode.setText("");
 					passwordFieldPIN.setText("");
+					
+					// get years
+					ArrayList<Integer> years = db.getVisitsHistoryYears(fiscalCode);
+					for(Integer y : years)
+						comboBoxVisitsYear.addItem(y.toString());
+					
+					//fill table (visits history) 
+					int i = 1;
+					ArrayList<Visit> visits = db.getVisitsHistory(fiscalCode);
+					if (visits != null) {
+						System.out.println("visits is not null " + visits.size());
+						for (Visit c : visits) {
+							System.out.println("element i");
+							Vector<Object> row = new Vector<Object>();
+							row.add(i++);
+							row.add(c.getDate().toString());
+							row.add(c.getHour());
+							row.add(c.getServiceName());
+							row.add(c.getRegime());
+							row.add(c.getUrgency());
+							visitsHistoryModel.addRow(row);
+						}
+					}
+					
+					
 				} else {
-					System.out.println("credenziali errate: " + username + " " + passwd);
+					System.out.println("credenziali errate: " + fiscalCode + " " + passwd);
 
 				}
 			}
@@ -379,9 +408,7 @@ public class View {
 		JLabel lblSelectYearPatientVisit = new JLabel("Seleziona anno:");
 		panelHistoryNorth.add(lblSelectYearPatientVisit);
 
-		JComboBox<String> comboBoxVisitsYear = new JComboBox<String>();
-		comboBoxVisitsYear.setModel(
-				new DefaultComboBoxModel<String>(new String[] { "<anno_1>", "<anno_2>", "<anno_3>", "<anno_4>" }));
+		comboBoxVisitsYear = new JComboBox<String>();
 		panelHistoryNorth.add(comboBoxVisitsYear);
 
 		JScrollPane scrollPaneHistory = new JScrollPane();
@@ -391,16 +418,8 @@ public class View {
 		// completati i metodi con il db, vedi tests fatto su w10 (simone)
 		tableHistoryVisits = new JTable();
 		tableHistoryVisits.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		tableHistoryVisits.setModel(new DefaultTableModel(
-				new Object[][] { { "1", "13/07/2017", "10:00", "Oculustica", "privata", "Media" },
-						{ "2", "20/08/2017", "11:00", "Cardiaca", "privata", "Alta" }, },
-				new String[] { "N\u00B0", "Data", "Ora", "Tipo Visita", "Regime", "Urgenza" }) {
-			boolean[] columnEditables = new boolean[] { false, false, false, false, false, false };
-
-			public boolean isCellEditable(int row, int column) {
-				return columnEditables[column];
-			}
-		});
+		visitsHistoryModel = new DefaultTableModel(new String[] { "N\u00B0", "Data", "Ora", "Tipo Visita", "Regime", "Urgenza" }, 0);
+		tableHistoryVisits.setModel(visitsHistoryModel);
 		tableHistoryVisits.getColumnModel().getColumn(0).setPreferredWidth(25);
 		tableHistoryVisits.getColumnModel().getColumn(0).setMaxWidth(25);
 		tableHistoryVisits.getTableHeader().setReorderingAllowed(false);
@@ -473,7 +492,6 @@ public class View {
 		JLabel lblSelectBookVisitDay = new JLabel("Giorno:");
 
 		JComboBox comboBoxSelectBookVisitDAy = new JComboBox();
-		comboBoxSelectBookVisitDAy.setModel(new DefaultComboBoxModel(Days.values()));
 
 		JLabel lblSelectBookVisitHour = new JLabel("Ora:");
 
@@ -486,68 +504,105 @@ public class View {
 		JLabel lblSelectBookVisitRegime = new JLabel("Regime:");
 
 		JComboBox comboBoxSelectBookVisitRegime = new JComboBox();
+		
+		JLabel lblAmbultorio = new JLabel("Ambulatorio:");
+		lblAmbultorio.setHorizontalAlignment(SwingConstants.RIGHT);
+		
+		JComboBox comboBox = new JComboBox();
 		GroupLayout gl_bookVisitCenterPanel = new GroupLayout(bookVisitCenterPanel);
-		gl_bookVisitCenterPanel.setHorizontalGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_bookVisitCenterPanel.createSequentialGroup().addGap(106)
-						.addComponent(lblSelectBookVisitType).addGap(5).addComponent(comboBoxSelectBookVisitType,
-								GroupLayout.PREFERRED_SIZE, 247, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gl_bookVisitCenterPanel.createSequentialGroup().addGap(129)
-						.addComponent(lblSelectBookVisitYear).addGap(5)
-						.addComponent(comboBoxSelectBookVisitYear, GroupLayout.PREFERRED_SIZE, 83,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(35).addComponent(lblSelectBookVisitMonth).addGap(5)
-						.addComponent(comboBoxSelectBookVisitMonth, GroupLayout.PREFERRED_SIZE, 95,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(39).addComponent(lblSelectBookVisitDay).addGap(5).addComponent(
-								comboBoxSelectBookVisitDAy, GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gl_bookVisitCenterPanel.createSequentialGroup().addGap(136)
-						.addComponent(lblSelectBookVisitHour).addGap(5).addComponent(comboBoxSelectBookVisitHour,
-								GroupLayout.PREFERRED_SIZE, 53, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gl_bookVisitCenterPanel.createSequentialGroup().addGap(114)
-						.addComponent(lblSelectBookVisitUrgency).addGap(5).addComponent(comboBoxSelectBookVisitUrgency,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gl_bookVisitCenterPanel.createSequentialGroup().addGap(119)
-						.addComponent(lblSelectBookVisitRegime).addGap(5).addComponent(comboBoxSelectBookVisitRegime,
-								GroupLayout.PREFERRED_SIZE, 53, GroupLayout.PREFERRED_SIZE)));
-		gl_bookVisitCenterPanel.setVerticalGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_bookVisitCenterPanel.createSequentialGroup().addGap(90)
-						.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_bookVisitCenterPanel.createSequentialGroup().addGap(3)
-										.addComponent(lblSelectBookVisitType))
-								.addComponent(comboBoxSelectBookVisitType, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGap(35)
-						.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_bookVisitCenterPanel.createSequentialGroup().addGap(3)
-										.addComponent(lblSelectBookVisitYear))
-								.addComponent(comboBoxSelectBookVisitYear, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGroup(gl_bookVisitCenterPanel.createSequentialGroup().addGap(3)
-										.addComponent(lblSelectBookVisitMonth))
-								.addComponent(comboBoxSelectBookVisitMonth, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGroup(gl_bookVisitCenterPanel.createSequentialGroup().addGap(3)
-										.addComponent(lblSelectBookVisitDay))
-								.addComponent(comboBoxSelectBookVisitDAy, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGap(35)
-						.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_bookVisitCenterPanel.createSequentialGroup().addGap(3)
+		gl_bookVisitCenterPanel.setHorizontalGroup(
+			gl_bookVisitCenterPanel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_bookVisitCenterPanel.createSequentialGroup()
+					.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.TRAILING)
+						.addGroup(Alignment.LEADING, gl_bookVisitCenterPanel.createSequentialGroup()
+							.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_bookVisitCenterPanel.createSequentialGroup()
+									.addContainerGap()
+									.addComponent(lblAmbultorio, GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE))
+								.addGroup(Alignment.LEADING, gl_bookVisitCenterPanel.createSequentialGroup()
+									.addGap(197)
+									.addComponent(lblSelectBookVisitType)))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.LEADING)
+								.addComponent(comboBoxSelectBookVisitType, 0, 248, Short.MAX_VALUE)
+								.addComponent(comboBox, 0, 248, Short.MAX_VALUE)))
+						.addGroup(gl_bookVisitCenterPanel.createSequentialGroup()
+							.addContainerGap(205, Short.MAX_VALUE)
+							.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.LEADING, false)
+								.addGroup(gl_bookVisitCenterPanel.createSequentialGroup()
+									.addComponent(lblSelectBookVisitUrgency)
+									.addGap(5)
+									.addComponent(comboBoxSelectBookVisitUrgency, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addGroup(gl_bookVisitCenterPanel.createSequentialGroup()
+									.addGap(5)
+									.addComponent(lblSelectBookVisitRegime)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(comboBoxSelectBookVisitRegime, GroupLayout.PREFERRED_SIZE, 53, GroupLayout.PREFERRED_SIZE))
+								.addGroup(gl_bookVisitCenterPanel.createSequentialGroup()
+									.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.LEADING, false)
+										.addGroup(gl_bookVisitCenterPanel.createSequentialGroup()
+											.addGap(10)
+											.addComponent(lblSelectBookVisitDay)
+											.addPreferredGap(ComponentPlacement.RELATED)
+											.addComponent(comboBoxSelectBookVisitDAy, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+										.addGroup(gl_bookVisitCenterPanel.createSequentialGroup()
+											.addGap(15)
+											.addComponent(lblSelectBookVisitYear)
+											.addGap(5)
+											.addComponent(comboBoxSelectBookVisitYear, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE)))
+									.addGap(35)
+									.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.TRAILING)
+										.addComponent(lblSelectBookVisitMonth)
 										.addComponent(lblSelectBookVisitHour))
-								.addComponent(comboBoxSelectBookVisitHour, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGap(35)
-						.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_bookVisitCenterPanel.createSequentialGroup().addGap(3)
-										.addComponent(lblSelectBookVisitUrgency))
-								.addComponent(comboBoxSelectBookVisitUrgency, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGap(35)
-						.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_bookVisitCenterPanel.createSequentialGroup().addGap(3)
-										.addComponent(lblSelectBookVisitRegime))
-								.addComponent(comboBoxSelectBookVisitRegime, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))));
+									.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.LEADING)
+										.addGroup(gl_bookVisitCenterPanel.createSequentialGroup()
+											.addGap(5)
+											.addComponent(comboBoxSelectBookVisitMonth, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE))
+										.addGroup(gl_bookVisitCenterPanel.createSequentialGroup()
+											.addPreferredGap(ComponentPlacement.RELATED)
+											.addComponent(comboBoxSelectBookVisitHour, GroupLayout.PREFERRED_SIZE, 53, GroupLayout.PREFERRED_SIZE)))))))
+					.addGap(173))
+		);
+		gl_bookVisitCenterPanel.setVerticalGroup(
+			gl_bookVisitCenterPanel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_bookVisitCenterPanel.createSequentialGroup()
+					.addGap(95)
+					.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(comboBoxSelectBookVisitType, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblSelectBookVisitType))
+					.addGap(35)
+					.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblAmbultorio)
+						.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+					.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_bookVisitCenterPanel.createSequentialGroup()
+							.addGap(3)
+							.addComponent(lblSelectBookVisitYear))
+						.addComponent(comboBoxSelectBookVisitYear, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_bookVisitCenterPanel.createSequentialGroup()
+							.addGap(3)
+							.addComponent(lblSelectBookVisitMonth))
+						.addComponent(comboBoxSelectBookVisitMonth, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(32)
+					.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.TRAILING)
+						.addComponent(lblSelectBookVisitDay)
+						.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.BASELINE)
+							.addComponent(lblSelectBookVisitHour)
+							.addComponent(comboBoxSelectBookVisitHour, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(comboBoxSelectBookVisitDAy, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(35)
+					.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_bookVisitCenterPanel.createSequentialGroup()
+							.addGap(3)
+							.addComponent(lblSelectBookVisitUrgency))
+						.addComponent(comboBoxSelectBookVisitUrgency, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(38)
+					.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblSelectBookVisitRegime)
+						.addComponent(comboBoxSelectBookVisitRegime, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(72))
+		);
 		bookVisitCenterPanel.setLayout(gl_bookVisitCenterPanel);
 
 		JLabel lblLuned = new JLabel("Luned\u00EC");

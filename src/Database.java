@@ -171,13 +171,35 @@ public class Database {
 		return null;
 	}
 
+	public ArrayList<Integer> getVisitsHistoryYears(String fiscalCode)
+	{
+		try(Connection con = DriverManager.getConnection(url, user, password))
+		{
+			String query = "SELECT DISTINCT EXTRACT(YEAR FROM(date)) as year FROM visit WHERE patient = ? AND NOT result IS NULL";
+			try(PreparedStatement pst = con.prepareStatement(query)){
+				pst.clearParameters();
+				pst.setString(1, fiscalCode); 
+				ResultSet rs = pst.executeQuery();
+				ArrayList<Integer> years = new ArrayList<Integer>();
+				while(rs.next()) 
+					years.add(rs.getInt("year")); 
+				return years;
+			} 
+
+		} catch (SQLException e1) {
+			System.out.println( "Errore durante connessione al database: " + e1.getMessage() );
+		}
+
+		return null;
+	}
 	
 	public ArrayList<Visit> getVisitsHistory(String fiscalCode)
 	{
 		try(Connection con = DriverManager.getConnection(url, user, password))
 		{
 			String query = "SELECT * FROM visit WHERE patient = ? AND NOT result IS NULL";
-			try(PreparedStatement pst = con.prepareStatement(query)){
+			try(PreparedStatement pst = con.prepareStatement(query))
+			{
 				pst.clearParameters();
 				pst.setString(1, fiscalCode); 
 				ResultSet rs = pst.executeQuery();
