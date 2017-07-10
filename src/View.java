@@ -105,7 +105,9 @@ public class View {
 	private JComboBox<String> comboBoxSelectCompany;
 
 	private JTextPane txtpnVisitResultInfo;
-	private JLabel lblWelcomeEmployee; 
+	private JLabel lblWelcomeEmployee;
+	private JComboBox<String> comboBoxSelectBookVisitType;
+	private JComboBox<Integer> comboBoxSelectBookVisitDAy; 
 
 
 	/**
@@ -278,6 +280,16 @@ public class View {
 							visitsHistoryModel.addRow(row);
 						}
 					}
+					 
+					// initialize book visit panel
+					ArrayList<String> services = db.getServices(Patient.getInstance().getHealthcarecompany());
+					
+					System.out.println(Employee.getInstance().getCompany());
+					System.out.println(services);
+					for(String s : services)
+						comboBoxSelectBookVisitType.addItem(s);
+						
+					
 				} else {
 					System.out.println("credenziali errate: " + fiscalCode + " " + passwd);
 					JOptionPane.showMessageDialog(null, "Nome utente o password errati o mancanti", "Errore accesso", JOptionPane.WARNING_MESSAGE);
@@ -342,17 +354,21 @@ public class View {
 		//frmHealthcareManagementSystem.getRootPane().setDefaultButton(btnLoginPatient); ------- sistemare (memo per me (simone))
 		btnLoginEmployee.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 				String user = textField_usr.getText();
 				String pass = new String(textField_passwd.getPassword());
+				
 				if (db.checkEmployee(user, pass)) {
 					System.out.println("ok");
 					lblWelcomeEmployee.setText(lblWelcomeEmployee.getText() + Employee.getInstance().getName() + " "+Employee.getInstance().getSurname());
 					clfrmHealhcareManagementSystem.show(frmHealthcareManagementSystem.getContentPane(), "panelEmployee");
+					
 					//add clinics
 					ArrayList<Clinic> clinics = db.getClinics(Employee.getInstance().getCompany());
 					System.out.println(clinics.size() + "  " + Employee.getInstance().getCompany());
 					for(Clinic c : clinics)
 						comboBoxClinicVisitInsertion.addItem(c.getName());
+					
 				}
 				else{
 					System.out.println("wrong credentials: " + user + " " + pass );
@@ -537,7 +553,7 @@ public class View {
 		JLabel lblSelectBookVisitType = new JLabel("Tipo visita:");
 		lblSelectBookVisitType.setHorizontalAlignment(SwingConstants.RIGHT);
 
-		JComboBox comboBoxSelectBookVisitType = new JComboBox();
+		comboBoxSelectBookVisitType = new JComboBox<String>();
 
 		JLabel lblSelectBookVisitYear = new JLabel("Anno:");
 		lblSelectBookVisitYear.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -566,7 +582,7 @@ public class View {
 		JLabel lblSelectBookVisitDay = new JLabel("Giorno:");
 		lblSelectBookVisitDay.setHorizontalAlignment(SwingConstants.RIGHT);
 
-		JComboBox comboBoxSelectBookVisitDAy = new JComboBox();
+		comboBoxSelectBookVisitDAy = new JComboBox<Integer>();
 		comboBoxSelectBookVisitDAy.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// da modificare 

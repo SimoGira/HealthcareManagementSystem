@@ -78,8 +78,11 @@ public class Database {
 	{
 		try(Connection con = DriverManager.getConnection(this.url, this.user, this.password))
 		{
+
+			System.out.println("query");
 			String query = "SELECT * FROM employee WHERE employeeCode = ? AND password = ?";
 			try(PreparedStatement pst = con.prepareStatement(query)){
+				System.out.println("prepare statement");
 				pst.clearParameters();
 				pst.setString(1, employeeCode); 
 				pst.setString(2, password); 
@@ -90,6 +93,7 @@ public class Database {
 					e.setFiscalcode(rs.getString("fiscalcode")); 
 					e.setName(rs.getString("name"));  
 					e.setClinic(rs.getString("clinic"));
+					System.out.println("company " + rs.getString("company"));
 					e.setCompany(rs.getString("company"));
 					e.setJob(rs.getString("job"));
 					e.setSurname(rs.getString("surname")); 
