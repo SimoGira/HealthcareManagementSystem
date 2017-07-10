@@ -1142,19 +1142,15 @@ public class View {
 		panelClinicsAndServicesNorth.add(lblSelectCompany);
 
 		comboBoxSelectCompany = new JComboBox<String>();
+		comboBoxSelectCompany.setPreferredSize(new Dimension(150, 27));
 		listClinics = new JList<String>();
 
 		comboBoxSelectCompany.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-
 				int comboBoxIndex = comboBoxSelectCompany.getSelectedIndex();
 				String companyID = companiesList.get(comboBoxIndex)[0];
-
 				ArrayList<Clinic> clinics = db.getClinics(companyID);
-
 				listClinics.setModel(new AbstractListModel<String>() {
-
 					@Override
 					public String getElementAt(int index) {
 						return clinics.get(index).getName();
@@ -1163,9 +1159,8 @@ public class View {
 					public int getSize() {
 						return clinics.size();
 					}
-
 				});
-
+				listClinics.setSelectedIndex(0);
 			}
 		});
 		panelClinicsAndServicesNorth.add(comboBoxSelectCompany);
