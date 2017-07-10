@@ -113,7 +113,8 @@ public class View {
 	private JComboBox<Integer> comboBoxSelectBookVisitDAy; 
  
 	private JButton btnLoginPatient;
-	private JButton btnLoginEmployee; 
+	private JButton btnLoginEmployee;
+	private JComboBox<Integer> comboBoxSelectBookVisitYear; 
 
 
 	/**
@@ -574,7 +575,11 @@ public class View {
 		JLabel lblSelectBookVisitYear = new JLabel("Anno:");
 		lblSelectBookVisitYear.setHorizontalAlignment(SwingConstants.RIGHT);
 
-		JComboBox<Integer> comboBoxSelectBookVisitYear = new JComboBox<Integer>();
+		comboBoxSelectBookVisitYear = new JComboBox<Integer>();
+		int year = Calendar.getInstance().get(Calendar.YEAR);
+		comboBoxSelectBookVisitYear.addItem(year);
+		comboBoxSelectBookVisitYear.addItem(year + 1);
+		
 		comboBoxSelectBookVisitYear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//da modificare
