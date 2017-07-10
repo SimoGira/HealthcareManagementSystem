@@ -52,6 +52,26 @@ public class Database {
 		}
 	}
 
+	public void updateVisitResult(Visit visit)
+	{
+		try(Connection con = DriverManager.getConnection(url, user, password))
+		{ 
+			String query = "UPDATE Visit SET result = ? WHERE patient = ? clinic = ?  company = ? serviceName = ? date = ? hour = ?";
+			try(PreparedStatement pst = con.prepareStatement(query)){
+				pst.clearParameters();
+				pst.setString(1, visit.getResult());
+				pst.setString(2, visit.getPatient());
+				pst.setString(3, visit.getClinicName());
+				pst.setString(4, visit.getCompanyId());
+				pst.setString(5, visit.getServiceName());
+				pst.setDate(6, visit.getDate());
+				pst.setInt(7, visit.getHour());
+			}
+
+		} catch (SQLException e1) {
+			System.out.println( "Errore durante connessione al database: " + e1.getMessage() );
+		}
+	}
 	
 	public void updateClinic(Clinic clinic)
 	{
