@@ -84,7 +84,7 @@ public class Visit {
 				+ result;
 	}
 
-	public String toString(String name, String surname)
+	public String toHTML(String name, String surname)
 	{
 		return  "<table border=\"0\" cellpadding=\"2\" cellspacing=\"1\">"
 				+ "<tr>" + "<td align=\"right\"><b>" + "Appuntamento per:" + "</b></td>" + "<td>" + name + " "  + surname + "</td>" + "</tr>" 
