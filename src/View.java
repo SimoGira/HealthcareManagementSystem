@@ -797,7 +797,23 @@ public class View {
 		panelBookVisit.add(bookVisitSouthButtonPanel, BorderLayout.SOUTH);
 
 		JButton btnBookVisit = new JButton("Prenota");
-		btnBookVisit.setEnabled(false);
+		btnBookVisit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Visit v = new Visit();
+				v.setServiceName(comboBoxSelectBookVisitType.getSelectedItem().toString());
+				v.setClinicName(comboBoxSelectBookVisitClinic.getSelectedItem().toString());
+				v.setCompanyId(Patient.getInstance().getHealthcarecompany());
+				v.setHour((int)comboBoxSelectBookVisitHour.getSelectedItem());
+				int year = (int)comboBoxSelectBookVisitYear.getSelectedItem();
+				int month = (int)comboBoxSelectBookVisitMonth.getSelectedItem();
+				int day = (int)comboBoxSelectBookVisitDay.getSelectedItem();
+				v.setDate(new Date(year, month, day)); //SIMONE MODIFICA QUI
+				v.setPatient(Patient.getInstance().getFiscalcode());
+				v.setRegime(comboBoxSelectBookVisitRegime.getSelectedItem().toString());
+				v.setUrgency(comboBoxSelectBookVisitUrgency.getSelectedItem().toString());
+				db.bookVisit(v);
+			}
+		});
 		btnBookVisit.setToolTipText("Clicca per prenotare");
 		bookVisitSouthButtonPanel.add(btnBookVisit);
 
