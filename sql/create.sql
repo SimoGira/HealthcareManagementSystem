@@ -56,6 +56,7 @@ create table service (
 	clinic VARCHAR,
 	company varchar,
 	name varchar,
+	regime varchar NOT NULL,
 	FOREIGN KEY(clinic, company) REFERENCES clinic(name, company),
 	PRIMARY KEY(clinic, company, name)
 );

@@ -40,18 +40,18 @@ VALUES
  ('OCULISTICA', 'cp02', 'via mincio 6', '02235', 'Verona', 'VR', '13/05/1991', ' ');
 
 
-INSERT INTO service( clinic, company, name )
+INSERT INTO service( clinic, company, name, regime )
 VALUES
-('GENETICA MEDICA', 'cp01', 'visita oncologica'),
-('GENETICA MEDICA', 'cp01', 'visita geriatrica'),
-('ANGIOEDEMA EREDITARIO ED ALTRE FORME DI ANGIOEDEMA', 'cp01', 'visita angiodema'),
-('IMMUNODEFICIENZE CONGENITE E ACQUISITE (DIVISIONALE)', 'cp01', 'visita polmonare'),
-('PATOLOGIA RICOSTRUTTIVA DELLA MAMMELLA', 'cp01', 'ricostruzione tessuti mammari'),
-('NEOPLASIE POLMONARI E TRATTO GASTROENTERICO', 'cp02', 'visita gastroenterica'),
-('NEOPLASIE POLMONARI E TRATTO GASTROENTERICO', 'cp02', 'visita polmonare'),
-('OCULISTICA', 'cp01', 'visita oculistica fotorecettori'),
-('OCULISTICA', 'cp02', 'visita oculistica generica'),
-('NEOPLASIE POLMONARI E TRATTO GASTROENTERICO', 'cp02', 'visita cervello');
+('GENETICA MEDICA', 'cp01', 'visita oncologica', 'privata'),
+('GENETICA MEDICA', 'cp01', 'visita geriatrica', 'privata'),
+('ANGIOEDEMA EREDITARIO ED ALTRE FORME DI ANGIOEDEMA', 'cp01', 'visita angiodema', 'privata'),
+('IMMUNODEFICIENZE CONGENITE E ACQUISITE (DIVISIONALE)', 'cp01', 'visita polmonare', 'privata'),
+('PATOLOGIA RICOSTRUTTIVA DELLA MAMMELLA', 'cp01', 'ricostruzione tessuti mammari', 'privata'),
+('NEOPLASIE POLMONARI E TRATTO GASTROENTERICO', 'cp02', 'visita gastroenterica', 'privata'),
+('NEOPLASIE POLMONARI E TRATTO GASTROENTERICO', 'cp02', 'visita polmonare', 'privata'),
+('OCULISTICA', 'cp01', 'visita oculistica fotorecettori', 'privata'),
+('OCULISTICA', 'cp02', 'visita oculistica generica', 'privata'),
+('NEOPLASIE POLMONARI E TRATTO GASTROENTERICO', 'cp02', 'visita cervello','rimborsata dal sistema sanitario');
 
 
 
