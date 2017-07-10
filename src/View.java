@@ -82,10 +82,12 @@ public class View {
 	private static final int DAYSC = 7;
 	private JComboBox<Integer> selectedMonth;
 	private JComboBox<String> comboBoxSelectBookVisitMonth;
-	protected Component btnViewSelectedVisit;
 	JComboBox<String> comboBoxClinicVisitInsertion;
 	private JComboBox<String> comboBoxVisitsYear;
 	private DefaultTableModel visitsHistoryModel;
+	private JButton btnViewVisitsPatient;
+	private CardLayout clpanelVisitPatient;
+	private JPanel panelVisitPatient;
 
 	/**
 	 * Launch the application.
@@ -213,6 +215,8 @@ public class View {
 		panelCenterPatientLogin.add(btnLoginPatient, gbc_btnLoginPatient);
 
 		btnLoginPatient.addActionListener(new ActionListener() {
+			private ArrayList<Visit> patientVisits;
+
 			public void actionPerformed(ActionEvent e) {
 				String fiscalCode = formattedTextFieldFiscalCode.getText();
 				String passwd = new String(passwordFieldPIN.getPassword());
@@ -233,10 +237,10 @@ public class View {
 					
 					//fill table (visits history) 
 					int i = 1;
-					ArrayList<Visit> visits = db.getVisitsHistory(fiscalCode);
-					if (visits != null) {
-						System.out.println("visits is not null " + visits.size());
-						for (Visit c : visits) {
+					patientVisits = db.getVisitsHistory(fiscalCode);
+					if (patientVisits != null) {
+						System.out.println("visits is not null " + patientVisits.size());
+						for (Visit c : patientVisits) {
 							System.out.println("element i");
 							Vector<Object> row = new Vector<Object>();
 							row.add(i++);
@@ -392,9 +396,12 @@ public class View {
 		JTabbedPane tabbedPanePatient = new JTabbedPane(JTabbedPane.TOP);
 		panelPatient.add(tabbedPanePatient, BorderLayout.CENTER);
 
-		JPanel panelVisitPatient = new JPanel();
+		panelVisitPatient = new JPanel();
 		tabbedPanePatient.addTab("Storico prenotazioni", null, panelVisitPatient, null);
 		panelVisitPatient.setLayout(new CardLayout(0, 0));
+		clpanelVisitPatient = (CardLayout) panelVisitPatient.getLayout();
+		
+		
 
 		JPanel panelHistoryVisitPatient = new JPanel();
 		panelVisitPatient.add(panelHistoryVisitPatient, "panelHistoryVisitPatient");
@@ -428,9 +435,8 @@ public class View {
 				// do some actions here, for example
 				// print first column value from selected row
 				if (!event.getValueIsAdjusting()) {
-					System.out
-							.println(tableHistoryVisits.getValueAt(tableHistoryVisits.getSelectedRow(), 0).toString());
-					btnViewSelectedVisit.setEnabled(true);
+					System.out.println(tableHistoryVisits.getValueAt(tableHistoryVisits.getSelectedRow(), 0).toString());
+					btnViewVisitsPatient.setEnabled(true);
 				}
 
 			}
@@ -441,17 +447,23 @@ public class View {
 		FlowLayout fl_panelHistoryButtons = (FlowLayout) panelHistoryButtons.getLayout();
 		fl_panelHistoryButtons.setAlignment(FlowLayout.RIGHT);
 		panelHistoryVisitPatient.add(panelHistoryButtons, BorderLayout.SOUTH);
+		
+		btnViewVisitsPatient = new JButton("Visualizza");
+		btnViewVisitsPatient.setEnabled(false);
+		btnViewVisitsPatient.addActionListener(new ActionListener() {
 
-		btnViewSelectedVisit = new JButton("Visualizza");
-		btnViewSelectedVisit.setEnabled(false);
-		panelHistoryButtons.add(btnViewSelectedVisit);
+			public void actionPerformed(ActionEvent e) {
+				clpanelVisitPatient.next(panelVisitPatient);
+				//clfrmHealhcareManagementSystem.show(panelVisitResultPatient.getContentPane(), "panelVisitResultPatient");
+			}
+		});
+		panelHistoryButtons.add(btnViewVisitsPatient);
+
+		 
 
 		JPanel panelVisitResultPatient = new JPanel();
 		panelVisitPatient.add(panelVisitResultPatient, "panelVisitResultPatient");
 		panelVisitResultPatient.setLayout(new BorderLayout(0, 0));
-
-		JTextArea resultVisitTextArea = new JTextArea();
-		panelVisitResultPatient.add(resultVisitTextArea, BorderLayout.CENTER);
 
 		JPanel resultVisitSouthpanel = new JPanel();
 		FlowLayout flowLayout = (FlowLayout) resultVisitSouthpanel.getLayout();
@@ -459,12 +471,22 @@ public class View {
 		panelVisitResultPatient.add(resultVisitSouthpanel, BorderLayout.SOUTH);
 
 		JButton btnBeckToHistory = new JButton("Indietro");
+		btnBeckToHistory.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				clpanelVisitPatient.previous(panelVisitPatient);
+			}
+		});
 		resultVisitSouthpanel.add(btnBeckToHistory);
 
 		JButton btnPrintVisitResult = new JButton("Stampa");
 		btnPrintVisitResult.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnPrintVisitResult.setAlignmentX(Component.CENTER_ALIGNMENT);
 		resultVisitSouthpanel.add(btnPrintVisitResult);
+		
+		JTextPane txtpnAccattiemmeelle = new JTextPane();
+		txtpnAccattiemmeelle.setEditable(false);
+		txtpnAccattiemmeelle.setContentType("text/html");
+		panelVisitResultPatient.add(txtpnAccattiemmeelle, BorderLayout.CENTER);
 
 		JPanel panelBookVisit = new JPanel();
 		tabbedPanePatient.addTab("Prenotazione visite", null, panelBookVisit, null);
@@ -714,6 +736,11 @@ public class View {
 		panelInsertVisitInfo.add(panelInsertVisitButton, BorderLayout.SOUTH);
 
 		JButton btnInsertNewVisit = new JButton("Inserisci");
+		btnInsertNewVisit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("clicked inserisci");
+			}
+		});
 		btnInsertNewVisit.setEnabled(false);
 		panelInsertVisitButton.add(btnInsertNewVisit);
 
