@@ -329,7 +329,7 @@ public class Database {
 		return null;
 	}
 	
-	public ArrayList<String> getServices(String company)
+	public ArrayList<String> getServices(String company) 
 	{
 		try(Connection con = DriverManager.getConnection(url, user, password))
 		{

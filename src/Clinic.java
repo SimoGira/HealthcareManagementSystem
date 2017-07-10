@@ -1,4 +1,5 @@
 import java.sql.Date;
+import java.util.ArrayList;
 
 public class Clinic {
 	private String name;
@@ -9,7 +10,7 @@ public class Clinic {
 	private String province;
 	private Date contractDate;
 	private String description;
-	
+
 	public String getName() {
 		return name;
 	}
@@ -58,40 +59,28 @@ public class Clinic {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
-	/*
-	 * 	private String name;
-	private String company;
-	private String street;
-	private String cap;
-	private String city;
-	private String province;
-	private Date contractDate;
-	private String description;
-	 */
-	
-	public String getCompleteDescription(String[] services){
-		
-		
+
+
+	public String getCompleteDescription(ArrayList<String> services)
+	{
 		String head =  "<table border=\"0\" cellpadding=\"2\" cellspacing=\"1\">"
 				+ "<tr>" + "<td align=\"right\"><b>" + "Nome Ambulatorio:" + "</b></td>" + "<td>" + name + "</td>" + "</tr>" 
-				+ "<tr>" + "<td align=\"right\"><b>" + "Indirizzo:" + "</b></td>" + "<td>" + street + "," + cap + " " + city + " (" + province + ")" + "</td>" + "</tr>"
+				+ "<tr>" + "<td align=\"right\"><b>" + "Indirizzo:" + "</b></td>" + "<td>" + street + ", " + cap + " " + city + " (" + province + ")" + "</td>" + "</tr>"
 				+ "<tr>" + "<td align=\"right\"><b>" + "Data contratto:" + "</b></td>" + "<td>" + contractDate + "</td>" + "</tr>"  
 				+ "</table>"
 				+ "<p><hr/><b>Descrizione</b><hr/></p>"
 				+ description ;
-		
 
 		String svc = "<p><hr/><b>Services</b><hr/></p><ul>";
 		for(String s :services)
 			svc += "<li>" + s + "</li>";
 		svc += "</ul>";
-		
-		
+
+
 		return head + svc;
-		
-		
-		
+
+
+
 	}
-	
+
 }
