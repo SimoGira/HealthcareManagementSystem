@@ -1,5 +1,3 @@
-import java.sql.Date;
-
 public class Employee {
 	private static Employee instance = null;
 
@@ -45,14 +43,14 @@ public class Employee {
 		return name;
 	}
 	public void setName(String name) {
-		this.name = name;
+		this.name = name.substring(0, 1).toUpperCase() + name.substring(1);
 	}
 
 	public String getSurname() {
 		return surname;
 	}
 	public void setSurname(String surname) {
-		this.surname = surname;
+		this.surname = surname.substring(0, 1).toUpperCase() + surname.substring(1);
 	}
 
 	public String getJob() {
