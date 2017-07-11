@@ -55,6 +55,8 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -864,7 +866,8 @@ public class View {
 		});
 		btnInsertNewVisit.setEnabled(false);
 		panelInsertVisitButton.add(btnInsertNewVisit);
-
+		
+		//INIZIO PANEL INSERT CLINIC MASTER
 		JPanel panelInsertClinicMaster = new JPanel();
 		tabbedPaneEmployee.addTab("Inserisci ambulatorio", null, panelInsertClinicMaster, null);
 		GridBagLayout gbl_panelInsertClinicMaster = new GridBagLayout();
@@ -873,7 +876,8 @@ public class View {
 		gbl_panelInsertClinicMaster.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
 		gbl_panelInsertClinicMaster.rowWeights = new double[] { 0.0, 1.0, 0.0, Double.MIN_VALUE };
 		panelInsertClinicMaster.setLayout(gbl_panelInsertClinicMaster);
-
+		
+		//Insert clinic data + description
 		JPanel panelInsertClinic = new JPanel();
 		GridBagConstraints gbc_panelInsertClinic = new GridBagConstraints();
 		gbc_panelInsertClinic.anchor = GridBagConstraints.NORTH;
@@ -884,6 +888,7 @@ public class View {
 		panelInsertClinicMaster.add(panelInsertClinic, gbc_panelInsertClinic);
 		panelInsertClinic.setLayout(new BorderLayout(0, 0));
 
+		//clinic data
 		JPanel panelInsertClinicData = new JPanel();
 		panelInsertClinic.add(panelInsertClinicData, BorderLayout.WEST);
 		panelInsertClinicData.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Dati",
@@ -895,7 +900,8 @@ public class View {
 		gbl_panelInsertClinicData.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
 				0.0, Double.MIN_VALUE };
 		panelInsertClinicData.setLayout(gbl_panelInsertClinicData);
-
+		
+		
 		JLabel lblInsertClinicName = new JLabel("Nome:");
 		GridBagConstraints gbc_lblInsertClinicName = new GridBagConstraints();
 		gbc_lblInsertClinicName.anchor = GridBagConstraints.WEST;
@@ -912,6 +918,7 @@ public class View {
 		gbc_textFieldInsertClinicName.gridy = 1;
 		panelInsertClinicData.add(textFieldInsertClinicName, gbc_textFieldInsertClinicName);
 		textFieldInsertClinicName.setColumns(10);
+		
 
 		JLabel lblInsertClinicRue = new JLabel("Via:");
 		GridBagConstraints gbc_lblInsertClinicRue = new GridBagConstraints();
@@ -929,6 +936,7 @@ public class View {
 		gbc_textFieldInsertClinicRue.gridy = 3;
 		panelInsertClinicData.add(textFieldInsertClinicRue, gbc_textFieldInsertClinicRue);
 		textFieldInsertClinicRue.setColumns(10);
+		
 
 		JLabel lblInsertClinicCity = new JLabel("Paese:");
 		GridBagConstraints gbc_lblInsertClinicCity = new GridBagConstraints();
@@ -946,6 +954,7 @@ public class View {
 		gbc_textFieldInsertClinicCity.gridy = 5;
 		panelInsertClinicData.add(textFieldInsertClinicCity, gbc_textFieldInsertClinicCity);
 		textFieldInsertClinicCity.setColumns(10);
+		
 
 		JLabel lblInsertClinicZipCode = new JLabel("CAP:");
 		GridBagConstraints gbc_lblInsertClinicZipCode = new GridBagConstraints();
@@ -963,6 +972,7 @@ public class View {
 		gbc_textFieldInsertClinicZipCode.gridy = 7;
 		panelInsertClinicData.add(textFieldInsertClinicZipCode, gbc_textFieldInsertClinicZipCode);
 		textFieldInsertClinicZipCode.setColumns(10);
+		
 
 		JLabel lblInsertClinicProvince = new JLabel("Provincia:");
 		GridBagConstraints gbc_lblInsertClinicProvince = new GridBagConstraints();
@@ -973,6 +983,7 @@ public class View {
 		panelInsertClinicData.add(lblInsertClinicProvince, gbc_lblInsertClinicProvince);
 
 		JComboBox<String> comboBoxInsertClinicProvince = new JComboBox<String>();
+		comboBoxInsertClinicProvince.setModel(new DefaultComboBoxModel(new String[] {"VR", "TR"}));
 		GridBagConstraints gbc_comboBoxInsertClinicProvince = new GridBagConstraints();
 		gbc_comboBoxInsertClinicProvince.fill = GridBagConstraints.HORIZONTAL;
 		gbc_comboBoxInsertClinicProvince.insets = new Insets(0, 0, 5, 0);
@@ -995,15 +1006,66 @@ public class View {
 		gbc_formattedTextFieldInsertClinicContractDate.gridy = 11;
 		panelInsertClinicData.add(formattedTextFieldInsertClinicContractDate,
 				gbc_formattedTextFieldInsertClinicContractDate);
-
+		//clinic description
 		JScrollPane scrollPaneInsertClinicDescription = new JScrollPane();
 		panelInsertClinic.add(scrollPaneInsertClinicDescription, BorderLayout.CENTER);
 		scrollPaneInsertClinicDescription
 				.setBorder(new TitledBorder(null, "Descrizione", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-
+		//description text area
 		JTextArea textAreaInsertClinicDescription = new JTextArea();
 		scrollPaneInsertClinicDescription.setViewportView(textAreaInsertClinicDescription);
+		
+		//bottone inserisci clinica
+		JPanel panelInsertClinicButton = new JPanel();
+		GridBagConstraints gbc_panelInsertClinicButton = new GridBagConstraints();
+		gbc_panelInsertClinicButton.anchor = GridBagConstraints.NORTH;
+		gbc_panelInsertClinicButton.fill = GridBagConstraints.HORIZONTAL;
+		gbc_panelInsertClinicButton.gridx = 0;
+		gbc_panelInsertClinicButton.gridy = 2;
+		panelInsertClinicMaster.add(panelInsertClinicButton, gbc_panelInsertClinicButton);
+		FlowLayout fl_panelInsertClinicButton = (FlowLayout) panelInsertClinicButton.getLayout();
+		fl_panelInsertClinicButton.setAlignment(FlowLayout.RIGHT);
 
+		JButton btnInsertClinic = new JButton("Inserisci");
+		btnInsertClinic.setEnabled(false);
+		panelInsertClinicButton.add(btnInsertClinic);
+		
+		//LISTENER PER I MIEI TEXTFIELD
+		DocumentListener textFieldListener = new DocumentListener() {
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				
+			}
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				
+				if(!textFieldInsertClinicName.getText().equals("") && 
+				   !textFieldInsertClinicRue.getText().equals("") &&
+			       !textFieldInsertClinicCity.getText().equals("") &&
+				   !textFieldInsertClinicZipCode.getText().equals("")) 
+							btnInsertClinic.setEnabled(true);
+				else
+					btnInsertClinic.setEnabled(false);
+
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				System.out.println("remove");
+
+			}
+
+		};
+
+		//AGGIUNGO IL LISTENER A TUTTI I MIEI TEXTFIELD
+		textFieldInsertClinicName.getDocument().addDocumentListener(textFieldListener); //serve il getDocument
+		textFieldInsertClinicRue.getDocument().addDocumentListener(textFieldListener);
+		textFieldInsertClinicCity.getDocument().addDocumentListener(textFieldListener);
+		textFieldInsertClinicZipCode.getDocument().addDocumentListener(textFieldListener);
+
+		//scroll panel cliniche già esistenti
 		JScrollPane scrollPaneViewClinics = new JScrollPane();
 		GridBagConstraints gbc_scrollPaneViewClinics = new GridBagConstraints();
 		gbc_scrollPaneViewClinics.insets = new Insets(0, 0, 5, 0);
@@ -1023,20 +1085,10 @@ public class View {
 		tableClinics.getTableHeader().setReorderingAllowed(false);
 		scrollPaneViewClinics.setViewportView(tableClinics);
 
-		JPanel panelInsertClinicButton = new JPanel();
-		GridBagConstraints gbc_panelInsertClinicButton = new GridBagConstraints();
-		gbc_panelInsertClinicButton.anchor = GridBagConstraints.NORTH;
-		gbc_panelInsertClinicButton.fill = GridBagConstraints.HORIZONTAL;
-		gbc_panelInsertClinicButton.gridx = 0;
-		gbc_panelInsertClinicButton.gridy = 2;
-		panelInsertClinicMaster.add(panelInsertClinicButton, gbc_panelInsertClinicButton);
-		FlowLayout fl_panelInsertClinicButton = (FlowLayout) panelInsertClinicButton.getLayout();
-		fl_panelInsertClinicButton.setAlignment(FlowLayout.RIGHT);
-
-		JButton btnInsertClinic = new JButton("Inserisci");
-		btnInsertClinic.setEnabled(false);
-		panelInsertClinicButton.add(btnInsertClinic);
-
+		
+		//fine panel inserisci clinica
+		
+		//INIZIO panel inserisci visit result
 		JPanel panelVisitsResultsPerPatientMaster = new JPanel();
 		tabbedPaneEmployee.addTab("Visualizza visite", null, panelVisitsResultsPerPatientMaster, null);
 		panelVisitsResultsPerPatientMaster.setLayout(new CardLayout(0, 0));
@@ -1242,7 +1294,7 @@ public class View {
 				ArrayList<Clinic> clinics = db.getClinics(companyID);
 				int selectedIndex = listClinics.getSelectedIndex();
 
-				if (selectedIndex != -1) { // quando cambio contenuto in
+				if (selectedIndex >= 0) { // quando cambio contenuto in
 											// combobox mi ritorna -1 e mi fa
 											// segfault in clinics.get
 					txtClinic.setText(clinics.get(selectedIndex).getCompleteDescription(
