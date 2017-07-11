@@ -105,7 +105,7 @@ public class View {
 	private JComboBox<String> comboBoxSelectBookVisitType;
 	private JTextArea textAreaVisitResult;
 	private DefaultTableModel insertClinicModel;
-	private JButton btnInsertNewVisit;
+	private JButton btnInsertNewVisitResult;
 
 	private JComboBox<Integer> comboBoxSelectBookVisitDay; 
  
@@ -114,7 +114,8 @@ public class View {
 	private JComboBox<Integer> comboBoxSelectBookVisitYear; 
 	private ArrayList<String[]> serviceInfos;
 	private JComboBox<String> comboBoxSelectBookVisitClinic;
-	private JComboBox<Integer> comboBoxSelectBookVisitHour; 
+	private JComboBox<Integer> comboBoxSelectBookVisitHour;
+	private ArrayList<Visit> visits = null;
 
 	/**
 	 * Launch the application.
@@ -840,7 +841,7 @@ public class View {
 		panelInfovisitInsertionNorth.add(comboBoxClinicVisitInsertion);
 
 		DefaultTableModel employeeInsertVisitModel = new DefaultTableModel(
-				new String[] { "Codice Fiscale", "Tipo visita", "Urgenza", "Ora" }, 0) {
+				new String[] { "N\u00B0", "Codice Fiscale", "Tipo visita", "Urgenza", "Ora" }, 0) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				return false;
@@ -856,7 +857,6 @@ public class View {
 
 				String date = formattedTextFieldVisitInsertion.getText();
 
-				ArrayList<Visit> visits = null;
 				try {
 					visits = db.getBookedVisits(Employee.getInstance().getCompany(),
 							(String) comboBoxClinicVisitInsertion.getSelectedItem(),
@@ -868,10 +868,11 @@ public class View {
 				}
 				if (visits != null) {
 					System.out.println("visits is not null " + visits.size());
+					int i = 1;
 					for (Visit c : visits) {
-						System.out.println("element i");
+						System.out.println("element: i" );
 						Vector<Object> vector = new Vector<Object>();
-
+						vector.add(i++);
 						vector.add(c.getPatient());
 						vector.add(c.getServiceName());
 						vector.add(c.getUrgency());
@@ -893,7 +894,7 @@ public class View {
 		tableVisitsFound.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent event) {
 				if(! event.getValueIsAdjusting()){
-					System.out.println(tableVisitsFound.getValueAt(tableVisitsFound.getSelectedRow(), 0).toString());
+					System.out.println("selected row:" + tableVisitsFound.getSelectedRow());
 					textAreaVisitResult.setEnabled(true);
 				}
 			}
@@ -918,14 +919,14 @@ public class View {
 				// TODO Auto-generated method stub
 				System.out.println("insert update");
 				if(!textAreaVisitResult.getText().isEmpty()){
-					btnInsertNewVisit.setEnabled(true);
+					btnInsertNewVisitResult.setEnabled(true);
 				}
 			}
 			@Override
 			public void removeUpdate(DocumentEvent arg0) {
 				System.out.println("insert remove");
 				if(textAreaVisitResult.getText().isEmpty()){
-					btnInsertNewVisit.setEnabled(false);
+					btnInsertNewVisitResult.setEnabled(false);
 				}
 			}
 		});
@@ -936,17 +937,20 @@ public class View {
 		fl_panelInsertVisitButton.setAlignment(FlowLayout.RIGHT);
 		panelInsertVisitInfo.add(panelInsertVisitButton, BorderLayout.SOUTH);
 
-		btnInsertNewVisit = new JButton("Inserisci");
-		btnInsertNewVisit.addActionListener(new ActionListener() {
+		btnInsertNewVisitResult = new JButton("Inserisci");
+		btnInsertNewVisitResult.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("clicked inserisci risultato visita");
-				// <-----------------------------------------------------------------------------------------------------------------------------------
-				
-				
+				int selectedIndex = tableVisitsFound.getSelectedRow();
+				visits.get(selectedIndex).setResult(textAreaVisitResult.getText());
+				db.updateVisitResult(visits.get(selectedIndex));
+	
+				btnFindVisits.doClick();
+				textAreaVisitResult.setText(null);
+				JOptionPane.showMessageDialog(null, "Il risultato della vista è stato inserito correttamente", "Informazione",JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
-		btnInsertNewVisit.setEnabled(false);
-		panelInsertVisitButton.add(btnInsertNewVisit);
+		btnInsertNewVisitResult.setEnabled(false);
+		panelInsertVisitButton.add(btnInsertNewVisitResult);
 
 		JPanel panelInsertClinicMaster = new JPanel();
 		tabbedPaneEmployee.addTab("Inserisci ambulatorio", null, panelInsertClinicMaster, null);

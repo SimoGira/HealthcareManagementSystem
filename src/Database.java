@@ -56,7 +56,7 @@ public class Database {
 	{
 		try(Connection con = DriverManager.getConnection(url, user, password))
 		{ 
-			String query = "UPDATE Visit SET result = ? WHERE patient = ? clinic = ?  company = ? serviceName = ? date = ? hour = ?";
+			String query = "UPDATE Visit SET result = ? WHERE patient = ? AND clinic = ?  AND company = ? AND serviceName = ? AND date = ? AND hour = ?";
 			try(PreparedStatement pst = con.prepareStatement(query)){
 				pst.clearParameters();
 				pst.setString(1, visit.getResult());
@@ -66,6 +66,8 @@ public class Database {
 				pst.setString(5, visit.getServiceName());
 				pst.setDate(6, visit.getDate());
 				pst.setInt(7, visit.getHour());
+				
+				System.out.println("UPDATED: " + pst.executeUpdate());
 			}
 
 		} catch (SQLException e1) {
@@ -88,6 +90,7 @@ public class Database {
 				pst.setString(6, clinic.getDescription());
 				pst.setString(7, clinic.getName());
 				pst.setString(8, clinic.getCompany());
+
 			}
 
 		} catch (SQLException e1) {
