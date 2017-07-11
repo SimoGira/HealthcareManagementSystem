@@ -672,7 +672,8 @@ public class View {
 
 				//SIMONE DEVI MODIFICARE QUI
 				int idx = comboBoxSelectBookVisitClinic.getSelectedIndex();
-				String[] info = serviceInfos.get(idx);
+				System.out.println(idx);
+				//String[] info = serviceInfos.get(idx);
 				//inserisci info[1] nel label regime (che devi sostituire al combobox)
 				updateBookingDays();
 			}
