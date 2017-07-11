@@ -181,10 +181,12 @@ public class Database {
 				pst.setString(4, v.getServiceName()); 
 				pst.setString(5, "CSBCRL74R10L781B"); 
 				pst.setDate(6, v.getDate());
-				pst.setInt(6, v.getHour());
-				pst.setString(7, v.getUrgency());
-				pst.setString(8, v.getRegime());
-				
+				pst.setInt(7, v.getHour());
+				pst.setString(8, v.getUrgency().toLowerCase());
+				pst.setString(9, v.getRegime());
+				System.out.println("UPDATED: " + pst.toString());
+				System.out.println("UPDATED: " + pst.executeUpdate());
+
 			}
 		}
 		catch (SQLException e1) {
@@ -337,6 +339,7 @@ public class Database {
 				pst.setString(3, company); 
 				pst.setInt(4, month); 
 				pst.setInt(5, year); 
+				System.out.println(pst);
 				ResultSet rs = pst.executeQuery();
 				int[] result = new int[32];
 				for(int i = 0 ; i < result.length; i++)

@@ -116,7 +116,15 @@ public class View {
 	private JComboBox<String> comboBoxSelectBookVisitClinic;
 	private JComboBox<Integer> comboBoxSelectBookVisitHour;
 	private ArrayList<Visit> visits = null;
-	private JComboBox<String> comboBoxSelectBookVisitRegime; 
+	private JTextField textFieldRegime;
+	private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+	private int visitIndex;
+	private JButton btnViewVisitSelectedResult;
+	private CardLayout clpanelVisitsResultsPerPatientMaster;
+	private JPanel panelVisitsResultsPerPatientMaster;
+	private JTextPane textPanePatientVisitResult;
+	private JTable tableUpdateClinics;
+	private DefaultTableModel tableUpdateClinicsModel;
 
 	/**
 	 * Launch the application.
@@ -166,7 +174,6 @@ public class View {
 	
 	private void updateBookingDays()
 	{
-		//da modificare 
 		int[] days = db.getVisitsInMonth(
 				(int)comboBoxSelectBookVisitYear.getSelectedItem(),
 				(int)comboBoxSelectBookVisitMonth.getSelectedIndex() + 1, 
@@ -180,7 +187,6 @@ public class View {
 			if(days[i] < 8)
 				comboBoxSelectBookVisitDay.addItem((int)i);
 		} 
-		System.out.print("\n");
 	} 
 	/**
 	 * Initialize the contents of the frame.
@@ -390,11 +396,32 @@ public class View {
 				if (db.checkEmployee(user, pass)) {
 					lblWelcomeEmployee.setText(lblWelcomeEmployee.getText() + Employee.getInstance().getName() + " "
 							+ Employee.getInstance().getSurname());
+					
+					//QUESTA DIVENTERA UNA FUNZIONE PER RIEMPIRE LA TABELLA DI CLINICHE IN INSERISCI AMBULATORIO___________________
+					ArrayList<Clinic> clinics = db.getClinics(Employee.getInstance().getCompany());
+					
+					if (clinics != null) {
+						for(Clinic c: clinics) {
+							
+							Vector<Object> vector = new Vector<Object>();
+
+							vector.add(c.getName());
+							vector.add(c.getStreet());
+							vector.add(c.getCap());
+							vector.add(c.getCity());
+							vector.add(c.getProvince());
+							tableUpdateClinicsModel.addRow(vector);
+							
+							System.out.println("clinica " + c.getName());
+
+						}
+					}
+					//---------------FINE--------------------------------
+					
 					clfrmHealhcareManagementSystem.show(frmHealthcareManagementSystem.getContentPane(),
 							"panelEmployee");
 
 					// add clinics
-					ArrayList<Clinic> clinics = db.getClinics(Employee.getInstance().getCompany());
 					System.out.println(clinics.size() + "  " + Employee.getInstance().getCompany());
 					for (Clinic c : clinics)
 						comboBoxClinicVisitInsertion.addItem(c.getName());
@@ -517,7 +544,8 @@ public class View {
 		tableHistoryVisits.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent event) {
 				if (!event.getValueIsAdjusting()) {
-					System.out.println(tableHistoryVisits.getValueAt(tableHistoryVisits.getSelectedRow(), 0).toString());
+					System.out.println(tableHistoryVisits.getSelectedRow());
+					visitIndex = tableHistoryVisits.getSelectedRow();
 					btnViewVisitsPatient.setEnabled(true);
 				}
 			}
@@ -533,11 +561,9 @@ public class View {
 		btnViewVisitsPatient.setEnabled(false);
 		btnViewVisitsPatient.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				clpanelVisitPatient.next(panelVisitPatient);
-				int visitIndex = (int) tableHistoryVisits.getValueAt(tableHistoryVisits.getSelectedRow(), 0) - 1;
 				Visit v = patientVisits.get(visitIndex);
-				txtpnVisitResultInfo
-				.setText(v.toHTML(Patient.getInstance().getName(), Patient.getInstance().getSurname()));
+				txtpnVisitResultInfo.setText(v.toHTML(Patient.getInstance().getName(), Patient.getInstance().getSurname()));
+				clpanelVisitPatient.next(panelVisitPatient);
 				// patientVisits
 			}
 		});
@@ -661,8 +687,6 @@ public class View {
 		JLabel lblSelectBookVisitRegime = new JLabel("Regime:");
 		lblSelectBookVisitRegime.setHorizontalAlignment(SwingConstants.RIGHT);
 
-		 comboBoxSelectBookVisitRegime = new JComboBox<String>();
-
 		JLabel lblAmbultorio = new JLabel("Ambulatorio:");
 		lblAmbultorio.setHorizontalAlignment(SwingConstants.RIGHT);
 
@@ -670,14 +694,21 @@ public class View {
 		comboBoxSelectBookVisitClinic.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				//SIMONE DEVI MODIFICARE QUI
 				int idx = comboBoxSelectBookVisitClinic.getSelectedIndex();
 				System.out.println(idx);
-				//String[] info = serviceInfos.get(idx);
-				//inserisci info[1] nel label regime (che devi sostituire al combobox)
+				if(idx >= 0)
+				{
+					String[] info = serviceInfos.get(idx);
+					textFieldRegime.setText(info[1]);
+
+				}
 				updateBookingDays();
 			}
 		});
+		
+		textFieldRegime = new JTextField();
+		textFieldRegime.setEditable(false);
+		textFieldRegime.setColumns(10);
 		
 		GroupLayout gl_bookVisitCenterPanel = new GroupLayout(bookVisitCenterPanel);
 		gl_bookVisitCenterPanel.setHorizontalGroup(
@@ -706,8 +737,8 @@ public class View {
 								.addComponent(lblSelectBookVisitRegime))
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.LEADING)
+								.addComponent(textFieldRegime, GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE)
 								.addComponent(comboBoxSelectBookVisitHour, 0, 104, Short.MAX_VALUE)
-								.addComponent(comboBoxSelectBookVisitRegime, 0, 104, Short.MAX_VALUE)
 								.addComponent(comboBoxSelectBookVisitMonth, 0, 104, Short.MAX_VALUE)))
 						.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.TRAILING, false)
 							.addComponent(comboBoxSelectBookVisitClinic, Alignment.LEADING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -742,7 +773,7 @@ public class View {
 						.addComponent(comboBoxSelectBookVisitUrgency, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblSelectBookVisitUrgency)
 						.addComponent(lblSelectBookVisitRegime)
-						.addComponent(comboBoxSelectBookVisitRegime, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(textFieldRegime, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addContainerGap(204, Short.MAX_VALUE))
 		);
 		bookVisitCenterPanel.setLayout(gl_bookVisitCenterPanel);
@@ -765,13 +796,21 @@ public class View {
 				v.setCompanyId(Patient.getInstance().getHealthcarecompany());
 				v.setHour((int)comboBoxSelectBookVisitHour.getSelectedItem());
 				int year = (int)comboBoxSelectBookVisitYear.getSelectedItem();
-				int month = (int)comboBoxSelectBookVisitMonth.getSelectedItem();
+				int month = comboBoxSelectBookVisitMonth.getSelectedIndex() + 1;
 				int day = (int)comboBoxSelectBookVisitDay.getSelectedItem();
-				v.setDate(new Date(year, month, day)); //SIMONE MODIFICA QUI
+				
+				try {
+					v.setDate(new Date(sdf.parse(day + "/" + month + "/" + year).getTime()));
+				} catch (ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} //SIMONE MODIFICA QUI
 				v.setPatient(Patient.getInstance().getFiscalcode());
-				v.setRegime(comboBoxSelectBookVisitRegime.getSelectedItem().toString());
+				v.setRegime(textFieldRegime.getText());
 				v.setUrgency(comboBoxSelectBookVisitUrgency.getSelectedItem().toString());
 				db.bookVisit(v);
+				updateBookingDays();
+				JOptionPane.showMessageDialog(null, "Prenotazione effettuta con successo","Informazione", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 		btnBookVisit.setToolTipText("Clicca per prenotare");
@@ -801,7 +840,6 @@ public class View {
 		JLabel lblDateVisitInsertion = new JLabel("Data:");
 		panelInfovisitInsertionNorth.add(lblDateVisitInsertion);
 
-		DateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		JFormattedTextField formattedTextFieldVisitInsertion = new JFormattedTextField(sdf);
 		formattedTextFieldVisitInsertion.setToolTipText("Inserisci la data della visita nel formato gg/mm/aaaa");
 		formattedTextFieldVisitInsertion.setColumns(10);
@@ -936,6 +974,31 @@ public class View {
 		gbl_panelInsertClinicMaster.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
 		gbl_panelInsertClinicMaster.rowWeights = new double[] { 1.0, 0.0, 0.0, Double.MIN_VALUE };
 		panelInsertClinicMaster.setLayout(gbl_panelInsertClinicMaster);
+		
+		JScrollPane scrollPaneClinicsTable = new JScrollPane();
+		GridBagConstraints gbc_scrollPaneClinicsTable = new GridBagConstraints();
+		gbc_scrollPaneClinicsTable.insets = new Insets(0, 0, 5, 0);
+		gbc_scrollPaneClinicsTable.fill = GridBagConstraints.BOTH;
+		gbc_scrollPaneClinicsTable.gridx = 0;
+		gbc_scrollPaneClinicsTable.gridy = 0;
+		panelInsertClinicMaster.add(scrollPaneClinicsTable, gbc_scrollPaneClinicsTable);
+		
+		//tabella cliniche già presenti (visualizza per comodità o modifica)
+		tableUpdateClinics = new JTable();
+		tableUpdateClinics.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tableUpdateClinics.getTableHeader().setReorderingAllowed(false);
+		
+		tableUpdateClinicsModel = new DefaultTableModel(
+				new String[] { "Nome", "Via", "CAP", "Citta'", "Provincia" }, 0) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
+		
+		tableUpdateClinics.setModel(tableUpdateClinicsModel);
+		
+		scrollPaneClinicsTable.setViewportView(tableUpdateClinics);
 		
 		//Insert clinic data + description
 		JPanel panelInsertClinic = new JPanel();
@@ -1123,15 +1186,6 @@ public class View {
 		textFieldInsertClinicCity.getDocument().addDocumentListener(textFieldListener);
 		textFieldInsertClinicZipCode.getDocument().addDocumentListener(textFieldListener);
 
-		//scroll panel cliniche già esistenti
-		JScrollPane scrollPaneViewClinics = new JScrollPane();
-		GridBagConstraints gbc_scrollPaneViewClinics = new GridBagConstraints();
-		gbc_scrollPaneViewClinics.insets = new Insets(0, 0, 5, 0);
-		gbc_scrollPaneViewClinics.fill = GridBagConstraints.BOTH;
-		gbc_scrollPaneViewClinics.gridx = 0;
-		gbc_scrollPaneViewClinics.gridy = 1;
-		panelInsertClinicMaster.add(scrollPaneViewClinics, gbc_scrollPaneViewClinics);
-
 	
 		insertClinicModel = new DefaultTableModel(
 				new String[] { "Nome", "Via", "Paese", "CAP", "Provincia", "Data contratto", "" }, 0) {
@@ -1145,9 +1199,10 @@ public class View {
 		//fine panel inserisci clinica
 		
 		//INIZIO panel inserisci visit result
-		JPanel panelVisitsResultsPerPatientMaster = new JPanel();
+		panelVisitsResultsPerPatientMaster = new JPanel();
 		tabbedPaneEmployee.addTab("Visualizza visite", null, panelVisitsResultsPerPatientMaster, null);
 		panelVisitsResultsPerPatientMaster.setLayout(new CardLayout(0, 0));
+		clpanelVisitsResultsPerPatientMaster  = (CardLayout) panelVisitsResultsPerPatientMaster.getLayout();
 
 		JPanel panelViewVisitPerPatient = new JPanel();
 		panelVisitsResultsPerPatientMaster.add(panelViewVisitPerPatient, "panelViewVisitPerPatient");
@@ -1181,7 +1236,7 @@ public class View {
 				while (employeeHistoryModel.getRowCount() > 0)
 					employeeHistoryModel.removeRow(0);
 
-				ArrayList<Visit> visits = db.getVisitsHistory(searchPatientTextField.getText());
+				visits = db.getVisitsHistory(searchPatientTextField.getText());
 				if (visits != null) { 
 					for (Visit c : visits) { 
 						Vector<Object> vector = new Vector<Object>();
@@ -1202,16 +1257,38 @@ public class View {
 		panelViewVisitPerPatient.add(scrollPaneViewVisitPerPatient, BorderLayout.CENTER);
 
 		tableVisitsPatientResults = new JTable();
+		tableVisitsPatientResults.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tableVisitsPatientResults.setModel(employeeHistoryModel);
+		tableVisitsPatientResults.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent event) {
+				if (!event.getValueIsAdjusting()) {
+					System.out.println(tableVisitsPatientResults.getSelectedRow());
+					visitIndex = tableVisitsPatientResults.getSelectedRow();
+					btnViewVisitSelectedResult.setEnabled(true);
+				}
+			}
+		});
+		tableVisitsPatientResults.getTableHeader().setReorderingAllowed(false);
 		scrollPaneViewVisitPerPatient.setViewportView(tableVisitsPatientResults);
-
 		JPanel panelViewVisitPerPatientSouth = new JPanel();
 		FlowLayout fl_panelViewVisitPerPatientSouth = (FlowLayout) panelViewVisitPerPatientSouth.getLayout();
 		fl_panelViewVisitPerPatientSouth.setAlignment(FlowLayout.RIGHT);
 		panelViewVisitPerPatient.add(panelViewVisitPerPatientSouth, BorderLayout.SOUTH);
 
-		JButton btnDettagli = new JButton("Visualizza");
-		panelViewVisitPerPatientSouth.add(btnDettagli);
+		btnViewVisitSelectedResult = new JButton("Visualizza");
+		btnViewVisitSelectedResult.setEnabled(false);
+		btnViewVisitSelectedResult.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Visit index : " + visitIndex);
+				Visit v = visits.get(visitIndex);
+				textPanePatientVisitResult.setText(v.toString());
+				//clpanelVisitsResultsPerPatientMaster  = (CardLayout) panelVisitsResultsPerPatientMaster.getLayout();
+				clpanelVisitsResultsPerPatientMaster.next(panelVisitsResultsPerPatientMaster);
+				//clpanelVisitPatient.next(panelVisitPatient);
+			}
+		});
+		panelViewVisitPerPatientSouth.add(btnViewVisitSelectedResult);
 
 		JPanel panelViewVisitResultsPerPatient = new JPanel();
 		panelVisitsResultsPerPatientMaster.add(panelViewVisitResultsPerPatient, "panelViewVisitResultsPerPatient");
@@ -1219,9 +1296,10 @@ public class View {
 
 		JScrollPane scrollPanepanelViewVisitResultsPerPatient = new JScrollPane();
 		panelViewVisitResultsPerPatient.add(scrollPanepanelViewVisitResultsPerPatient, BorderLayout.CENTER);
-
-		JTextArea textArea = new JTextArea();
-		scrollPanepanelViewVisitResultsPerPatient.setViewportView(textArea);
+		
+		textPanePatientVisitResult = new JTextPane();
+		textPanePatientVisitResult.setContentType("text/html");
+		scrollPanepanelViewVisitResultsPerPatient.setViewportView(textPanePatientVisitResult);
 
 		JPanel panelpanelViewVisitResultsPerPatientSouth = new JPanel();
 		FlowLayout fl_panelpanelViewVisitResultsPerPatientSouth = (FlowLayout) panelpanelViewVisitResultsPerPatientSouth
@@ -1230,6 +1308,12 @@ public class View {
 		panelViewVisitResultsPerPatient.add(panelpanelViewVisitResultsPerPatientSouth, BorderLayout.SOUTH);
 
 		JButton btnBackToViewVisitPerPatient = new JButton("Indietro");
+		btnBackToViewVisitPerPatient.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Clcked back buttoon");
+				clpanelVisitsResultsPerPatientMaster.previous(panelVisitsResultsPerPatientMaster);
+			}
+		});
 		panelpanelViewVisitResultsPerPatientSouth.add(btnBackToViewVisitPerPatient);
 
 		JButton btnPrintReaultVisitPatient = new JButton("Stampa");
