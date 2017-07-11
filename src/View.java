@@ -116,6 +116,7 @@ public class View {
 	private JComboBox<String> comboBoxSelectBookVisitClinic;
 	private JComboBox<Integer> comboBoxSelectBookVisitHour;
 	private ArrayList<Visit> visits = null;
+	private JComboBox<String> comboBoxSelectBookVisitRegime; 
 
 	/**
 	 * Launch the application.
@@ -587,6 +588,7 @@ public class View {
 				serviceInfos = db.getServiceInfos(Patient.getInstance().getHealthcarecompany(), comboBoxSelectBookVisitType.getSelectedItem().toString());
 				for(String[] info : serviceInfos)
 					comboBoxSelectBookVisitClinic.addItem(info[0]);
+				
 				updateBookingDays();
 			}
 		});
@@ -659,7 +661,7 @@ public class View {
 		JLabel lblSelectBookVisitRegime = new JLabel("Regime:");
 		lblSelectBookVisitRegime.setHorizontalAlignment(SwingConstants.RIGHT);
 
-		JComboBox comboBoxSelectBookVisitRegime = new JComboBox();
+		 comboBoxSelectBookVisitRegime = new JComboBox<String>();
 
 		JLabel lblAmbultorio = new JLabel("Ambulatorio:");
 		lblAmbultorio.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -667,6 +669,11 @@ public class View {
 		comboBoxSelectBookVisitClinic = new JComboBox<String>();
 		comboBoxSelectBookVisitClinic.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+
+				//SIMONE DEVI MODIFICARE QUI
+				int idx = comboBoxSelectBookVisitClinic.getSelectedIndex();
+				String[] info = serviceInfos.get(idx); 
+				//inserisci info[1] nel label regime (che devi sostituire al combobox)
 				updateBookingDays();
 			}
 		});
@@ -798,7 +805,23 @@ public class View {
 		panelBookVisit.add(bookVisitSouthButtonPanel, BorderLayout.SOUTH);
 
 		JButton btnBookVisit = new JButton("Prenota");
-		btnBookVisit.setEnabled(false);
+		btnBookVisit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Visit v = new Visit();
+				v.setServiceName(comboBoxSelectBookVisitType.getSelectedItem().toString());
+				v.setClinicName(comboBoxSelectBookVisitClinic.getSelectedItem().toString());
+				v.setCompanyId(Patient.getInstance().getHealthcarecompany());
+				v.setHour((int)comboBoxSelectBookVisitHour.getSelectedItem());
+				int year = (int)comboBoxSelectBookVisitYear.getSelectedItem();
+				int month = (int)comboBoxSelectBookVisitMonth.getSelectedItem();
+				int day = (int)comboBoxSelectBookVisitDay.getSelectedItem();
+				v.setDate(new Date(year, month, day)); //SIMONE MODIFICA QUI
+				v.setPatient(Patient.getInstance().getFiscalcode());
+				v.setRegime(comboBoxSelectBookVisitRegime.getSelectedItem().toString());
+				v.setUrgency(comboBoxSelectBookVisitUrgency.getSelectedItem().toString());
+				db.bookVisit(v);
+			}
+		});
 		btnBookVisit.setToolTipText("Clicca per prenotare");
 		bookVisitSouthButtonPanel.add(btnBookVisit);
 
