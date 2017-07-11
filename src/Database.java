@@ -52,6 +52,29 @@ public class Database {
 		}
 	}
 
+	public void updateVisitResult(Visit visit)
+	{
+		try(Connection con = DriverManager.getConnection(url, user, password))
+		{ 
+			String query = "UPDATE Visit SET result = ? WHERE patient = ? AND clinic = ?  AND company = ? AND serviceName = ? AND date = ? AND hour = ?";
+			try(PreparedStatement pst = con.prepareStatement(query)){
+				pst.clearParameters();
+				pst.setString(1, visit.getResult());
+				pst.setString(2, visit.getPatient());
+				pst.setString(3, visit.getClinicName());
+				pst.setString(4, visit.getCompanyId());
+				pst.setString(5, visit.getServiceName());
+				pst.setDate(6, visit.getDate());
+				pst.setInt(7, visit.getHour());
+				
+				System.out.println("UPDATED: " + pst.executeUpdate());
+			}
+
+		} catch (SQLException e1) {
+			System.out.println( "Errore durante connessione al database: " + e1.getMessage() );
+		}
+	}
+	
 	public void updateClinic(Clinic clinic)
 	{
 		try(Connection con = DriverManager.getConnection(url, user, password))
@@ -67,6 +90,7 @@ public class Database {
 				pst.setString(6, clinic.getDescription());
 				pst.setString(7, clinic.getName());
 				pst.setString(8, clinic.getCompany());
+
 			}
 
 		} catch (SQLException e1) {
@@ -143,7 +167,32 @@ public class Database {
 
 		return false;
 	}
+	
+	public void bookVisit(Visit v)
+	{
+		try(Connection con = DriverManager.getConnection(url, user, password))
+		{
+			String query = "INSERT INTO visit (patient, clinic, company, serviceName, doctor, date, hour, urgency, regime, result) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, NULL)";
+			try(PreparedStatement pst = con.prepareStatement(query)){
+				pst.clearParameters();
+				pst.setString(1, v.getPatient()); 
+				pst.setString(2, v.getClinicName()); 
+				pst.setString(3, v.getCompanyId()); 
+				pst.setString(4, v.getServiceName()); 
+				pst.setString(5, "CSBCRL74R10L781B"); 
+				pst.setDate(6, v.getDate());
+				pst.setInt(6, v.getHour());
+				pst.setString(7, v.getUrgency());
+				pst.setString(8, v.getRegime());
+				
+			}
+		}
+		catch (SQLException e1) {
+			System.out.println( "Errore durante connessione al database: " + e1.getMessage() );
+		}
 
+	}
+	
 	public ArrayList<Visit> getBookedVisits(String company, String clinic, Date date)
 	{
 		try(Connection con = DriverManager.getConnection(url, user, password))
@@ -275,22 +324,27 @@ public class Database {
 	}
 
 	// for each day of this month, get the number of visits in this day (min 0 - max 8)
-	public int[] getVisitsInMonth(int year, int month, String visitType, String company)
+	public int[] getVisitsInMonth(int year, int month, String visitType, String clinic, String company)
 	{
+		System.out.println(year + ";"+month+","+visitType +","+clinic+","+company);
 		try(Connection con = DriverManager.getConnection(url, user, password))
 		{
-			String query = "SELECT EXTRACT(DAY FROM(date)) as day , COUNT(*) as cnt FROM visit WHERE serviceName = ? AND company = ? AND result IS NULL AND EXTRACT(MONTH FROM(date)) = ?  AND EXTRACT(YEAR FROM(date)) = ?  GROUP BY date";
+			String query = "SELECT EXTRACT(DAY FROM(date)) as day , COUNT(*) as cnt FROM visit WHERE clinic = ? AND serviceName = ? AND company = ? AND result IS NULL AND EXTRACT(MONTH FROM(date)) = ?  AND EXTRACT(YEAR FROM(date)) = ?  GROUP BY date";
 			try(PreparedStatement pst = con.prepareStatement(query)){
 				pst.clearParameters();
-				pst.setString(1, visitType);
-				pst.setString(2, company); 
-				pst.setInt(3, year); 
+				pst.setString(1, clinic);
+				pst.setString(2, visitType);
+				pst.setString(3, company); 
 				pst.setInt(4, month); 
+				pst.setInt(5, year); 
 				ResultSet rs = pst.executeQuery();
 				int[] result = new int[32];
+				for(int i = 0 ; i < result.length; i++)
+					result[i] = 0;
 				while(rs.next())
 				{ 
-					int day = rs.getInt("day") - 1; //start from 0
+					int day = rs.getInt("day"); //start from 0
+					System.out.println("day: " +day);
 					result[day] =  rs.getInt("cnt");
 				} 
 				return result;
@@ -304,22 +358,23 @@ public class Database {
 	}
 
 	
-	public boolean[] getBookedVisitsInDay(int year, int month, int day, String visitType, String company)
+	public boolean[] getBookedVisitsInDay(int year, int month, int day, String visitType,String clinic, String company)
 	{
 		try(Connection con = DriverManager.getConnection(url, user, password))
 		{
-			String query = "SELECT hour as cnt FROM visit WHERE serviceName = ? AND company = ? AND result IS NULL AND EXTRACT(MONTH FROM(date)) = ?  AND EXTRACT(YEAR FROM(date)) = ? AND EXTRACT(DAY FROM(date)) = ?  GROUP BY date";
+			String query = "SELECT hour FROM visit WHERE serviceName = ? AND company = ? AND clinic = ? AND result IS NULL AND EXTRACT(YEAR FROM(date)) = ?  AND EXTRACT(MONTH FROM(date)) = ? AND EXTRACT(DAY FROM(date)) = ?  GROUP BY date, hour";
 			try(PreparedStatement pst = con.prepareStatement(query)){
 				pst.clearParameters();
 				pst.setString(1, visitType);
 				pst.setString(2, company); 
-				pst.setInt(3, year); 
-				pst.setInt(4, month);
-				pst.setInt(5, day); 
+				pst.setString(3, clinic); 
+				pst.setInt(4, year); 
+				pst.setInt(5, month);
+				pst.setInt(6, day);  
 				ResultSet rs = pst.executeQuery();
 				boolean[] result = new boolean[24];
 				while(rs.next())
-				{ 
+				{  
 					int hour = rs.getInt("hour");
 					result[hour] =  true;
 				} 
@@ -398,6 +453,32 @@ public class Database {
 			} 
 
 		} catch (SQLException e1) {
+			System.out.println( "Errore durante connessione al database: " + e1.getMessage() );
+		}
+
+		return null;
+	}
+	
+
+	public ArrayList<String[]> getServiceInfos(String company, String service)
+	{
+		try(Connection con = DriverManager.getConnection(url, user, password))
+		{
+			String query = "SELECT clinic, regime FROM service WHERE name = ? AND company = ?";
+			try(PreparedStatement pst = con.prepareStatement(query)){
+				pst.clearParameters();
+				pst.setString(1, service);
+				pst.setString(2, company);
+				ResultSet rs = pst.executeQuery();
+
+				ArrayList<String[]> result = new ArrayList<String[]>();
+				while(rs.next()) 
+					result.add(new String[]{rs.getString("clinic"), rs.getString("regime")}); 
+				
+				return result;
+			}
+		}
+		catch (SQLException e1) {
 			System.out.println( "Errore durante connessione al database: " + e1.getMessage() );
 		}
 
