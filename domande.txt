@@ -1,0 +1,33 @@
+check
+- use case rispecchiano contenuto app
+- schemi corretti (costrutti)
+- corrispondenze tra diagrammi
+- subtyping
+- ereditarietà
+- abstract vs interface
+- incapsulamento
+- legacy
+- come avete fatto i test?
+
+
+DOMANDE VISTE L'11
+Primo interrogato: (individuale)
+1. Richiede di mostrare il funzionamento dell’applicazione
+2. Richiede la visualizzazione della documentazione
+3. visualizzando use case diagram: Che differenza c’è tra extended e include? ( errori concettuali nell’extend e include)
+4. Fammi vedere activity diagram ( ci sono errori nell’activity diagram)
+5. Mi fai vedere diagramma delle classi
+6. Model e controller, come funzionano nel vostro codice
+7. Avete usate pattern a parte MVC?
+8. Cosa è il pattern singleton? (Costruttore privato , dove lo chiami questo costruttore private? Ha un metodo statico getistance()  voto : 26
+Secondo interrogato: ( un lupo che parla sottovoce non si capisce un cazzo)
+1. Decidi te se partire dall’implementazione o dalla progettazione (ok fammi vedere il software )
+2. Fammi vedere la struttura delle classi
+3. I pattern usati ?
+4. Fammi vedere la documentazione
+5. Cosa vuol dire include ed extend ?  l’estensione va dall’estensione all’esteso( —use case sbagliati) ps: controlliamo bene inostri riguardando la torri….
+6. Che differenza c’è tra i metodi agili e i metodi plan driven?
+7. È possibile tornare indietro in un approccio plan driven?
+8. Nella parte agile che cosa avviene , che procedure ci sono? Voto : 25
+Terzo interrogato: (  primo gruppo interrogato insieme )
+1. Il racconto del progetto non lo fa uno di voi ma voglio sentire parlare tutti e tre…  uno ha cominciato a dire che ha usato un metodo Scrum,(ps :  direi che noi tiriamo fuori l’uso di git ad esempio…), poi dice che sono passati agli use case..prof:  cosa è questo extend? Extend vuol dire che è un modulo opzionale che può essere eseguito oppure no, hanno sbagliato… invece include cosa vuol dire,

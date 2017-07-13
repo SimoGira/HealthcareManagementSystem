@@ -70,9 +70,9 @@ public class View {
 	private JPasswordField passwordFieldPIN;
 	private JTable tableHistoryVisits;
 	private JTable tableVisitsFound;
-	private JTextField textFieldInsertClinicRue;
+	private JTextField textFieldInsertClinicStreet;
 	private JTextField textFieldInsertClinicCity;
-	private JTextField textFieldInsertClinicZipCode;
+	private JTextField textFieldInsertClinicCAP;
 	private JTextField textFieldInsertClinicName;
 	private JTable tableClinics;
 	private JTable tableVisitsPatientResults;
@@ -108,7 +108,7 @@ public class View {
 	private JButton btnInsertNewVisitResult;
 
 	private JComboBox<Integer> comboBoxSelectBookVisitDay; 
- 
+
 	private JButton btnLoginPatient;
 	private JButton btnLoginEmployee; 
 	private JComboBox<Integer> comboBoxSelectBookVisitYear; 
@@ -125,6 +125,14 @@ public class View {
 	private JTextPane textPanePatientVisitResult;
 	private JTable tableUpdateClinics;
 	private DefaultTableModel tableUpdateClinicsModel;
+	private JPanel panelInsertClinicButton;
+	private JPanel panelInsertClinic;
+	ArrayList<Clinic> editableClinics;
+	private JFormattedTextField formattedTextFieldInsertClinicContractDate;
+	private JComboBox<String> comboBoxInsertClinicProvince;
+	private JTextArea textAreaInsertClinicDescription;
+	private boolean isAddingNewClinic = false;
+	private JButton btnEditClinic;
 
 	/**
 	 * Launch the application.
@@ -172,6 +180,33 @@ public class View {
 		return cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 	} 
 	
+	private void refreshEditableClinics()
+	{
+		//clear 
+		while(tableUpdateClinicsModel.getRowCount() > 0)
+			tableUpdateClinicsModel.removeRow(0);
+		
+		//QUESTA DIVENTERA UNA FUNZIONE PER RIEMPIRE LA TABELLA DI CLINICHE IN INSERISCI AMBULATORIO___________________
+		editableClinics = db.getClinics(Employee.getInstance().getCompany());
+
+		if (editableClinics != null) {
+			for(Clinic c: editableClinics) {
+
+				Vector<Object> vector = new Vector<Object>();
+
+				vector.add(c.getName());
+				vector.add(c.getStreet());
+				vector.add(c.getCAP());
+				vector.add(c.getCity());
+				vector.add(c.getProvince());
+				tableUpdateClinicsModel.addRow(vector);
+
+				System.out.println("clinica " + c.getName());
+
+			}
+		}
+	}
+
 	private void updateBookingDays()
 	{
 		int[] days = db.getVisitsInMonth(
@@ -180,7 +215,7 @@ public class View {
 				(String)comboBoxSelectBookVisitType.getSelectedItem(),
 				(String)comboBoxSelectBookVisitClinic.getSelectedItem(),
 				Patient.getInstance().getHealthcarecompany());
-		
+
 		comboBoxSelectBookVisitDay.removeAllItems();
 		for(int i = 1; i < 32; i++)
 		{
@@ -208,10 +243,10 @@ public class View {
 		tabbedPaneLogin.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				if (tabbedPaneLogin.getSelectedIndex() == 0)
-					frmHealthcareManagementSystem.getRootPane().setDefaultButton(btnLoginPatient);
-				else
-					frmHealthcareManagementSystem.getRootPane().setDefaultButton(btnLoginEmployee);
+				//if (tabbedPaneLogin.getSelectedIndex() == 0)
+					//frmHealthcareManagementSystem.getRootPane().setDefaultButton(btnLoginPatient);
+				//else
+					//frmHealthcareManagementSystem.getRootPane().setDefaultButton(btnLoginEmployee);
 			}
 		});
 		panelLogin.add(tabbedPaneLogin, BorderLayout.CENTER);
@@ -278,7 +313,6 @@ public class View {
 		panelCenterPatientLogin.add(passwordFieldPIN, gbc_passwordFieldPIN);
 
 		btnLoginPatient = new JButton("Login");
-		frmHealthcareManagementSystem.getRootPane().setDefaultButton(btnLoginPatient);
 		GridBagConstraints gbc_btnLoginPatient = new GridBagConstraints();
 		gbc_btnLoginPatient.gridx = 1;
 		gbc_btnLoginPatient.gridy = 3;
@@ -288,7 +322,6 @@ public class View {
 			public void actionPerformed(ActionEvent e) {
 				String fiscalCode = formattedTextFieldFiscalCode.getText();
 				String passwd = new String(passwordFieldPIN.getPassword());
-
 				if (db.checkPatient(fiscalCode, passwd)) {
 					lblWelcomePatient.setText(lblWelcomePatient.getText() + Patient.getInstance().getName() + " "
 							+ Patient.getInstance().getSurname());
@@ -321,7 +354,7 @@ public class View {
 
 					// initialize book visit panel
 					ArrayList<String> services = db.getServices(Patient.getInstance().getHealthcarecompany());
- 				  
+
 					for(String s : services) 
 						comboBoxSelectBookVisitType.addItem(s);
 
@@ -390,40 +423,23 @@ public class View {
 		btnLoginEmployee.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
+				System.out.println("LOGIN EFFETTUATO");
 				String user = textField_usr.getText();
 				String pass = new String(textField_passwd.getPassword());
 
 				if (db.checkEmployee(user, pass)) {
 					lblWelcomeEmployee.setText(lblWelcomeEmployee.getText() + Employee.getInstance().getName() + " "
 							+ Employee.getInstance().getSurname());
-					
-					//QUESTA DIVENTERA UNA FUNZIONE PER RIEMPIRE LA TABELLA DI CLINICHE IN INSERISCI AMBULATORIO___________________
-					ArrayList<Clinic> clinics = db.getClinics(Employee.getInstance().getCompany());
-					
-					if (clinics != null) {
-						for(Clinic c: clinics) {
-							
-							Vector<Object> vector = new Vector<Object>();
 
-							vector.add(c.getName());
-							vector.add(c.getStreet());
-							vector.add(c.getCap());
-							vector.add(c.getCity());
-							vector.add(c.getProvince());
-							tableUpdateClinicsModel.addRow(vector);
-							
-							System.out.println("clinica " + c.getName());
-
-						}
-					}
-					//---------------FINE--------------------------------
 					
+					refreshEditableClinics();
+
 					clfrmHealhcareManagementSystem.show(frmHealthcareManagementSystem.getContentPane(),
 							"panelEmployee");
 
 					// add clinics
-					System.out.println(clinics.size() + "  " + Employee.getInstance().getCompany());
-					for (Clinic c : clinics)
+					System.out.println(editableClinics.size() + "  " + Employee.getInstance().getCompany());
+					for (Clinic c : editableClinics)
 						comboBoxClinicVisitInsertion.addItem(c.getName());
 
 				} else {
@@ -614,7 +630,7 @@ public class View {
 				serviceInfos = db.getServiceInfos(Patient.getInstance().getHealthcarecompany(), comboBoxSelectBookVisitType.getSelectedItem().toString());
 				for(String[] info : serviceInfos)
 					comboBoxSelectBookVisitClinic.addItem(info[0]);
-				
+
 				updateBookingDays();
 			}
 		});
@@ -627,7 +643,7 @@ public class View {
 		comboBoxSelectBookVisitYear.addItem(year);
 		comboBoxSelectBookVisitYear.addItem(year + 1);
 
-		
+
 		comboBoxSelectBookVisitYear.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent e) { 
 				System.out.println("modified year");
@@ -651,12 +667,11 @@ public class View {
 
 		comboBoxSelectBookVisitDay = new JComboBox<Integer>();
 		comboBoxSelectBookVisitDay.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// da modificare
+			public void actionPerformed(ActionEvent e) { 
 				System.out.println("modified day");
 				if(comboBoxSelectBookVisitDay.getSelectedItem() == null)
 					return;
-				
+
 				boolean[] hours = db.getBookedVisitsInDay(
 						(int)comboBoxSelectBookVisitYear.getSelectedItem(),
 						(int)comboBoxSelectBookVisitMonth.getSelectedIndex() + 1,
@@ -664,14 +679,14 @@ public class View {
 						(String)comboBoxSelectBookVisitType.getSelectedItem(),
 						(String)comboBoxSelectBookVisitClinic.getSelectedItem(),
 						Patient.getInstance().getHealthcarecompany());
-				
+
 				comboBoxSelectBookVisitHour.removeAllItems(); 
-				
+
 				for(int i = 8; i < 16; i++)
 					if(!hours[i])
 						comboBoxSelectBookVisitHour.addItem((int)i);
-					
-				
+
+
 			}
 		});
 
@@ -705,81 +720,78 @@ public class View {
 				updateBookingDays();
 			}
 		});
-		
+
 		textFieldRegime = new JTextField();
 		textFieldRegime.setEditable(false);
 		textFieldRegime.setColumns(10);
-		
+
 		GroupLayout gl_bookVisitCenterPanel = new GroupLayout(bookVisitCenterPanel);
 		gl_bookVisitCenterPanel.setHorizontalGroup(
-			gl_bookVisitCenterPanel.createParallelGroup(Alignment.TRAILING)
+				gl_bookVisitCenterPanel.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_bookVisitCenterPanel.createSequentialGroup()
-					.addGap(132)
-					.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.TRAILING)
+						.addGap(132)
+						.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.LEADING)
+										.addComponent(lblSelectBookVisitUrgency, Alignment.TRAILING)
+										.addComponent(lblSelectBookVisitType, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE)
+										.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.TRAILING, false)
+												.addComponent(lblSelectBookVisitYear, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+												.addComponent(lblAmbultorio, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 91, Short.MAX_VALUE)))
+								.addComponent(lblSelectBookVisitDay, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE))
+						.addPreferredGap(ComponentPlacement.UNRELATED)
 						.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.LEADING)
-							.addComponent(lblSelectBookVisitUrgency, Alignment.TRAILING)
-							.addComponent(lblSelectBookVisitType, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE)
-							.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.TRAILING, false)
-								.addComponent(lblSelectBookVisitYear, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(lblAmbultorio, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 91, Short.MAX_VALUE)))
-						.addComponent(lblSelectBookVisitDay, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_bookVisitCenterPanel.createSequentialGroup()
-							.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.TRAILING, false)
-								.addComponent(comboBoxSelectBookVisitDay, Alignment.LEADING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(comboBoxSelectBookVisitYear, Alignment.LEADING, 0, 69, Short.MAX_VALUE)
-								.addComponent(comboBoxSelectBookVisitUrgency, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGap(69)
-							.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.TRAILING)
-								.addComponent(lblSelectBookVisitMonth)
-								.addComponent(lblSelectBookVisitHour)
-								.addComponent(lblSelectBookVisitRegime))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.LEADING)
-								.addComponent(textFieldRegime, GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE)
-								.addComponent(comboBoxSelectBookVisitHour, 0, 104, Short.MAX_VALUE)
-								.addComponent(comboBoxSelectBookVisitMonth, 0, 104, Short.MAX_VALUE)))
-						.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.TRAILING, false)
-							.addComponent(comboBoxSelectBookVisitClinic, Alignment.LEADING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(comboBoxSelectBookVisitType, Alignment.LEADING, 0, 285, Short.MAX_VALUE)))
-					.addGap(156))
-		);
+								.addGroup(gl_bookVisitCenterPanel.createSequentialGroup()
+										.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.TRAILING, false)
+												.addComponent(comboBoxSelectBookVisitDay, Alignment.LEADING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+												.addComponent(comboBoxSelectBookVisitYear, Alignment.LEADING, 0, 69, Short.MAX_VALUE)
+												.addComponent(comboBoxSelectBookVisitUrgency, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+										.addGap(69)
+										.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.TRAILING)
+												.addComponent(lblSelectBookVisitMonth)
+												.addComponent(lblSelectBookVisitHour)
+												.addComponent(lblSelectBookVisitRegime))
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.LEADING)
+												.addComponent(textFieldRegime, GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE)
+												.addComponent(comboBoxSelectBookVisitHour, 0, 104, Short.MAX_VALUE)
+												.addComponent(comboBoxSelectBookVisitMonth, 0, 104, Short.MAX_VALUE)))
+								.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.TRAILING, false)
+										.addComponent(comboBoxSelectBookVisitClinic, Alignment.LEADING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+										.addComponent(comboBoxSelectBookVisitType, Alignment.LEADING, 0, 285, Short.MAX_VALUE)))
+						.addGap(156))
+				);
 		gl_bookVisitCenterPanel.setVerticalGroup(
-			gl_bookVisitCenterPanel.createParallelGroup(Alignment.LEADING)
+				gl_bookVisitCenterPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_bookVisitCenterPanel.createSequentialGroup()
-					.addGap(82)
-					.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(comboBoxSelectBookVisitType, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblSelectBookVisitType))
-					.addGap(18)
-					.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(comboBoxSelectBookVisitClinic, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblAmbultorio))
-					.addGap(18)
-					.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(comboBoxSelectBookVisitYear, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblSelectBookVisitMonth)
-						.addComponent(lblSelectBookVisitYear)
-						.addComponent(comboBoxSelectBookVisitMonth, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(comboBoxSelectBookVisitDay, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblSelectBookVisitHour)
-						.addComponent(lblSelectBookVisitDay)
-						.addComponent(comboBoxSelectBookVisitHour, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(comboBoxSelectBookVisitUrgency, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblSelectBookVisitUrgency)
-						.addComponent(lblSelectBookVisitRegime)
-						.addComponent(textFieldRegime, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(204, Short.MAX_VALUE))
-		);
+						.addGap(82)
+						.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(comboBoxSelectBookVisitType, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblSelectBookVisitType))
+						.addGap(18)
+						.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(comboBoxSelectBookVisitClinic, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblAmbultorio))
+						.addGap(18)
+						.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(comboBoxSelectBookVisitYear, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblSelectBookVisitMonth)
+								.addComponent(lblSelectBookVisitYear)
+								.addComponent(comboBoxSelectBookVisitMonth, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGap(18)
+						.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(comboBoxSelectBookVisitDay, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblSelectBookVisitHour)
+								.addComponent(lblSelectBookVisitDay)
+								.addComponent(comboBoxSelectBookVisitHour, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGap(18)
+						.addGroup(gl_bookVisitCenterPanel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(comboBoxSelectBookVisitUrgency, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblSelectBookVisitUrgency)
+								.addComponent(lblSelectBookVisitRegime)
+								.addComponent(textFieldRegime, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addContainerGap(204, Short.MAX_VALUE))
+				);
 		bookVisitCenterPanel.setLayout(gl_bookVisitCenterPanel);
-
-		JLabel lblLuned = new JLabel("Luned\u00EC");
-		JLabel lblMarted = new JLabel("Marted\u00EC");
 
 		JPanel bookVisitSouthButtonPanel = new JPanel();
 		bookVisitSouthButtonPanel.setBorder(new LineBorder(Color.LIGHT_GRAY));
@@ -798,7 +810,7 @@ public class View {
 				int year = (int)comboBoxSelectBookVisitYear.getSelectedItem();
 				int month = comboBoxSelectBookVisitMonth.getSelectedIndex() + 1;
 				int day = (int)comboBoxSelectBookVisitDay.getSelectedItem();
-				
+
 				try {
 					v.setDate(new Date(sdf.parse(day + "/" + month + "/" + year).getTime()));
 				} catch (ParseException e1) {
@@ -824,7 +836,7 @@ public class View {
 		panelEmployee.add(tabbedPaneEmployee, BorderLayout.CENTER);
 
 		JPanel panelInsertVisitInfo = new JPanel();
-		tabbedPaneEmployee.addTab("Inserisci risultato", null, panelInsertVisitInfo, null);
+		tabbedPaneEmployee.addTab("Risultati visite", null, panelInsertVisitInfo, null);
 		panelInsertVisitInfo.setLayout(new BorderLayout(0, 0));
 
 		JPanel panelInfoVisitInsertion = new JPanel();
@@ -956,7 +968,7 @@ public class View {
 				int selectedIndex = tableVisitsFound.getSelectedRow();
 				visits.get(selectedIndex).setResult(textAreaVisitResult.getText());
 				db.updateVisitResult(visits.get(selectedIndex));
-	
+
 				btnFindVisits.doClick();
 				textAreaVisitResult.setText(null);
 				JOptionPane.showMessageDialog(null, "Il risultato della vista è stato inserito correttamente", "Informazione",JOptionPane.INFORMATION_MESSAGE);
@@ -967,27 +979,27 @@ public class View {
 		panelInsertVisitButton.add(btnInsertNewVisitResult);
 
 		JPanel panelInsertClinicMaster = new JPanel();
-		tabbedPaneEmployee.addTab("Inserisci ambulatorio", null, panelInsertClinicMaster, null);
+		tabbedPaneEmployee.addTab("Gestione ambulatori", null, panelInsertClinicMaster, null);
 		GridBagLayout gbl_panelInsertClinicMaster = new GridBagLayout();
 		gbl_panelInsertClinicMaster.columnWidths = new int[] { 579, 0 };
-		gbl_panelInsertClinicMaster.rowHeights = new int[] { 75, 288, 33, 0 };
+		gbl_panelInsertClinicMaster.rowHeights = new int[] { 147, 0, 288, 33, 0 };
 		gbl_panelInsertClinicMaster.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
-		gbl_panelInsertClinicMaster.rowWeights = new double[] { 1.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_panelInsertClinicMaster.rowWeights = new double[] { 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		panelInsertClinicMaster.setLayout(gbl_panelInsertClinicMaster);
-		
+
 		JScrollPane scrollPaneClinicsTable = new JScrollPane();
+		scrollPaneClinicsTable.setViewportBorder(new TitledBorder(null, "Ambulatori", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		GridBagConstraints gbc_scrollPaneClinicsTable = new GridBagConstraints();
 		gbc_scrollPaneClinicsTable.insets = new Insets(0, 0, 5, 0);
 		gbc_scrollPaneClinicsTable.fill = GridBagConstraints.BOTH;
 		gbc_scrollPaneClinicsTable.gridx = 0;
 		gbc_scrollPaneClinicsTable.gridy = 0;
 		panelInsertClinicMaster.add(scrollPaneClinicsTable, gbc_scrollPaneClinicsTable);
-		
+
 		//tabella cliniche già presenti (visualizza per comodità o modifica)
 		tableUpdateClinics = new JTable();
 		tableUpdateClinics.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tableUpdateClinics.getTableHeader().setReorderingAllowed(false);
-		
 		tableUpdateClinicsModel = new DefaultTableModel(
 				new String[] { "Nome", "Via", "CAP", "Citta'", "Provincia" }, 0) {
 			@Override
@@ -995,19 +1007,85 @@ public class View {
 				return false;
 			}
 		};
-		
 		tableUpdateClinics.setModel(tableUpdateClinicsModel);
-		
+		tableUpdateClinics.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent event) {
+				if (!event.getValueIsAdjusting() && !panelInsertClinic.isVisible()) {
+					System.out.println(tableUpdateClinics.getSelectedRow());
+					visitIndex = tableUpdateClinics.getSelectedRow();
+					btnEditClinic.setEnabled(true);
+				}
+			}
+		});
 		scrollPaneClinicsTable.setViewportView(tableUpdateClinics);
+
+		JPanel panelInsertEditClinicButtons = new JPanel();
+		GridBagConstraints gbc_panelInsertEditClinicButtons = new GridBagConstraints();
+		gbc_panelInsertEditClinicButtons.insets = new Insets(0, 0, 5, 0);
+		gbc_panelInsertEditClinicButtons.fill = GridBagConstraints.HORIZONTAL;
+		gbc_panelInsertEditClinicButtons.gridx = 0;
+		gbc_panelInsertEditClinicButtons.gridy = 1;
+		panelInsertClinicMaster.add(panelInsertEditClinicButtons, gbc_panelInsertEditClinicButtons);
+
+		JButton btnAddNewClinic = new JButton("Aggiungi ambulatorio");
+		panelInsertEditClinicButtons.add(btnAddNewClinic);
+		btnEditClinic = new JButton("Modifica ambulatorio");
+		btnEditClinic.setEnabled(false);
+		panelInsertEditClinicButtons.add(btnEditClinic); 
 		
+		btnEditClinic.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				isAddingNewClinic = false;
+				int row = tableUpdateClinics.getSelectedRow();
+				if(row == -1)
+					return;
+				
+				// da modificare 
+				btnEditClinic.setEnabled(false);
+				btnAddNewClinic.setEnabled(false);
+				panelInsertClinic.setVisible(true);
+				panelInsertClinicButton.setVisible(true);
+				Clinic clinic = editableClinics.get(row); 
+				textFieldInsertClinicName.setText(clinic.getName());
+				textFieldInsertClinicCity.setText(clinic.getCity());
+				textFieldInsertClinicStreet.setText(clinic.getStreet());
+				textFieldInsertClinicCAP.setText(clinic.getCAP());
+				formattedTextFieldInsertClinicContractDate.setValue(clinic.getContractDate());
+				comboBoxInsertClinicProvince.setSelectedItem(clinic.getProvince());
+				textAreaInsertClinicDescription.setText(clinic.getDescription());
+				//formatted
+				//fill fields
+				
+			}
+		});
+		btnAddNewClinic.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				isAddingNewClinic = true;
+				// da modificare 
+				btnAddNewClinic.setEnabled(false);
+				btnEditClinic.setEnabled(false);
+				panelInsertClinic.setVisible(true);
+				panelInsertClinicButton.setVisible(true);
+				
+				
+				//clear parameters
+				textFieldInsertClinicName.setText("");
+				textFieldInsertClinicCity.setText("");
+				textFieldInsertClinicStreet.setText("");
+				textFieldInsertClinicCAP.setText(""); 
+				comboBoxInsertClinicProvince.setSelectedIndex(0);;
+				textAreaInsertClinicDescription.setText("");
+			}
+		});
+
 		//Insert clinic data + description
-		JPanel panelInsertClinic = new JPanel();
+		panelInsertClinic = new JPanel();
 		GridBagConstraints gbc_panelInsertClinic = new GridBagConstraints();
 		gbc_panelInsertClinic.anchor = GridBagConstraints.NORTH;
 		gbc_panelInsertClinic.fill = GridBagConstraints.HORIZONTAL;
 		gbc_panelInsertClinic.insets = new Insets(0, 0, 5, 0);
 		gbc_panelInsertClinic.gridx = 0;
-		gbc_panelInsertClinic.gridy = 1;
+		gbc_panelInsertClinic.gridy = 2;
 		panelInsertClinicMaster.add(panelInsertClinic, gbc_panelInsertClinic);
 		panelInsertClinic.setLayout(new BorderLayout(0, 0));
 
@@ -1023,8 +1101,8 @@ public class View {
 		gbl_panelInsertClinicData.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
 				0.0, Double.MIN_VALUE };
 		panelInsertClinicData.setLayout(gbl_panelInsertClinicData);
-		
-		
+
+
 		JLabel lblInsertClinicName = new JLabel("Nome:");
 		GridBagConstraints gbc_lblInsertClinicName = new GridBagConstraints();
 		gbc_lblInsertClinicName.anchor = GridBagConstraints.WEST;
@@ -1041,7 +1119,7 @@ public class View {
 		gbc_textFieldInsertClinicName.gridy = 1;
 		panelInsertClinicData.add(textFieldInsertClinicName, gbc_textFieldInsertClinicName);
 		textFieldInsertClinicName.setColumns(10);
-		
+
 
 		JLabel lblInsertClinicRue = new JLabel("Via:");
 		GridBagConstraints gbc_lblInsertClinicRue = new GridBagConstraints();
@@ -1051,15 +1129,15 @@ public class View {
 		gbc_lblInsertClinicRue.gridy = 2;
 		panelInsertClinicData.add(lblInsertClinicRue, gbc_lblInsertClinicRue);
 
-		textFieldInsertClinicRue = new JTextField();
+		textFieldInsertClinicStreet = new JTextField();
 		GridBagConstraints gbc_textFieldInsertClinicRue = new GridBagConstraints();
 		gbc_textFieldInsertClinicRue.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textFieldInsertClinicRue.insets = new Insets(0, 0, 5, 0);
 		gbc_textFieldInsertClinicRue.gridx = 0;
 		gbc_textFieldInsertClinicRue.gridy = 3;
-		panelInsertClinicData.add(textFieldInsertClinicRue, gbc_textFieldInsertClinicRue);
-		textFieldInsertClinicRue.setColumns(10);
-		
+		panelInsertClinicData.add(textFieldInsertClinicStreet, gbc_textFieldInsertClinicRue);
+		textFieldInsertClinicStreet.setColumns(10);
+
 
 		JLabel lblInsertClinicCity = new JLabel("Paese:");
 		GridBagConstraints gbc_lblInsertClinicCity = new GridBagConstraints();
@@ -1077,7 +1155,7 @@ public class View {
 		gbc_textFieldInsertClinicCity.gridy = 5;
 		panelInsertClinicData.add(textFieldInsertClinicCity, gbc_textFieldInsertClinicCity);
 		textFieldInsertClinicCity.setColumns(10);
-		
+
 
 		JLabel lblInsertClinicZipCode = new JLabel("CAP:");
 		GridBagConstraints gbc_lblInsertClinicZipCode = new GridBagConstraints();
@@ -1087,15 +1165,15 @@ public class View {
 		gbc_lblInsertClinicZipCode.gridy = 6;
 		panelInsertClinicData.add(lblInsertClinicZipCode, gbc_lblInsertClinicZipCode);
 
-		textFieldInsertClinicZipCode = new JTextField();
+		textFieldInsertClinicCAP = new JTextField();
 		GridBagConstraints gbc_textFieldInsertClinicZipCode = new GridBagConstraints();
 		gbc_textFieldInsertClinicZipCode.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textFieldInsertClinicZipCode.insets = new Insets(0, 0, 5, 0);
 		gbc_textFieldInsertClinicZipCode.gridx = 0;
 		gbc_textFieldInsertClinicZipCode.gridy = 7;
-		panelInsertClinicData.add(textFieldInsertClinicZipCode, gbc_textFieldInsertClinicZipCode);
-		textFieldInsertClinicZipCode.setColumns(10);
-		
+		panelInsertClinicData.add(textFieldInsertClinicCAP, gbc_textFieldInsertClinicZipCode);
+		textFieldInsertClinicCAP.setColumns(10);
+
 
 		JLabel lblInsertClinicProvince = new JLabel("Provincia:");
 		GridBagConstraints gbc_lblInsertClinicProvince = new GridBagConstraints();
@@ -1105,8 +1183,8 @@ public class View {
 		gbc_lblInsertClinicProvince.gridy = 8;
 		panelInsertClinicData.add(lblInsertClinicProvince, gbc_lblInsertClinicProvince);
 
-		JComboBox<String> comboBoxInsertClinicProvince = new JComboBox<String>();
-		comboBoxInsertClinicProvince.setModel(new DefaultComboBoxModel(new String[] {"VR", "TR"}));
+		comboBoxInsertClinicProvince = new JComboBox<String>();
+		comboBoxInsertClinicProvince.setModel(new DefaultComboBoxModel<String>(new String[] {"BL","PD","RO","TV","VE","VR","VI"}));
 		GridBagConstraints gbc_comboBoxInsertClinicProvince = new GridBagConstraints();
 		gbc_comboBoxInsertClinicProvince.fill = GridBagConstraints.HORIZONTAL;
 		gbc_comboBoxInsertClinicProvince.insets = new Insets(0, 0, 5, 0);
@@ -1122,7 +1200,9 @@ public class View {
 		gbc_lblInsertClinicContractDate.gridy = 10;
 		panelInsertClinicData.add(lblInsertClinicContractDate, gbc_lblInsertClinicContractDate);
 
-		JFormattedTextField formattedTextFieldInsertClinicContractDate = new JFormattedTextField(sdf);
+		formattedTextFieldInsertClinicContractDate = new JFormattedTextField(sdf);
+		formattedTextFieldInsertClinicContractDate.setText(sdf.format(new java.util.Date())); 
+		 
 		GridBagConstraints gbc_formattedTextFieldInsertClinicContractDate = new GridBagConstraints();
 		gbc_formattedTextFieldInsertClinicContractDate.fill = GridBagConstraints.HORIZONTAL;
 		gbc_formattedTextFieldInsertClinicContractDate.gridx = 0;
@@ -1133,60 +1213,138 @@ public class View {
 		JScrollPane scrollPaneInsertClinicDescription = new JScrollPane();
 		panelInsertClinic.add(scrollPaneInsertClinicDescription, BorderLayout.CENTER);
 		scrollPaneInsertClinicDescription.setBorder(new TitledBorder(null, "Descrizione", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		JTextArea textAreaInsertClinicDescription = new JTextArea();
+		textAreaInsertClinicDescription = new JTextArea();
 		scrollPaneInsertClinicDescription.setViewportView(textAreaInsertClinicDescription);
-		
+
 		//bottone inserisci clinica
-		JPanel panelInsertClinicButton = new JPanel();
+		panelInsertClinicButton = new JPanel();
 		GridBagConstraints gbc_panelInsertClinicButton = new GridBagConstraints();
 		gbc_panelInsertClinicButton.anchor = GridBagConstraints.NORTH;
 		gbc_panelInsertClinicButton.fill = GridBagConstraints.HORIZONTAL;
 		gbc_panelInsertClinicButton.gridx = 0;
-		gbc_panelInsertClinicButton.gridy = 2;
+		gbc_panelInsertClinicButton.gridy = 3;
 		panelInsertClinicMaster.add(panelInsertClinicButton, gbc_panelInsertClinicButton);
 		FlowLayout fl_panelInsertClinicButton = (FlowLayout) panelInsertClinicButton.getLayout();
 		fl_panelInsertClinicButton.setAlignment(FlowLayout.RIGHT);
 
-		JButton btnInsertClinic = new JButton("Inserisci");
-		btnInsertClinic.setEnabled(false);
-		panelInsertClinicButton.add(btnInsertClinic);
-		
-		//LISTENER PER I MIEI TEXTFIELD
+
+		//hide panels 
+		panelInsertClinic.setVisible(false);
+		panelInsertClinicButton.setVisible(false);
+
+		JButton btnEditClinicOk = new JButton("OK");
+		btnEditClinicOk.setEnabled(false);
+		btnEditClinicOk.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				//da modificare
+				panelInsertClinic.setVisible(false);
+				panelInsertClinicButton.setVisible(false);
+				btnAddNewClinic.setEnabled(true);
+				int row = tableUpdateClinics.getSelectedRow();
+				if(row != -1) 
+					btnEditClinic.setEnabled(true);
+
+				Clinic c = new Clinic();
+				c.setName(textFieldInsertClinicName.getText());
+				c.setCAP(textFieldInsertClinicCAP.getText());
+				c.setCity(textFieldInsertClinicCity.getText());
+				c.setCompany(Employee.getInstance().getCompany());
+				try { c.setContractDate(new Date(sdf.parse(formattedTextFieldInsertClinicContractDate.getText()).getTime()));}
+				catch (ParseException e1) {}
+				
+				c.setDescription(textAreaInsertClinicDescription.getText());
+				c.setProvince(comboBoxInsertClinicProvince.getSelectedItem().toString());
+				c.setStreet(textFieldInsertClinicStreet.getText()); 
+				 
+				//add new
+				if(isAddingNewClinic)
+				{
+					db.insertClinic(c);
+					System.out.println("clinic added");
+				}
+				//edit 
+				else
+				{
+					db.updateClinic(c);
+					System.out.println("clinic updated");
+				}
+				
+				refreshEditableClinics();
+			}
+		});
+		panelInsertClinicButton.add(btnEditClinicOk);
+
+		JButton btnEditClinicCancel = new JButton("Annulla"); 
+		btnEditClinicCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				//da modificare
+				panelInsertClinic.setVisible(false);
+				panelInsertClinicButton.setVisible(false);
+				btnAddNewClinic.setEnabled(true);
+				int row = tableUpdateClinics.getSelectedRow();
+				if(row != -1) 
+					btnEditClinic.setEnabled(true);
+			}
+		});
+		panelInsertClinicButton.add(btnEditClinicCancel);
+ 
 		DocumentListener textFieldListener = new DocumentListener() {
 
-			@Override
-			public void changedUpdate(DocumentEvent e) {
+			private void updateEditClinicTextFields() {
 				
-			}
-
-			@Override
-			public void insertUpdate(DocumentEvent e) {
+				boolean okStatus = true;
 				
-				if(!textFieldInsertClinicName.getText().equals("") && 
-				   !textFieldInsertClinicRue.getText().equals("") &&
-			       !textFieldInsertClinicCity.getText().equals("") &&
-				   !textFieldInsertClinicZipCode.getText().equals("")) 
-							btnInsertClinic.setEnabled(true);
+				// TODO Auto-generated method stub
+				if(textFieldInsertClinicName.getText().isEmpty() ||
+						textFieldInsertClinicStreet.getText().isEmpty() ||
+						textFieldInsertClinicCity.getText().isEmpty() ||
+						textFieldInsertClinicCAP.getText().isEmpty() ||
+						!formattedTextFieldInsertClinicContractDate.isEditValid() || 
+						textAreaInsertClinicDescription.getText().isEmpty()
+						) 
+				 okStatus = false;
+				
+				if (textFieldInsertClinicCAP.getText().length() != 5 || !textFieldInsertClinicCAP.getText().matches("[0-9]+"))
+					textFieldInsertClinicCAP.setBackground(Color.red);
 				else
-					btnInsertClinic.setEnabled(false);
+					textFieldInsertClinicCAP.setBackground(Color.white);
+				
 
+				btnEditClinicOk.setEnabled(okStatus);
 			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e)
+			{
+				updateEditClinicTextFields(); 
+			}
+
+			
 
 			@Override
 			public void removeUpdate(DocumentEvent e) {
-				System.out.println("remove");
+				updateEditClinicTextFields();
+			}
 
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println("changed");
+				
 			}
 
 		};
 
 		//AGGIUNGO IL LISTENER A TUTTI I MIEI TEXTFIELD
 		textFieldInsertClinicName.getDocument().addDocumentListener(textFieldListener); //serve il getDocument
-		textFieldInsertClinicRue.getDocument().addDocumentListener(textFieldListener);
+		textFieldInsertClinicStreet.getDocument().addDocumentListener(textFieldListener);
 		textFieldInsertClinicCity.getDocument().addDocumentListener(textFieldListener);
-		textFieldInsertClinicZipCode.getDocument().addDocumentListener(textFieldListener);
+		textFieldInsertClinicCAP.getDocument().addDocumentListener(textFieldListener);
+		textAreaInsertClinicDescription.getDocument().addDocumentListener(textFieldListener);
+		
 
-	
 		insertClinicModel = new DefaultTableModel(
 				new String[] { "Nome", "Via", "Paese", "CAP", "Provincia", "Data contratto", "" }, 0) {
 			@Override
@@ -1195,12 +1353,12 @@ public class View {
 			}
 		};
 
-		
+
 		//fine panel inserisci clinica
-		
+
 		//INIZIO panel inserisci visit result
 		panelVisitsResultsPerPatientMaster = new JPanel();
-		tabbedPaneEmployee.addTab("Visualizza visite", null, panelVisitsResultsPerPatientMaster, null);
+		tabbedPaneEmployee.addTab("Storico visite", null, panelVisitsResultsPerPatientMaster, null);
 		panelVisitsResultsPerPatientMaster.setLayout(new CardLayout(0, 0));
 		clpanelVisitsResultsPerPatientMaster  = (CardLayout) panelVisitsResultsPerPatientMaster.getLayout();
 
@@ -1296,7 +1454,7 @@ public class View {
 
 		JScrollPane scrollPanepanelViewVisitResultsPerPatient = new JScrollPane();
 		panelViewVisitResultsPerPatient.add(scrollPanepanelViewVisitResultsPerPatient, BorderLayout.CENTER);
-		
+
 		textPanePatientVisitResult = new JTextPane();
 		textPanePatientVisitResult.setContentType("text/html");
 		scrollPanepanelViewVisitResultsPerPatient.setViewportView(textPanePatientVisitResult);
@@ -1424,8 +1582,8 @@ public class View {
 				int selectedIndex = listClinics.getSelectedIndex();
 
 				if (selectedIndex >= 0) { // quando cambio contenuto in
-											// combobox mi ritorna -1 e mi fa
-											// segfault in clinics.get
+					// combobox mi ritorna -1 e mi fa
+					// segfault in clinics.get
 					txtClinic.setText(clinics.get(selectedIndex).getCompleteDescription(
 							db.getClinicServices(companyID, clinics.get(selectedIndex).getName())));
 					ServicesPanel.add(txtClinic, BorderLayout.CENTER);

@@ -29,10 +29,10 @@ public class Clinic {
 	public void setStreet(String street) {
 		this.street = street;
 	}
-	public String getCap() {
+	public String getCAP() {
 		return cap;
 	}
-	public void setCap(String cap) {
+	public void setCAP(String cap) {
 		this.cap = cap;
 	}
 	public String getCity() {

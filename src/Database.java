@@ -40,11 +40,13 @@ public class Database {
 				pst.setString(1, clinc.getName());
 				pst.setString(2, clinc.getCompany());
 				pst.setString(3, clinc.getStreet());
-				pst.setString(4, clinc.getCap());
+				pst.setString(4, clinc.getCAP());
 				pst.setString(5, clinc.getCity());
 				pst.setString(6, clinc.getProvince());
 				pst.setDate(7, clinc.getContractDate());
 				pst.setString(8, clinc.getDescription());
+				System.out.println(pst);
+				System.out.println("UPDATED: " + pst.executeUpdate());
 			}
 
 		} catch (SQLException e1) {
@@ -83,14 +85,15 @@ public class Database {
 			try(PreparedStatement pst = con.prepareStatement(query)){
 				pst.clearParameters();
 				pst.setString(1, clinic.getStreet());
-				pst.setString(2, clinic.getCap());
+				pst.setString(2, clinic.getCAP());
 				pst.setString(3, clinic.getCity());
 				pst.setString(4, clinic.getProvince());
 				pst.setDate(5, clinic.getContractDate());
 				pst.setString(6, clinic.getDescription());
 				pst.setString(7, clinic.getName());
 				pst.setString(8, clinic.getCompany());
-
+				System.out.println(pst);
+				System.out.println("UPDATED: " + pst.executeUpdate());
 			}
 
 		} catch (SQLException e1) {
@@ -308,7 +311,7 @@ public class Database {
 					a.setName(rs.getString("name"));
 					a.setCompany(rs.getString("company"));
 					a.setStreet(rs.getString("street"));
-					a.setCap(rs.getString("cap"));
+					a.setCAP(rs.getString("cap"));
 					a.setCity(rs.getString("city"));  
 					a.setProvince(rs.getString("province"));
 					a.setContractDate(rs.getDate("contractdate"));
