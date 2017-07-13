@@ -892,19 +892,26 @@ public class View {
 							"Errore data", JOptionPane.WARNING_MESSAGE);
 				}
 				if (visits != null) {
-					System.out.println("visits is not null " + visits.size());
-					int i = 1;
-					for (Visit c : visits) {
-						System.out.println("element: i" );
-						Vector<Object> vector = new Vector<Object>();
-						vector.add(i++);
-						vector.add(c.getPatient());
-						vector.add(c.getServiceName());
-						vector.add(c.getUrgency());
-						vector.add(c.getHour());
-						employeeInsertVisitModel.addRow(vector);
+					if(visits.size() == 0 ){
+						JOptionPane.showMessageDialog(null, "Nessuna visita trovata in data:" + date,
+								"Infomazione", JOptionPane.INFORMATION_MESSAGE);
 					}
+					else{
+						int i = 1;
+						for (Visit c : visits) {
+							System.out.println("element: i" );
+							Vector<Object> vector = new Vector<Object>();
+							vector.add(i++);
+							vector.add(c.getPatient());
+							vector.add(c.getServiceName());
+							vector.add(c.getUrgency());
+							vector.add(c.getHour());
+							employeeInsertVisitModel.addRow(vector);
+					}
+					}
+
 				}
+				
 			}
 		});
 		panelInfovisitInsertionNorth.add(btnFindVisits);
@@ -949,7 +956,6 @@ public class View {
 			}
 			@Override
 			public void removeUpdate(DocumentEvent arg0) {
-				System.out.println("insert remove");
 				if(textAreaVisitResult.getText().isEmpty()){
 					btnInsertNewVisitResult.setEnabled(false);
 				}
@@ -988,7 +994,6 @@ public class View {
 		panelInsertClinicMaster.setLayout(gbl_panelInsertClinicMaster);
 
 		JScrollPane scrollPaneClinicsTable = new JScrollPane();
-		scrollPaneClinicsTable.setViewportBorder(new TitledBorder(null, "Ambulatori", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		GridBagConstraints gbc_scrollPaneClinicsTable = new GridBagConstraints();
 		gbc_scrollPaneClinicsTable.insets = new Insets(0, 0, 5, 0);
 		gbc_scrollPaneClinicsTable.fill = GridBagConstraints.BOTH;
