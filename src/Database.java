@@ -202,7 +202,7 @@ public class Database {
 	{
 		try(Connection con = DriverManager.getConnection(url, user, password))
 		{
-			String query = "SELECT * FROM visit WHERE company = ? AND clinic = ? AND result IS NULL AND date = ?";
+			String query = "SELECT * FROM visit WHERE company = ? AND clinic = ? AND result IS NULL AND date = ? ORDER BY patient";
 			try(PreparedStatement pst = con.prepareStatement(query)){
 				pst.clearParameters();
 				pst.setString(1, company); 
@@ -261,7 +261,7 @@ public class Database {
 	{
 		try(Connection con = DriverManager.getConnection(url, user, password))
 		{
-			String query = "SELECT * FROM visit WHERE patient = ? AND NOT result IS NULL";
+			String query = "SELECT * FROM visit WHERE patient = ? AND NOT result IS NULL ORDER BY date";
 			try(PreparedStatement pst = con.prepareStatement(query))
 			{
 				pst.clearParameters();
@@ -299,7 +299,7 @@ public class Database {
 	{
 		try(Connection con = DriverManager.getConnection(url, user, password))
 		{
-			String query = "SELECT * FROM Clinic WHERE company = ?";
+			String query = "SELECT * FROM Clinic WHERE company = ? ORDER BY name";
 			try(PreparedStatement pst = con.prepareStatement(query)){
 				pst.clearParameters();
 				pst.setString(1, company); 
@@ -398,7 +398,7 @@ public class Database {
 	{
 		try(Connection con = DriverManager.getConnection(url, user, password))
 		{
-			String query = "SELECT DISTINCT name FROM service WHERE company = ?";
+			String query = "SELECT DISTINCT name FROM service WHERE company = ? ORDER BY name";
 			try(PreparedStatement pst = con.prepareStatement(query)){
 				pst.clearParameters();
 				pst.setString(1, company); 

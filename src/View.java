@@ -1311,7 +1311,7 @@ public class View {
 				else
 					textFieldInsertClinicCAP.setBackground(Color.white);
 				
-
+				
 				btnEditClinicOk.setEnabled(okStatus);
 			}
 			
