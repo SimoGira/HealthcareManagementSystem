@@ -133,6 +133,7 @@ public class View {
 	private JTextArea textAreaInsertClinicDescription;
 	private boolean isAddingNewClinic = false;
 	private JButton btnEditClinic;
+	private String currentClinicName;
 
 	/**
 	 * Launch the application.
@@ -179,6 +180,20 @@ public class View {
 		cal.set(Calendar.MONTH, month);
 		return cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 	} 
+	
+	private boolean duplicatedClinicName(String newName, String oldName) {
+		
+		newName = newName.toUpperCase();
+		
+		if(newName.equals(oldName))
+			return true;
+		
+		for (Clinic c: editableClinics) {
+			if (c.getName().equals(newName))
+				return false;
+		}
+		return true;
+	}
 	
 	private void refreshEditableClinics()
 	{
@@ -1055,6 +1070,8 @@ public class View {
 				textAreaInsertClinicDescription.setText(clinic.getDescription());
 				//formatted
 				//fill fields
+				//memorizzo il nome corrente della clinica
+				currentClinicName = clinic.getName();
 				
 			}
 		});
@@ -1260,6 +1277,7 @@ public class View {
 				//add new
 				if(isAddingNewClinic)
 				{
+					
 					db.insertClinic(c);
 					System.out.println("clinic added");
 				}
@@ -1272,6 +1290,7 @@ public class View {
 				
 				refreshEditableClinics();
 			}
+			
 		});
 		panelInsertClinicButton.add(btnEditClinicOk);
 
@@ -1306,10 +1325,19 @@ public class View {
 						) 
 				 okStatus = false;
 				
-				if (textFieldInsertClinicCAP.getText().length() != 5 || !textFieldInsertClinicCAP.getText().matches("[0-9]+"))
+				if (textFieldInsertClinicCAP.getText().length() != 5 || !textFieldInsertClinicCAP.getText().matches("[0-9]+")) {
+					okStatus=false;
 					textFieldInsertClinicCAP.setBackground(Color.red);
+				}
 				else
 					textFieldInsertClinicCAP.setBackground(Color.white);
+				
+				if (!duplicatedClinicName(textFieldInsertClinicName.getText(), currentClinicName)) {
+					okStatus=false;
+					textFieldInsertClinicName.setBackground(Color.red);
+				}
+				else
+					textFieldInsertClinicName.setBackground(Color.white);
 				
 				
 				btnEditClinicOk.setEnabled(okStatus);
