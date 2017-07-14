@@ -28,16 +28,16 @@ VALUES
  INSERT INTO clinic (name, company, street, cap, city, province, contractDate, description)
  VALUES
  ('GENETICA MEDICA', 'cp01', 'via alighieri 8', '02235', 'Verona', 'VR', '12/12/1990', ' '),
- ('ANGIOEDEMA EREDITARIO ED ALTRE FORME DI ANGIOEDEMA', 'cp01', 'via alighieri 8', '02235', 'Verona', 'VR', '12/12/1990',' '),
- ('IMMUNODEFICIENZE CONGENITE E ACQUISITE (DIVISIONALE)', 'cp01', 'via alighieri 8', '02235', 'Verona', 'VR', '12/12/1990',' '),
- ('PATOLOGIA RICOSTRUTTIVA DELLA MAMMELLA', 'cp01', 'via alighieri 8', '02235', 'Verona', 'VR', '12/12/1990',' '),
- ('NEOPLASIE POLMONARI E TRATTO GASTROENTERICO', 'cp02', 'via alighieri 8', '02235', 'Verona', 'VR', '12/12/1990',' '),
- ('NEOPLASIE VARIE', 'cp02', 'via alighieri 8', '02235', 'Verona', 'VR', '12/12/1990',' '),
- ('AMBULATORIO CELIACHIA', 'cp03', 'via alighieri 8', '02235', 'Verona', 'VR', '12/12/1990',' '),
- ('SPECIALISTICA ENDOCRINOLOGICA', 'cp01', 'via alighieri 8', '02235', 'Verona', 'VR', '12/12/1990',' '),
- ('MALATTIE INFETTIVE', 'cp02', 'via cipolla 31', '02235', 'Verona', 'VR', '12/12/1990',' '),
- ('OCULISTICA', 'cp01', 'via leonardo 12', '02235', 'Verona', 'VR', '13/05/1990', ' '),
- ('OCULISTICA', 'cp02', 'via mincio 6', '02235', 'Verona', 'VR', '13/05/1991', ' ');
+ ('ANGIOEDEMA EREDITARIO ED ALTRE FORME DI ANGIOEDEMA', 'cp01', 'via alighieri 8', '02235', 'Verona', 'VR', '12/12/1990','descrizoine_temp'),
+ ('IMMUNODEFICIENZE CONGENITE E ACQUISITE (DIVISIONALE)', 'cp01', 'via alighieri 8', '02235', 'Verona', 'VR', '12/12/1990','descrizoine_temp'),
+ ('PATOLOGIA RICOSTRUTTIVA DELLA MAMMELLA', 'cp01', 'via alighieri 8', '02235', 'Verona', 'VR', '12/12/1990','descrizoine_temp'),
+ ('NEOPLASIE POLMONARI E TRATTO GASTROENTERICO', 'cp02', 'via alighieri 8', '02235', 'Verona', 'VR', '12/12/1990','descrizoine_temp'),
+ ('NEOPLASIE VARIE', 'cp02', 'via alighieri 8', '02235', 'Verona', 'VR', '12/12/1990','descrizoine_temp'),
+ ('AMBULATORIO CELIACHIA', 'cp03', 'via alighieri 8', '02235', 'Verona', 'VR', '12/12/1990','descrizoine_temp'),
+ ('SPECIALISTICA ENDOCRINOLOGICA', 'cp01', 'via alighieri 8', '02235', 'Verona', 'VR', '12/12/1990','descrizoine_temp'),
+ ('MALATTIE INFETTIVE', 'cp02', 'via cipolla 31', '02235', 'Verona', 'VR', '12/12/1990','descrizoine_temp'),
+ ('OCULISTICA', 'cp01', 'via leonardo 12', '02235', 'Verona', 'VR', '13/05/1990', 'descrizoine_temp'),
+ ('OCULISTICA', 'cp02', 'via mincio 6', '02235', 'Verona', 'VR', '13/05/1991', 'descrizoine_temp');
 
 
 INSERT INTO service( clinic, company, name, regime )
