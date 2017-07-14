@@ -10,6 +10,8 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -48,6 +50,8 @@ public class Login extends JFrame {
 	private JList<String> listClinics; // forse da mettere locale
 	private JButton btnLoginPatient;
 	private JButton btnLoginEmployee;
+	private JLabel lblMaiuscActive;
+	private JPasswordField textField_password;
 
 	/**
 	 * Launch the application.
@@ -98,6 +102,7 @@ public class Login extends JFrame {
 					getRootPane().setDefaultButton(btnLoginEmployee);
 			}
 		});
+		
 		panelLogin.add(tabbedPaneLogin, BorderLayout.CENTER);
 
 		JPanel panelPatientLogin = new JPanel();
@@ -193,6 +198,7 @@ public class Login extends JFrame {
 		panelCenterEmployeeLogin.setBorder(new EmptyBorder(0, 20, 0, 0));
 		panelEmployeeLogin.add(panelCenterEmployeeLogin, BorderLayout.WEST);
 		GridBagLayout gbl_panelCenterEmployeeLogin = new GridBagLayout();
+		gbl_panelCenterEmployeeLogin.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0};
 		gbl_panelCenterEmployeeLogin.columnWidths = new int[] { 100, 0 };
 		gbl_panelCenterEmployeeLogin.rowHeights = new int[] { 0, 0, 0, 0 };
 		panelCenterEmployeeLogin.setLayout(gbl_panelCenterEmployeeLogin);
@@ -226,12 +232,27 @@ public class Login extends JFrame {
 		lblPassword.setHorizontalAlignment(SwingConstants.TRAILING);
 		lblPassword.setAlignmentX(Component.RIGHT_ALIGNMENT);
 
-		JPasswordField textField_password = new JPasswordField(16);
+		textField_password = new JPasswordField(16);
 		GridBagConstraints gbc_textField_passwd = new GridBagConstraints();
 		gbc_textField_passwd.insets = new Insets(0, 0, 5, 0);
 		gbc_textField_passwd.fill = GridBagConstraints.BOTH;
 		gbc_textField_passwd.gridx = 1;
 		gbc_textField_passwd.gridy = 1;
+		textField_password.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyTyped(KeyEvent e) {}
+			@Override
+			public void keyReleased(KeyEvent e) {}
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK))
+					lblMaiuscActive.setVisible(true);
+				else
+					lblMaiuscActive.setVisible(false);
+			}
+		});
+		
 		panelCenterEmployeeLogin.add(textField_password, gbc_textField_passwd);
 		btnLoginEmployee = new JButton("Login");
 
@@ -258,6 +279,16 @@ public class Login extends JFrame {
 				}
 			}
 		});
+		
+		lblMaiuscActive = new JLabel("MAIUSC ATTIVO");
+		lblMaiuscActive.setForeground(UIManager.getColor("TextField.selectionBackground"));
+		lblMaiuscActive.setVisible(false);
+		GridBagConstraints gbc_lblMaiuscActive = new GridBagConstraints();
+		gbc_lblMaiuscActive.fill = GridBagConstraints.VERTICAL;
+		gbc_lblMaiuscActive.insets = new Insets(0, 0, 5, 0);
+		gbc_lblMaiuscActive.gridx = 1;
+		gbc_lblMaiuscActive.gridy = 2;
+		panelCenterEmployeeLogin.add(lblMaiuscActive, gbc_lblMaiuscActive);
 
 		GridBagConstraints gbc_btnLoginEmployee = new GridBagConstraints();
 		gbc_btnLoginEmployee.gridx = 1;
@@ -312,6 +343,8 @@ public class Login extends JFrame {
 				String companyID = companiesList.get(comboBoxIndex)[0];
 				ArrayList<Clinic> clinics = db.getClinics(companyID);
 				listClinics.setModel(new AbstractListModel<String>() {
+					private static final long serialVersionUID = 1L;
+
 					@Override
 					public String getElementAt(int index) {
 						return clinics.get(index).getName();

@@ -68,8 +68,6 @@ public class View {
 	private JLabel lblWelcomePatient;
 	private ArrayList<Visit> patientVisits;
 
-	private final String company = "cp02";
-
 	private JComboBox<String> comboBoxSelectBookVisitMonth;
 	private JComboBox<String> comboBoxClinicVisitInsertion;
 	private JComboBox<String> comboBoxVisitsYear;
@@ -87,7 +85,6 @@ public class View {
 
 	private JComboBox<String> comboBoxSelectBookVisitType;
 	private JTextArea textAreaVisitResult;
-	private DefaultTableModel insertClinicModel;
 	private JButton btnInsertNewVisitResult;
 
 	private JComboBox<Integer> comboBoxSelectBookVisitDay;
@@ -219,7 +216,9 @@ public class View {
 		tableHistoryVisits = new JTable();
 		tableHistoryVisits.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		visitsHistoryModel = new DefaultTableModel(
-				new String[] { "N\u00B0", "Data", "Ora", "Tipo Visita", "Regime", "Urgenza" }, 0) {
+			new String[] { "N\u00B0", "Data", "Ora", "Tipo Visita", "Regime", "Urgenza", "Stato"}, 0) {
+			private static final long serialVersionUID = 5L;
+
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				return false;
@@ -232,7 +231,7 @@ public class View {
 		tableHistoryVisits.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent event) {
 				if (!event.getValueIsAdjusting()) {
-					System.out.println(tableHistoryVisits.getSelectedRow());
+					System.out.println("selezionata la riga: " + tableHistoryVisits.getSelectedRow());
 					visitIndex = tableHistoryVisits.getSelectedRow();
 					btnViewVisitsPatient.setEnabled(true);
 				}
@@ -250,8 +249,7 @@ public class View {
 		btnViewVisitsPatient.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Visit v = patientVisits.get(visitIndex);
-				txtpnVisitResultInfo
-						.setText(v.toHTML(Patient.getInstance().getName(), Patient.getInstance().getSurname()));
+				txtpnVisitResultInfo.setText(v.toHTML(Patient.getInstance().getName(), Patient.getInstance().getSurname()));
 				clpanelVisitPatient.next(panelVisitPatient);
 				// patientVisits
 			}
@@ -497,14 +495,13 @@ public class View {
 					v.setDate(new Date(sdf.parse(day + "/" + month + "/" + year).getTime()));
 				} catch (ParseException e1) {
 					e1.printStackTrace();
-				} // SIMONE MODIFICA QUI
+				} 
 				v.setPatient(Patient.getInstance().getFiscalcode());
 				v.setRegime(textFieldRegime.getText());
 				v.setUrgency(comboBoxSelectBookVisitUrgency.getSelectedItem().toString());
 				db.bookVisit(v);
 				updateBookingDays();
-				JOptionPane.showMessageDialog(null, "Prenotazione effettuta con successo", "Informazione",
-						JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Prenotazione effettuta con successo", "Informazione",JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 		btnBookVisit.setToolTipText("Clicca per prenotare");
@@ -527,6 +524,12 @@ public class View {
 				row.add(c.getServiceName());
 				row.add(c.getRegime());
 				row.add(c.getUrgency());
+				
+				if(c.getResult() != null)
+					row.add("Risultato disponibile");
+				else
+					row.add("In attesa del risultato");
+				
 				visitsHistoryModel.addRow(row);
 			}
 		}
@@ -579,7 +582,9 @@ public class View {
 		panelInfovisitInsertionNorth.add(comboBoxClinicVisitInsertion);
 
 		DefaultTableModel employeeInsertVisitModel = new DefaultTableModel(
-				new String[] { "N\u00B0", "Codice Fiscale", "Tipo visita", "Urgenza", "Ora" }, 0) {
+			new String[] { "N\u00B0", "Codice Fiscale", "Tipo visita", "Urgenza", "Ora" }, 0) {
+			private static final long serialVersionUID = 6L;
+
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				return false;
@@ -719,8 +724,10 @@ public class View {
 		tableUpdateClinics = new JTable();
 		tableUpdateClinics.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tableUpdateClinics.getTableHeader().setReorderingAllowed(false);
-		tableUpdateClinicsModel = new DefaultTableModel(new String[] { "Nome", "Via", "CAP", "Citta'", "Provincia" },
-				0) {
+		tableUpdateClinicsModel = new DefaultTableModel(new String[] { "Nome", "Via", "CAP", "Citta'", "Provincia" },0) {
+			
+			private static final long serialVersionUID = 3L;
+
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				return false;
@@ -1025,8 +1032,7 @@ public class View {
 						|| textAreaInsertClinicDescription.getText().isEmpty())
 					okStatus = false;
 
-				if (textFieldInsertClinicCAP.getText().length() != 5
-						|| !textFieldInsertClinicCAP.getText().matches("[0-9]+")) {
+				if (textFieldInsertClinicCAP.getText().length() > 0 && !textFieldInsertClinicCAP.getText().matches("[0-9]{5}")) {
 					okStatus = false;
 					textFieldInsertClinicCAP.setBackground(Color.red);
 				} else
@@ -1064,14 +1070,16 @@ public class View {
 		textFieldInsertClinicCity.getDocument().addDocumentListener(textFieldListener);
 		textFieldInsertClinicCAP.getDocument().addDocumentListener(textFieldListener);
 		textAreaInsertClinicDescription.getDocument().addDocumentListener(textFieldListener);
-
-		insertClinicModel = new DefaultTableModel(
+		
+		/*
+		 DefaultTableModel insertClinicModel = new DefaultTableModel(
 				new String[] { "Nome", "Via", "Paese", "CAP", "Provincia", "Data contratto", "" }, 0) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				return false;
 			}
 		};
+		*/
 
 		// fine panel inserisci clinica
 
@@ -1098,10 +1106,13 @@ public class View {
 		searchPatientTextField.setColumns(16);
 
 		DefaultTableModel employeeHistoryModel = new DefaultTableModel(
-				new String[] { "Data", "Ora", "Tipo visita", "Regime", "Urgenza" }, 0) {
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				return false;
+			new String[] { "Data", "Ora", "Tipo visita", "Regime", "Urgenza" }, 0) {
+				
+				private static final long serialVersionUID = 2L;
+
+				@Override
+				public boolean isCellEditable(int row, int column) {
+					return false;
 			}
 		};
 
@@ -1260,6 +1271,8 @@ public class View {
 				String companyID = companiesList.get(comboBoxIndex)[0];
 				ArrayList<Clinic> clinics = db.getClinics(companyID);
 				listClinics.setModel(new AbstractListModel<String>() {
+					private static final long serialVersionUID = 4L;
+
 					@Override
 					public String getElementAt(int index) {
 						return clinics.get(index).getName();
