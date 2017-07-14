@@ -77,6 +77,7 @@ public class Login extends JFrame {
 	 */
 	public Login() throws ClassNotFoundException, SQLException {
 
+		Database db = Database.getInstance();
 		setTitle("HEALTHCARE MANAGEMENT SYSTEM - Login");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(View.class.getResource("/img/healthcare-icon.png")));
 		setSize(700, 600);
@@ -165,11 +166,12 @@ public class Login extends JFrame {
 				String PIN = new String(passwordFieldPIN.getPassword());
 
 				// CHECK LOGIN
-				ResultSet rsPatient = Database.getInstance().checkPatient(fiscalCode, PIN)
-				if (rsPatient != null) {
+
+				ResultSet patientInfo = Database.getInstance().checkPatient(fiscalCode, PIN);
+				if (patientInfo != null) {
 
 					try {
-						new Patient(rsPatient);
+						new Patient(patientInfo);
 						dispose(); 																														// valutare un possibile set visible false
 					} catch (ClassNotFoundException | SQLException e1) {
 						// TODO Auto-generated catch block
@@ -261,15 +263,12 @@ public class Login extends JFrame {
 				String password = new String(textField_password.getPassword());
 
 				// CHECK LOGIN
-				if (db.checkEmployee(username, password)) {
+				ResultSet employeeInfo = Database.getInstance().checkEmployee(username, password);
+				
+				if (employeeInfo != null) {
 
-					try {
-						new View("Employee", username);
-						dispose();																												 // valutare un possibile set visible false
-					} catch (ClassNotFoundException | SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+					new Employee(employeeInfo);
+					dispose();																												 // valutare un possibile set visible false
 
 				} else {
 					JOptionPane.showMessageDialog(null, "Nome utente o password errati o mancanti", "Errore accesso",
