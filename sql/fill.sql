@@ -42,15 +42,15 @@ VALUES
 
 INSERT INTO service( clinic, company, name, regime )
 VALUES
-('GENETICA MEDICA', 'cp01', 'visita oncologica', 'privata'),
+('GENETICA MEDICA', 'cp01', 'visita oncologica', 'rimborsata dal sistema sanitario'),
 ('GENETICA MEDICA', 'cp01', 'visita geriatrica', 'privata'),
-('ANGIOEDEMA EREDITARIO ED ALTRE FORME DI ANGIOEDEMA', 'cp01', 'visita angiodema', 'privata'),
+('ANGIOEDEMA EREDITARIO ED ALTRE FORME DI ANGIOEDEMA', 'cp01', 'visita angiodema', 'rimborsata dal sistema sanitario'),
 ('IMMUNODEFICIENZE CONGENITE E ACQUISITE (DIVISIONALE)', 'cp01', 'visita polmonare', 'privata'),
 ('PATOLOGIA RICOSTRUTTIVA DELLA MAMMELLA', 'cp01', 'ricostruzione tessuti', 'privata'),
 ('NEOPLASIE POLMONARI E TRATTO GASTROENTERICO', 'cp02', 'visita gastroenterica', 'privata'),
 ('NEOPLASIE POLMONARI E TRATTO GASTROENTERICO', 'cp02', 'visita polmonare', 'privata'),
 ('OCULISTICA', 'cp01', 'visita oculistica fotorecettori', 'privata'),
-('OCULISTICA', 'cp02', 'visita oculistica generica', 'privata'),
+('OCULISTICA', 'cp02', 'visita oculistica generica', 'rimborsata dal sistema sanitario'),
 ('NEOPLASIE POLMONARI E TRATTO GASTROENTERICO', 'cp02', 'visita cervello','rimborsata dal sistema sanitario');
 
 
@@ -64,28 +64,28 @@ VALUES
 ('CMBCRL74R10L781B', 'JOBIT0005', 'ingegneria', 'carlo', 'combi', 'oculista', 'OCULISTICA', 'cp01'),
 ('CSBCRL74R10L781B', 'JOBIT0006', 'pelo', 'carolo', 'casabassa', 'oculista', 'OCULISTICA', 'cp01');
 
-INSERT INTO visit (patient, clinic, company, serviceName, doctor, date, hour, urgency, regime, result)
+INSERT INTO visit (patient, clinic, company, serviceName, doctor, date, hour, urgency, result)
 VALUES
-('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'visita oncologica', 'RFCVCV85A42E952E', '01/01/2017', 10, 'bassa', 'privata', 'Nessuna prescrizione'),
-('ZTHQCL68S66H117Q','ANGIOEDEMA EREDITARIO ED ALTRE FORME DI ANGIOEDEMA', 'cp01', 'visita angiodema', 'RFCVCV85A42E952E', '05/05/2017', 8, 'alta', 'rimborsata dal sistema sanitario', 'prescrizione cetirizina'),
-('VBDDFU83H26L215K','GENETICA MEDICA', 'cp01', 'visita geriatrica', 'NDRMSN85A42E952E', '05/05/2017', 15, 'alta', 'rimborsata dal sistema sanitario', 'prescrizione esercizi fisici'),
-('VBDDFU83H26L215K','IMMUNODEFICIENZE CONGENITE E ACQUISITE (DIVISIONALE)', 'cp01', 'visita polmonare', 'NDRMSN85A42E952E', '13/07/2017', 13, 'media', 'rimborsata dal sistema sanitario', 'Nessuna prescrizione'),
-('VBDDFU83H26L215K','IMMUNODEFICIENZE CONGENITE E ACQUISITE (DIVISIONALE)', 'cp01', 'visita polmonare', 'NDRMSN85A42E952E', '13/07/2015', 11, 'media', 'rimborsata dal sistema sanitario', 'Nessuna prescrizione'),
-('VBDDFU83H26L215K','IMMUNODEFICIENZE CONGENITE E ACQUISITE (DIVISIONALE)', 'cp01', 'visita polmonare', 'NDRMSN85A42E952E', '13/07/2012', 9, 'bassa', 'rimborsata dal sistema sanitario', 'Nessuna prescrizione'),
-('TMMDRN87R08G018F','OCULISTICA', 'cp01', 'visita oculistica fotorecettori','CMBCRL74R10L781B', '11/07/2017', 11, 'alta', 'privata', NULL),
-('CSTKRM90T12G605P','OCULISTICA', 'cp01', 'visita oculistica fotorecettori','CMBCRL74R10L781B', '11/07/2017', 8, 'alta', 'privata', NULL),
-('GRRSMN54C28A396D','OCULISTICA', 'cp01', 'visita oculistica fotorecettori','CMBCRL74R10L781B', '11/07/2017', 12, 'alta', 'privata', NULL),
-('DGPYGG88H63E398B','OCULISTICA', 'cp01', 'visita oculistica fotorecettori','CSBCRL74R10L781B', '12/01/2016', 9, 'media', 'rimborsata dal sistema sanitario', 'prescrizione collirio'),
-('DGPYGG88H63E398B','OCULISTICA', 'cp01', 'visita oculistica fotorecettori','CSBCRL74R10L781B', '13/06/2016', 10, 'media', 'rimborsata dal sistema sanitario', 'prescrizione collirio'),
-('DGPYGG88H63E398B','OCULISTICA', 'cp01', 'visita oculistica fotorecettori','CSBCRL74R10L781B', '14/01/2017', 15, 'media', 'privata', NULL),
-('YZJDFH93S68M073Z','OCULISTICA', 'cp02', 'visita oculistica generica','CSBCRL74R10L781B', '15/06/2017', 12, 'media', 'privata', NULL),
-('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'visita oncologica', 'RFCVCV85A42E952E', '01/03/2017', 8, 'bassa', 'privata', NULL),
-('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'visita oncologica', 'RFCVCV85A42E952E', '01/03/2017', 9, 'bassa', 'privata', NULL),
-('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'visita oncologica', 'RFCVCV85A42E952E', '01/03/2017', 10, 'bassa', 'privata', NULL),
-('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'visita oncologica', 'RFCVCV85A42E952E', '01/03/2017', 11, 'bassa', 'privata', NULL),
-('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'visita oncologica', 'RFCVCV85A42E952E', '01/03/2017', 12, 'bassa', 'privata', NULL),
-('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'visita oncologica', 'RFCVCV85A42E952E', '01/03/2017', 13, 'bassa', 'privata', NULL),
-('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'visita oncologica', 'RFCVCV85A42E952E', '01/03/2017', 14, 'bassa', 'privata', NULL),
-('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'visita oncologica', 'RFCVCV85A42E952E', '01/03/2017', 15, 'bassa', 'privata', NULL);
+('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'visita oncologica', 'RFCVCV85A42E952E', '01/01/2017', 10, 'bassa', 'Nessuna prescrizione'),
+('ZTHQCL68S66H117Q','ANGIOEDEMA EREDITARIO ED ALTRE FORME DI ANGIOEDEMA', 'cp01', 'visita angiodema', 'RFCVCV85A42E952E', '05/05/2017', 8, 'alta', 'prescrizione cetirizina'),
+('VBDDFU83H26L215K','GENETICA MEDICA', 'cp01', 'visita geriatrica', 'NDRMSN85A42E952E', '05/05/2017', 15, 'alta', 'prescrizione esercizi fisici'),
+('VBDDFU83H26L215K','IMMUNODEFICIENZE CONGENITE E ACQUISITE (DIVISIONALE)', 'cp01', 'visita polmonare', 'NDRMSN85A42E952E', '13/07/2017', 13, 'media', 'Nessuna prescrizione'),
+('VBDDFU83H26L215K','IMMUNODEFICIENZE CONGENITE E ACQUISITE (DIVISIONALE)', 'cp01', 'visita polmonare', 'NDRMSN85A42E952E', '13/07/2015', 11, 'media', 'Nessuna prescrizione'),
+('VBDDFU83H26L215K','IMMUNODEFICIENZE CONGENITE E ACQUISITE (DIVISIONALE)', 'cp01', 'visita polmonare', 'NDRMSN85A42E952E', '13/07/2012', 9, 'bassa', 'Nessuna prescrizione'),
+('TMMDRN87R08G018F','OCULISTICA', 'cp01', 'visita oculistica fotorecettori','CMBCRL74R10L781B', '11/07/2017', 11, 'alta', NULL),
+('CSTKRM90T12G605P','OCULISTICA', 'cp01', 'visita oculistica fotorecettori','CMBCRL74R10L781B', '11/07/2017', 8, 'alta', NULL),
+('GRRSMN54C28A396D','OCULISTICA', 'cp01', 'visita oculistica fotorecettori','CMBCRL74R10L781B', '11/07/2017', 12, 'alta', NULL),
+('DGPYGG88H63E398B','OCULISTICA', 'cp01', 'visita oculistica fotorecettori','CSBCRL74R10L781B', '12/01/2016', 9, 'media', 'prescrizione collirio'),
+('DGPYGG88H63E398B','OCULISTICA', 'cp01', 'visita oculistica fotorecettori','CSBCRL74R10L781B', '13/06/2016', 10, 'media', 'prescrizione collirio'),
+('DGPYGG88H63E398B','OCULISTICA', 'cp01', 'visita oculistica fotorecettori','CSBCRL74R10L781B', '14/01/2017', 15, 'media', NULL),
+('YZJDFH93S68M073Z','OCULISTICA', 'cp02', 'visita oculistica generica','CSBCRL74R10L781B', '15/06/2017', 12, 'media', NULL),
+('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'visita oncologica', 'RFCVCV85A42E952E', '01/03/2017', 8, 'bassa', NULL),
+('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'visita oncologica', 'RFCVCV85A42E952E', '01/03/2017', 9, 'bassa', NULL),
+('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'visita oncologica', 'RFCVCV85A42E952E', '01/03/2017', 10, 'bassa', NULL),
+('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'visita oncologica', 'RFCVCV85A42E952E', '01/03/2017', 11, 'bassa', NULL),
+('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'visita oncologica', 'RFCVCV85A42E952E', '01/03/2017', 12, 'bassa', NULL),
+('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'visita oncologica', 'RFCVCV85A42E952E', '01/03/2017', 13, 'bassa', NULL),
+('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'visita oncologica', 'RFCVCV85A42E952E', '01/03/2017', 14, 'bassa', NULL),
+('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'visita oncologica', 'RFCVCV85A42E952E', '01/03/2017', 15, 'bassa', NULL);
 
 

@@ -56,7 +56,7 @@ create table service (
 	clinic VARCHAR,
 	company varchar,
 	name varchar,
-	regime varchar NOT NULL,
+    regime varchar check(regime in('privata', 'rimborsata dal sistema sanitario','rimborsata da assicurazioni private')),
 	FOREIGN KEY(clinic, company) REFERENCES clinic(name, company),
 	PRIMARY KEY(clinic, company, name)
 );
@@ -70,7 +70,6 @@ create table visit(
     date date,
 	hour smallint check ( hour >= 8 AND hour < 16 ),
     urgency varchar check(urgency in('bassa', 'media', 'alta')),
-    regime varchar check(regime in('privata', 'rimborsata dal sistema sanitario','rimborsata da assicurazioni private')),
     result text,
 	FOREIGN KEY(clinic, company, serviceName) REFERENCES service(clinic, company, name),
     primary key(patient, clinic, company, serviceName, date, hour)
