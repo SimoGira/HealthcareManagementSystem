@@ -170,13 +170,8 @@ public class Login extends JFrame {
 				ResultSet patientInfo = Database.getInstance().checkPatient(fiscalCode, PIN);
 				if (patientInfo != null) {
 
-					try {
-						new Patient(patientInfo);
-						dispose(); 																														// valutare un possibile set visible false
-					} catch (ClassNotFoundException | SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+					new Patient(patientInfo);
+					dispose(); 																														// valutare un possibile set visible false
 				} else
 					JOptionPane.showMessageDialog(null, "Codice fiscale o PIN errati o mancanti", "Errore accesso",
 							JOptionPane.WARNING_MESSAGE);
