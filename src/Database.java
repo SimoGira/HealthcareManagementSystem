@@ -14,11 +14,11 @@ public class Database {
 
 	private static Database instance = null;
 	
-	private Database() throws ClassNotFoundException, SQLException{
+	private Database() {
 		setParameters();
 	}
 	
-	public static Database getInstance() throws ClassNotFoundException, SQLException
+	public static Database getInstance() 
 	{
 		if ( instance == null )
 			instance = new Database();
@@ -26,7 +26,7 @@ public class Database {
 	} 
 	 
 
-	private void setParameters() throws ClassNotFoundException {
+	private void setParameters()  {
 		// TODO: replace the below code opening a configuration file and getting the credentials
 		url = "jdbc:postgresql://localhost/dbhms";
 		user = "postgres";
@@ -37,7 +37,12 @@ public class Database {
 			user = "simonegirardi";
 		}
 
-		Class.forName("org.postgresql.Driver");
+		try {
+			Class.forName("org.postgresql.Driver");
+		}
+		catch (ClassNotFoundException e) { 
+			e.printStackTrace();
+		}
 	}
 
 	public void insertClinic(Clinic clinc)
