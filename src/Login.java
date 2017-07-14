@@ -41,9 +41,6 @@ import javax.swing.event.ListSelectionListener;
 
 public class Login extends JFrame {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1234L;
 	private CardLayout clLogin;
 	private ArrayList<String[]> companiesList; // forse da mettere locale
@@ -169,6 +166,7 @@ public class Login extends JFrame {
 				String PIN = new String(passwordFieldPIN.getPassword());
 
 				// CHECK LOGIN
+
 				ResultSet patientInfo = Database.getInstance().checkPatient(fiscalCode, PIN);
 				if (patientInfo != null) {
 
@@ -269,13 +267,8 @@ public class Login extends JFrame {
 				
 				if (employeeInfo != null) {
 
-					try {
-						new Employee(employeeInfo);
-						dispose();																												 // valutare un possibile set visible false
-					} catch (ClassNotFoundException | SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+					new Employee(employeeInfo);
+					dispose();																												 // valutare un possibile set visible false
 
 				} else {
 					JOptionPane.showMessageDialog(null, "Nome utente o password errati o mancanti", "Errore accesso",
