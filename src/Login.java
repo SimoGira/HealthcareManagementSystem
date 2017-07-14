@@ -15,6 +15,7 @@ import java.awt.event.KeyListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Map;
 
 import javax.swing.AbstractListModel;
 import javax.swing.ImageIcon;
@@ -167,7 +168,7 @@ public class Login extends JFrame {
 
 				// CHECK LOGIN
 
-				ResultSet patientInfo = Database.getInstance().checkPatient(fiscalCode, PIN);
+				Map<String, Object> patientInfo = Database.getInstance().checkPatient(fiscalCode, PIN);
 				if (patientInfo != null) {
 
 					new Patient(patientInfo);
@@ -258,7 +259,7 @@ public class Login extends JFrame {
 				String password = new String(textField_password.getPassword());
 
 				// CHECK LOGIN
-				ResultSet employeeInfo = Database.getInstance().checkEmployee(username, password);
+				Map<String, Object> employeeInfo = Database.getInstance().checkEmployee(username, password);
 				
 				if (employeeInfo != null) {
 

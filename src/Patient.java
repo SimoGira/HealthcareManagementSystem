@@ -93,10 +93,7 @@ public class Patient extends JFrame{
 			email=rs.getString("email");
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
-		
-		
-		
+		}		
 	}
 
 	public String getFiscalcode() {

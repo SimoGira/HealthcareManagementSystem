@@ -20,6 +20,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Vector;
  
 import javax.swing.AbstractListModel;
@@ -74,9 +75,9 @@ public class Employee extends JFrame {
 	protected String currentClinicName;
 	protected ArrayList<Clinic> editableClinics;
 	
-	public Employee(ResultSet rs) { 
+	public Employee(Map<String, Object> map) { 
 
-		setParamenters(rs);
+		setParamenters(map);
 		setTitle("HEALTHCARE MANAGEMENT SYSTEM");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(View.class.getResource("/img/healthcare-icon.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -88,7 +89,6 @@ public class Employee extends JFrame {
 		setSize(700, 600);
 		setLocationRelativeTo(null);
 		setVisible(true);
-
 	}
 
 
@@ -138,19 +138,13 @@ public class Employee extends JFrame {
 		}
 	}
 
-	private void setParamenters(ResultSet rs) {
-		try {
-			rs.next();
-			//fiscalcode = rs.getString("fiscalcode"); 
-			name = rs.getString("name");
-			//clinic = rs.getString("clinic"); 
-			company = rs.getString("company");
-			//job = rs.getString("job");
-			surname = rs.getString("surname"); 
-		}
-		catch (SQLException e) { 
-			e.printStackTrace();
-		}
+	private void setParamenters(Map<String, Object> map) {
+		//fiscalcode = rs.getString("fiscalcode"); 
+		name = (String) map.get("name");
+		//clinic = rs.getString("clinic"); 
+		company = (String) map.get("company");
+		//job = rs.getString("job");
+		surname = (String) map.get("surname");
 	}
 
 	// ----------------------------------------------- EMPLOYEE SECTION -------------------------------------------------------------------
