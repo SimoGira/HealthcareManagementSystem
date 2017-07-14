@@ -106,10 +106,8 @@ public class Database {
 		try(Connection con = DriverManager.getConnection(this.url, this.user, this.password))
 		{
 
-			System.out.println("query");
 			String query = "SELECT * FROM employee WHERE employeeCode = ? AND password = ?";
 			try(PreparedStatement pst = con.prepareStatement(query)){
-				System.out.println("prepare statement");
 				pst.clearParameters();
 				pst.setString(1, employeeCode); 
 				pst.setString(2, password); 
