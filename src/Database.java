@@ -111,7 +111,7 @@ public class Database {
 		}
 	}
 
-	public boolean checkEmployee(String employeeCode, String password)
+	public boolean checkEmployee(Employee e, String employeeCode, String password)
 	{
 		try(Connection con = DriverManager.getConnection(this.url, this.user, this.password))
 		{
@@ -121,8 +121,7 @@ public class Database {
 				pst.clearParameters();
 				pst.setString(1, employeeCode); 
 				pst.setString(2, password); 
-				ResultSet rs = pst.executeQuery(); 
-				Employee e = Employee.getInstance();
+				ResultSet rs = pst.executeQuery();  
 				while(rs.next())
 				{ 
 					e.setFiscalcode(rs.getString("fiscalcode")); 
@@ -145,7 +144,7 @@ public class Database {
 	}
 
 
-	public boolean checkPatient(String fiscalCode, String pin)
+	public boolean checkPatient(Patient p, String fiscalCode, String pin)
 	{
 		try(Connection con = DriverManager.getConnection(url, user, password))
 		{
@@ -155,8 +154,7 @@ public class Database {
 				pst.setString(1, fiscalCode); 
 				pst.setString(2, pin); 
 				ResultSet rs = pst.executeQuery(); 
-
-				Patient p = Patient.getInstance();
+ 
 				while(rs.next())
 				{
 					p.setFiscalcode(rs.getString("fiscalcode"));
