@@ -12,9 +12,19 @@ public class Database {
 	private String user;
 	private String password;
 
-	public Database() throws ClassNotFoundException, SQLException{
+	private static Database instance = null;
+	
+	private Database() throws ClassNotFoundException, SQLException{
 		setParameters();
 	}
+	
+	public static Database getInstance() throws ClassNotFoundException, SQLException
+	{
+		if ( instance == null )
+			instance = new Database();
+		return instance;
+	} 
+	 
 
 	private void setParameters() throws ClassNotFoundException {
 		// TODO: replace the below code opening a configuration file and getting the credentials
