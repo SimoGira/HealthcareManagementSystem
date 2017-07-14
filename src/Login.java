@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -79,7 +80,7 @@ public class Login extends JFrame {
 	 */
 	public Login() throws ClassNotFoundException, SQLException {
 
-		Database db = new Database();
+		Database db = Database.getInstance();
 		setTitle("HEALTHCARE MANAGEMENT SYSTEM - Login");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(View.class.getResource("/img/healthcare-icon.png")));
 		setSize(700, 600);
@@ -168,10 +169,11 @@ public class Login extends JFrame {
 				String PIN = new String(passwordFieldPIN.getPassword());
 
 				// CHECK LOGIN
-				if (db.checkPatient(fiscalCode, PIN)) {
+				ResultSet patientInfo = Database.getInstance().checkPatient(fiscalCode, PIN);
+				if (patientInfo != null) {
 
 					try {
-						new View("Patient", fiscalCode);
+						new Patient(patientInfo);
 						dispose(); 																														// valutare un possibile set visible false
 					} catch (ClassNotFoundException | SQLException e1) {
 						// TODO Auto-generated catch block
@@ -263,10 +265,12 @@ public class Login extends JFrame {
 				String password = new String(textField_password.getPassword());
 
 				// CHECK LOGIN
-				if (db.checkEmployee(username, password)) {
+				ResultSet employeeInfo = Database.getInstance().checkEmployee(username, password);
+				
+				if (employeeInfo != null) {
 
 					try {
-						new View("Employee", username);
+						new Employee(employeeInfo);
 						dispose();																												 // valutare un possibile set visible false
 					} catch (ClassNotFoundException | SQLException e1) {
 						// TODO Auto-generated catch block
