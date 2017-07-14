@@ -111,6 +111,27 @@ public class Database {
 		}
 	}
 
+	public ResultSet checkEmployee(String employeeCode, String password)
+	{
+		try(Connection con = DriverManager.getConnection(this.url, this.user, this.password))
+		{
+
+			String query = "SELECT * FROM employee WHERE employeeCode = ? AND password = ?";
+			try(PreparedStatement pst = con.prepareStatement(query)){
+				pst.clearParameters();
+				pst.setString(1, employeeCode); 
+				pst.setString(2, password); 
+				return pst.executeQuery();  
+			} 
+
+		} catch (SQLException e1) {
+			System.out.println( "Errore durante connessione al database: " + e1.getMessage() );
+		}
+
+		return null;
+	}
+	
+	/*
 	public boolean checkEmployee(Employee e, String employeeCode, String password)
 	{
 		try(Connection con = DriverManager.getConnection(this.url, this.user, this.password))
@@ -142,8 +163,28 @@ public class Database {
 
 		return false;
 	}
+	*/
 
+	public ResultSet checkPatient(String fiscalCode, String pin)
+	{
+		try(Connection con = DriverManager.getConnection(url, user, password))
+		{
+			String query = "SELECT * FROM patient WHERE fiscalCode = ? AND pin = ?";
+			try(PreparedStatement pst = con.prepareStatement(query)){
+				pst.clearParameters();
+				pst.setString(1, fiscalCode); 
+				pst.setString(2, pin); 
+				return pst.executeQuery(); 
+			}
 
+		} catch (SQLException e1) {
+			System.out.println( "Errore durante connessione al database: " + e1.getMessage() );
+		}
+
+		return null;
+	}
+	
+	/*
 	public boolean checkPatient(Patient p, String fiscalCode, String pin)
 	{
 		try(Connection con = DriverManager.getConnection(url, user, password))
@@ -176,6 +217,7 @@ public class Database {
 
 		return false;
 	}
+	*/
 	
 	public void bookVisit(Visit v)
 	{
