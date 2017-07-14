@@ -79,7 +79,7 @@ public class Login extends JFrame {
 
 		Database db = Database.getInstance();
 		setTitle("HEALTHCARE MANAGEMENT SYSTEM - Login");
-		setIconImage(Toolkit.getDefaultToolkit().getImage(View.class.getResource("/img/healthcare-icon.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/img/healthcare-icon.png")));
 		setSize(700, 600);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -180,7 +180,7 @@ public class Login extends JFrame {
 
 		JLabel lblBackGroundImageMainPage = new JLabel();
 		lblBackGroundImageMainPage.setHorizontalAlignment(SwingConstants.CENTER);
-		lblBackGroundImageMainPage.setIcon(new ImageIcon(View.class.getResource("/img/healthcare-icon.png")));
+		lblBackGroundImageMainPage.setIcon(new ImageIcon(Login.class.getResource("/img/healthcare-icon.png")));
 		panelPatientLogin.add(lblBackGroundImageMainPage, BorderLayout.CENTER);
 
 		// ----------------- FINE PATIENT ------------------------------------
@@ -289,7 +289,7 @@ public class Login extends JFrame {
 
 		JLabel label = new JLabel();
 		label.setHorizontalAlignment(SwingConstants.CENTER);
-		label.setIcon(new ImageIcon(View.class.getResource("/img/healthcare-icon.png")));
+		label.setIcon(new ImageIcon(Login.class.getResource("/img/healthcare-icon.png")));
 		panelEmployeeLogin.add(label, BorderLayout.CENTER);
 
 		JPanel panelSouthLogin = new JPanel();

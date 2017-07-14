@@ -78,7 +78,7 @@ public class Employee extends JFrame {
 
 		setParamenters(rs);
 		setTitle("HEALTHCARE MANAGEMENT SYSTEM");
-		setIconImage(Toolkit.getDefaultToolkit().getImage(View.class.getResource("/img/healthcare-icon.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Employee.class.getResource("/img/healthcare-icon.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//getContentPane().setLayout(new CardLayout(0, 0));                                                                                                // card layout inutile
 		//this.clfrmHealhcareManagementSystem = (CardLayout) frmHealthcareManagementSystem.getContentPane().getLayout();

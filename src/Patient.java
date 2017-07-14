@@ -69,7 +69,7 @@ public class Patient extends JFrame{
 	public Patient(ResultSet rs) {
 		setParamenters(rs);
 		setTitle("HEALTHCARE MANAGEMENT SYSTEM");
-		setIconImage(Toolkit.getDefaultToolkit().getImage(View.class.getResource("/img/healthcare-icon.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Patient.class.getResource("/img/healthcare-icon.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		initializeView();
