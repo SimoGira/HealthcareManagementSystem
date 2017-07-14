@@ -488,4 +488,25 @@ public class Database {
 
 		return null;
 	}
+
+	public String getPatientEmail(String fiscalCode) {
+		try(Connection con = DriverManager.getConnection(url, user, password))
+		{
+			String query = "SELECT email FROM patient WHERE fiscalcode = ?";
+			try(PreparedStatement pst = con.prepareStatement(query)){
+				pst.clearParameters();
+				pst.setString(1, fiscalCode); 
+				ResultSet rs = pst.executeQuery();
+				if(rs.next()){
+					return rs.getString("email");
+				}
+				return null;
+			} 
+
+		} catch (SQLException e1) {
+			System.out.println( "Errore durante connessione al database: " + e1.getMessage() );
+		}
+
+		return null;
+	}
 }

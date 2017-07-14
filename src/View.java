@@ -616,7 +616,6 @@ public class View {
 					} else {
 						int i = 1;
 						for (Visit c : visits) {
-							System.out.println("element: i");
 							Vector<Object> vector = new Vector<Object>();
 							vector.add(i++);
 							vector.add(c.getPatient());
@@ -692,11 +691,16 @@ public class View {
 				int selectedIndex = tableVisitsFound.getSelectedRow();
 				visits.get(selectedIndex).setResult(textAreaVisitResult.getText());
 				db.updateVisitResult(visits.get(selectedIndex));
-
-				btnFindVisits.doClick();
+				String email = db.getPatientEmail((String) tableVisitsFound.getValueAt(selectedIndex, 1));
+				
 				textAreaVisitResult.setText(null);
-				JOptionPane.showMessageDialog(null, "Il risultato della vista è stato inserito correttamente",
-						"Informazione", JOptionPane.INFORMATION_MESSAGE);
+				
+				if(email != null)
+					JOptionPane.showMessageDialog(null, "Il risultato della vista è stato inserito correttamente.\nUna mail di notifica e' stata inviata all'indirizzo: " + email,"Informazione", JOptionPane.INFORMATION_MESSAGE);
+				else
+					JOptionPane.showMessageDialog(null, "Il risultato della vista è stato inserito correttamente.","Informazione", JOptionPane.INFORMATION_MESSAGE);
+				
+				btnFindVisits.doClick();
 			}
 		});
 
