@@ -5,7 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class Database {
 	private String url;
@@ -116,7 +118,7 @@ public class Database {
 		}
 	}
 
-	public ResultSet checkEmployee(String employeeCode, String password)
+	public Map<String, Object> checkEmployee(String employeeCode, String password)
 	{
 		try(Connection con = DriverManager.getConnection(this.url, this.user, this.password))
 		{
@@ -126,7 +128,20 @@ public class Database {
 				pst.clearParameters();
 				pst.setString(1, employeeCode); 
 				pst.setString(2, password); 
-				return pst.executeQuery();  
+				Map<String, Object> m = new HashMap<String, Object>();
+				
+				ResultSet rs = pst.executeQuery(); 
+				rs.next();
+				m.put("fiscalCode", rs.getString("fiscalcode"));
+				m.put("name", rs.getString("name"));
+				m.put("surname", rs.getString("surname"));
+				m.put("clinic", rs.getString("clinic"));
+				m.put("company", rs.getString("company"));
+				m.put("job", rs.getString("job"));
+				    
+				return m;
+			
+				
 			} 
 
 		} catch (SQLException e1) {
@@ -170,7 +185,7 @@ public class Database {
 	}
 	*/
 
-	public ResultSet checkPatient(String fiscalCode, String pin)
+	public Map<String, Object> checkPatient(String fiscalCode, String pin)
 	{
 		try(Connection con = DriverManager.getConnection(url, user, password))
 		{
@@ -179,7 +194,22 @@ public class Database {
 				pst.clearParameters();
 				pst.setString(1, fiscalCode); 
 				pst.setString(2, pin); 
-				return pst.executeQuery(); 
+				
+				Map<String, Object> m = new HashMap<String, Object>();
+				
+				ResultSet rs = pst.executeQuery(); 
+				rs.next();
+				m.put("fiscalCode", rs.getString("fiscalcode"));
+				m.put("healthcarecompany", rs.getString("healthcarecompany")); 
+				m.put("name", rs.getString("name"));
+				m.put("surname", rs.getString("surname"));
+				m.put("birthdate", rs.getDate("birthdate"));
+				m.put("birthplace", rs.getString("birthplace"));
+				m.put("province", rs.getString("province")); 
+				m.put("email", rs.getString("email"));  
+				
+				return m;
+				
 			}
 
 		} catch (SQLException e1) {
