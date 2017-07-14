@@ -639,6 +639,7 @@ public class View {
 		tableVisitsFound.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tableVisitsFound.setModel(employeeInsertVisitModel);
 		tableVisitsFound.getTableHeader().setReorderingAllowed(false);
+		tableVisitsFound.getColumnModel().getColumn(0).setPreferredWidth(25);
 		tableVisitsFound.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent event) {
 				if (!event.getValueIsAdjusting()) {
@@ -728,7 +729,7 @@ public class View {
 		tableUpdateClinics = new JTable();
 		tableUpdateClinics.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tableUpdateClinics.getTableHeader().setReorderingAllowed(false);
-		tableUpdateClinicsModel = new DefaultTableModel(new String[] { "Nome", "Via", "CAP", "Citta'", "Provincia" },0) {
+		tableUpdateClinicsModel = new DefaultTableModel(new String[] {"N\u00B0", "Nome", "Via", "CAP", "Citta'", "Provincia" },0) {
 			
 			private static final long serialVersionUID = 3L;
 
@@ -738,6 +739,7 @@ public class View {
 			}
 		};
 		tableUpdateClinics.setModel(tableUpdateClinicsModel);
+		tableUpdateClinics.getColumnModel().getColumn(0).setPreferredWidth(25);
 		tableUpdateClinics.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent event) {
 				if (!event.getValueIsAdjusting() && !panelInsertClinic.isVisible()) {
@@ -1075,16 +1077,6 @@ public class View {
 		textFieldInsertClinicCAP.getDocument().addDocumentListener(textFieldListener);
 		textAreaInsertClinicDescription.getDocument().addDocumentListener(textFieldListener);
 		
-		/*
-		 DefaultTableModel insertClinicModel = new DefaultTableModel(
-				new String[] { "Nome", "Via", "Paese", "CAP", "Provincia", "Data contratto", "" }, 0) {
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				return false;
-			}
-		};
-		*/
-
 		// fine panel inserisci clinica
 
 		// INIZIO panel inserisci visit result
@@ -1110,7 +1102,7 @@ public class View {
 		searchPatientTextField.setColumns(16);
 
 		DefaultTableModel employeeHistoryModel = new DefaultTableModel(
-			new String[] { "Data", "Ora", "Tipo visita", "Regime", "Urgenza" }, 0) {
+			new String[] {"N\u00B0", "Data", "Ora", "Tipo visita", "Regime", "Urgenza" }, 0) {
 				
 				private static final long serialVersionUID = 2L;
 
@@ -1128,11 +1120,13 @@ public class View {
 				while (employeeHistoryModel.getRowCount() > 0)
 					employeeHistoryModel.removeRow(0);
 
+				int i = 1;
 				visits = db.getVisitsHistory(searchPatientTextField.getText());
 				if (visits != null) {
 					for (Visit c : visits) {
 						Vector<Object> vector = new Vector<Object>();
 
+						vector.add(i++);
 						vector.add(c.getDate().toString());
 						vector.add(c.getHour());
 						vector.add(c.getServiceName());
@@ -1151,6 +1145,7 @@ public class View {
 		tableVisitsPatientResults = new JTable();
 		tableVisitsPatientResults.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tableVisitsPatientResults.setModel(employeeHistoryModel);
+		tableVisitsPatientResults.getColumnModel().getColumn(0).setPreferredWidth(25);
 		tableVisitsPatientResults.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent event) {
 				if (!event.getValueIsAdjusting()) {
@@ -1323,11 +1318,13 @@ public class View {
 		// INSERISCI AMBULATORIO___________________
 		editableClinics = db.getClinics(Employee.getInstance().getCompany());
 
+		int i = 1;
 		if (editableClinics != null) {
 			for (Clinic c : editableClinics) {
 
 				Vector<Object> vector = new Vector<Object>();
 
+				vector.add(i++);
 				vector.add(c.getName());
 				vector.add(c.getStreet());
 				vector.add(c.getCAP());
