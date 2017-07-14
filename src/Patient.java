@@ -66,7 +66,7 @@ public class Patient extends JFrame{
 	private int visitIndex;
 	private JButton btnViewVisitsPatient;
 
-	private Patient(ResultSet rs) {
+	public Patient(ResultSet rs) {
 		setParamenters(rs);
 		setTitle("HEALTHCARE MANAGEMENT SYSTEM");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(View.class.getResource("/img/healthcare-icon.png")));
