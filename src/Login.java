@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -40,9 +41,6 @@ import javax.swing.event.ListSelectionListener;
 
 public class Login extends JFrame {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1234L;
 	private CardLayout clLogin;
 	private ArrayList<String[]> companiesList; // forse da mettere locale
@@ -79,7 +77,6 @@ public class Login extends JFrame {
 	 */
 	public Login() throws ClassNotFoundException, SQLException {
 
-		Database db = new Database();
 		setTitle("HEALTHCARE MANAGEMENT SYSTEM - Login");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(View.class.getResource("/img/healthcare-icon.png")));
 		setSize(700, 600);
@@ -168,10 +165,11 @@ public class Login extends JFrame {
 				String PIN = new String(passwordFieldPIN.getPassword());
 
 				// CHECK LOGIN
-				if (db.checkPatient(fiscalCode, PIN)) {
+				ResultSet rsPatient = Database.getInstance().checkPatient(fiscalCode, PIN)
+				if (rsPatient != null) {
 
 					try {
-						new View("Patient", fiscalCode);
+						new Patient(rsPatient);
 						dispose(); 																														// valutare un possibile set visible false
 					} catch (ClassNotFoundException | SQLException e1) {
 						// TODO Auto-generated catch block

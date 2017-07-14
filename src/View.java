@@ -55,6 +55,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 public class View {
+	/*
 
 	public JFrame frmHealthcareManagementSystem;
 	private JTable tableHistoryVisits;
@@ -66,7 +67,7 @@ public class View {
 	private JTable tableVisitsPatientResults;
 	private CardLayout clfrmHealhcareManagementSystem;
 	private Database db;
-	private JLabel lblWelcomePatient;
+	private JLabel lblWelcomePatient; 								// copied
 	private ArrayList<Visit> patientVisits;
 
 	private JComboBox<String> comboBoxSelectBookVisitMonth;
@@ -114,14 +115,9 @@ public class View {
 	private JButton btnEditClinic;
 	private String currentClinicName;
 
-	/**
-	 * Create the application.
-	 * 
-	 * @throws SQLException
-	 * @throws ClassNotFoundException
-	 */
+
 	public View(String userType, String user) throws ClassNotFoundException, SQLException {
-		this.db = new Database();
+		//this.db = new Database();
 
 		frmHealthcareManagementSystem = new JFrame("HEALTHCARE MANAGEMENT SYSTEM");
 		frmHealthcareManagementSystem.setIconImage(Toolkit.getDefaultToolkit().getImage(View.class.getResource("/img/healthcare-icon.png")));
@@ -183,12 +179,8 @@ public class View {
 			public void mouseClicked(MouseEvent arg0) {
 				System.out.println("Patient clicked on Logout");
  
-				OpenLoginWindow();																						// da cambiar con qualcosa di meglio
+				OpenLoginWindow();
 				frmHealthcareManagementSystem.dispose();
-				 
-
-				// qui va chiamata una funzione per resettare tutti i parametri
-				// quindi distruggere tutti i pannelli dell'utente loggato.
 			}
 
 			
@@ -205,7 +197,7 @@ public class View {
 		JTabbedPane tabbedPanePatient = new JTabbedPane(JTabbedPane.TOP);
 		panelPatient.add(tabbedPanePatient, BorderLayout.CENTER);
 
-		panelVisitPatient = new JPanel();
+		//panelVisitPatient = new JPanel();																				copied
 		tabbedPanePatient.addTab("Storico prenotazioni", null, panelVisitPatient, null);
 		panelVisitPatient.setLayout(new CardLayout(0, 0));
 		clpanelVisitPatient = (CardLayout) panelVisitPatient.getLayout();
@@ -1358,4 +1350,5 @@ public class View {
 				comboBoxSelectBookVisitDay.addItem((int) i);
 		}
 	}
+	*/
 }
