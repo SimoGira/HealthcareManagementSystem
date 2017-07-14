@@ -71,8 +71,6 @@ public class Patient extends JFrame{
 		setTitle("HEALTHCARE MANAGEMENT SYSTEM");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(View.class.getResource("/img/healthcare-icon.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//getContentPane().setLayout(new CardLayout(0, 0));																								// card layout inutile
-		//this.clfrmHealhcareManagementSystem = (CardLayout) frmHealthcareManagementSystem.getContentPane().getLayout();
 
 		initializeView();
 
@@ -149,10 +147,9 @@ public class Patient extends JFrame{
 		this.email = email;
 	}
 	
-	// ---------------------------------------------------------------------------------------------------------------------------------------------
 	private void initializeView() {
 		JPanel panelPatient = new JPanel();
-		getContentPane().add(panelPatient, "panelPatient");
+		getContentPane().add(panelPatient, BorderLayout.CENTER);
 		panelPatient.setLayout(new BorderLayout(0, 0));
 
 		JPanel panelPatientNorth = new JPanel();
@@ -338,7 +335,7 @@ public class Patient extends JFrame{
 				updateBookingDays();
 			}
 		});
-		comboBoxSelectBookVisitMonth.setModel(new DefaultComboBoxModel(Month.values()));
+		comboBoxSelectBookVisitMonth.setModel(new DefaultComboBoxModel<String>(new String[] {"GENNAIO", "FEBBRAIO", "MARZO", "APRILE", "MAGGIO", "GIUGNO", "LUGLIO", "AGOSTO", "SETTEMBRE", "OTTOBRE", "NOVEMBRE", "DICEMBRE"}));
 
 		JLabel lblSelectBookVisitDay = new JLabel("Giorno:");
 		lblSelectBookVisitDay.setHorizontalAlignment(SwingConstants.RIGHT);
