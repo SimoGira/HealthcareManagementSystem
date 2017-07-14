@@ -173,7 +173,7 @@ public class Database {
 	{
 		try(Connection con = DriverManager.getConnection(url, user, password))
 		{
-			String query = "INSERT INTO visit (patient, clinic, company, serviceName, doctor, date, hour, urgency, regime, result) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, NULL)";
+			String query = "INSERT INTO visit (patient, clinic, company, serviceName, doctor, date, hour, urgency, result) VALUES(?, ?, ?, ?, ?, ?, ?, ?, NULL)";
 			try(PreparedStatement pst = con.prepareStatement(query)){
 				pst.clearParameters();
 				pst.setString(1, v.getPatient()); 
@@ -184,7 +184,6 @@ public class Database {
 				pst.setDate(6, v.getDate());
 				pst.setInt(7, v.getHour());
 				pst.setString(8, v.getUrgency().toLowerCase());
-				pst.setString(9, v.getRegime());
 				System.out.println("UPDATED: " + pst.toString());
 				System.out.println("UPDATED: " + pst.executeUpdate());
 
@@ -218,8 +217,7 @@ public class Database {
 					v.setDoctor(rs.getString("doctor"));
 					v.setDate(rs.getDate("date"));
 					v.setHour(rs.getInt("hour"));
-					v.setUrgency(rs.getString("urgency"));
-					v.setRegime(rs.getString("regime"));
+					v.setUrgency(rs.getString("urgency")); 
 					v.setResult(rs.getString("result"));
 					visits.add(v);
 				}
@@ -277,8 +275,7 @@ public class Database {
 					v.setDoctor(rs.getString("doctor"));
 					v.setDate(rs.getDate("date"));
 					v.setHour(rs.getInt("hour"));
-					v.setUrgency(rs.getString("urgency"));
-					v.setRegime(rs.getString("regime"));
+					v.setUrgency(rs.getString("urgency")); 
 					v.setResult(rs.getString("result"));
 					visits.add(v);
 				}

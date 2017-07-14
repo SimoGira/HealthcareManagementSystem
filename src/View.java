@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -139,6 +140,21 @@ public class View {
 
 	}
 
+	private void OpenLoginWindow() {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					// Set System L&F
+					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+					Login frame = new Login();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+	
 	// ----------------------------------------------- PATIENT SECTION -------------------------------------------------------------------
 	private void initializeAsPatient(String fiscalCode) {
 		JPanel panelPatient = new JPanel();
@@ -166,17 +182,16 @@ public class View {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				System.out.println("Patient clicked on Logout");
-
-				try {
-					new Login().main(null); 																								// da cambiar con qualcosa di meglio
-					frmHealthcareManagementSystem.dispose();
-				} catch (ClassNotFoundException | SQLException e) {
-					e.printStackTrace();
-				}
+ 
+				OpenLoginWindow();																						// da cambiar con qualcosa di meglio
+				frmHealthcareManagementSystem.dispose();
+				 
 
 				// qui va chiamata una funzione per resettare tutti i parametri
 				// quindi distruggere tutti i pannelli dell'utente loggato.
 			}
+
+			
 
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -216,7 +231,7 @@ public class View {
 		tableHistoryVisits = new JTable();
 		tableHistoryVisits.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		visitsHistoryModel = new DefaultTableModel(
-			new String[] { "N\u00B0", "Data", "Ora", "Tipo Visita", "Regime", "Urgenza", "Stato"}, 0) {
+			new String[] { "N\u00B0", "Data", "Ora", "Tipo Visita", "Urgenza", "Stato"}, 0) {
 			private static final long serialVersionUID = 5L;
 
 			@Override
@@ -497,7 +512,6 @@ public class View {
 					e1.printStackTrace();
 				} 
 				v.setPatient(Patient.getInstance().getFiscalcode());
-				v.setRegime(textFieldRegime.getText());
 				v.setUrgency(comboBoxSelectBookVisitUrgency.getSelectedItem().toString());
 				db.bookVisit(v);
 				updateBookingDays();
@@ -522,7 +536,6 @@ public class View {
 				row.add(c.getDate().toString());
 				row.add(c.getHour());
 				row.add(c.getServiceName());
-				row.add(c.getRegime());
 				row.add(c.getUrgency());
 				
 				if(c.getResult() != null)
@@ -1102,7 +1115,7 @@ public class View {
 		searchPatientTextField.setColumns(16);
 
 		DefaultTableModel employeeHistoryModel = new DefaultTableModel(
-			new String[] {"N\u00B0", "Data", "Ora", "Tipo visita", "Regime", "Urgenza" }, 0) {
+			new String[] {"N\u00B0", "Data", "Ora", "Tipo visita", "Urgenza" }, 0) {
 				
 				private static final long serialVersionUID = 2L;
 
@@ -1130,7 +1143,6 @@ public class View {
 						vector.add(c.getDate().toString());
 						vector.add(c.getHour());
 						vector.add(c.getServiceName());
-						vector.add(c.getRegime());
 						vector.add(c.getUrgency());
 						employeeHistoryModel.addRow(vector);
 					}
@@ -1229,11 +1241,7 @@ public class View {
 			public void mouseClicked(MouseEvent e) {
 				System.out.println("Employee clicked on Logout");
 
-				try {
-					new Login().main(null);																														// da sistemare
-				} catch (ClassNotFoundException | SQLException e1) {
-					e1.printStackTrace();
-				}
+				OpenLoginWindow();
 				frmHealthcareManagementSystem.dispose();
 			}
 

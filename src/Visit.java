@@ -9,7 +9,6 @@ public class Visit {
 	private Date date;
 	private int hour;
 	private String urgency;
-	private String regime;
 	private String result;
 
 	public String getPatient() {
@@ -59,13 +58,8 @@ public class Visit {
 	}
 	public void setUrgency(String urgency) {
 		this.urgency = urgency;
-	}
-	public String getRegime() {
-		return regime;
-	}
-	public void setRegime(String regime) {
-		this.regime = regime;
-	}
+	} 
+	
 	public String getResult() {
 		return result;
 	}
