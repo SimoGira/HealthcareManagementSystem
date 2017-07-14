@@ -21,8 +21,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Vector;
-
-import javax.swing.AbstractButton;
+ 
 import javax.swing.AbstractListModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -49,77 +48,32 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
-public class Employee extends JFrame {
-	private static Employee instance = null;
-
-	private String fiscalcode;
-	private String employeeCode;
+@SuppressWarnings("serial")
+public class Employee extends JFrame { 
+	
+	//private String fiscalcode;
+	//private String employeeCode;
 	private String name;
 	private String surname;
-	private String job;
-	private String clinic;
+	//private String job;
+	//private String clinic;
 	private String company;
-	
-	
+
+
 
 	// interface variables
 	private ArrayList<Visit> visits;
-	private JTable tableVisitsFound;
-	JTextArea textAreaVisitResult;
-	JButton btnInsertNewVisitResult;
-	JTable tableUpdateClinics;
-	DefaultTableModel tableUpdateClinicsModel;
-	JPanel panelInsertClinic;
-
-	JFrame frmHealthcareManagementSystem;
-	JTable tableHistoryVisits; 
-	JTextField textFieldInsertClinicStreet;
-	JTextField textFieldInsertClinicCity;
-	JTextField textFieldInsertClinicCAP;
-	JTextField textFieldInsertClinicName;
-	JTable tableVisitsPatientResults;
-	CardLayout clfrmHealhcareManagementSystem;
-
-	JLabel lblWelcomePatient;
-	ArrayList<Visit> patientVisits;
-
-	JComboBox<String> comboBoxSelectBookVisitMonth; 
-	JComboBox<String> comboBoxVisitsYear;
-	DefaultTableModel visitsHistoryModel;
-	JButton btnViewVisitsPatient;
-	CardLayout clpanelVisitPatient;
-	JPanel panelVisitPatient;
-
-	JList<String> listClinics;
-	ArrayList<String[]> companiesList;
-	JComboBox<String> comboBoxSelectCompany;
-
-	JTextPane txtpnVisitResultInfo;
-	JLabel lblWelcomeEmployee;
-
-	JComboBox<String> comboBoxSelectBookVisitType; 
-
-	JComboBox<Integer> comboBoxSelectBookVisitDay;
-
-	JComboBox<Integer> comboBoxSelectBookVisitYear;
-	ArrayList<String[]> serviceInfos;
-	JComboBox<String> comboBoxSelectBookVisitClinic;
-	JComboBox<Integer> comboBoxSelectBookVisitHour; 
-	JTextField textFieldRegime; 
-	int visitIndex;
-	JButton btnViewVisitSelectedResult;
-	CardLayout clpanelVisitsResultsPerPatientMaster;
-	JPanel panelVisitsResultsPerPatientMaster;
-	JTextPane textPanePatientVisitResult; 
-	JPanel panelInsertClinicButton; 
-	ArrayList<Clinic> editableClinics;
-	JFormattedTextField formattedTextFieldInsertClinicContractDate;
-	JComboBox<String> comboBoxInsertClinicProvince;
-	JTextArea textAreaInsertClinicDescription;
-	boolean isAddingNewClinic = false;
-	JButton btnEditClinic;
-	String currentClinicName;
-
+	private JTextField textFieldInsertClinicStreet;
+	private JTextField textFieldInsertClinicCity;
+	private JTextField textFieldInsertClinicCAP;
+	private JComboBox<String> comboBoxInsertClinicProvince;
+	private JFormattedTextField formattedTextFieldInsertClinicContractDate;
+	private JTextArea textAreaInsertClinicDescription;
+	protected int visitIndex;
+	protected boolean isAddingNewClinic;
+	protected String currentClinicName;
+	protected ArrayList<Clinic> editableClinics;
+	
 	public Employee(ResultSet rs) { 
 
 		setParamenters(rs);
@@ -152,7 +106,7 @@ public class Employee extends JFrame {
 			}
 		});
 	}
-	
+
 	private void refreshEditableClinics(DefaultTableModel model, ArrayList<Clinic> clinics) {
 		// clear
 		while (model.getRowCount() > 0)
@@ -160,12 +114,9 @@ public class Employee extends JFrame {
 
 		// QUESTA DIVENTERA UNA FUNZIONE PER RIEMPIRE LA TABELLA DI CLINICHE IN
 		// INSERISCI AMBULATORIO___________________
-		try {
-			clinics = Database.getInstance().getClinics(company);
-		}
-		catch (ClassNotFoundException | SQLException e) { 
-			e.printStackTrace();
-		}
+		 
+		clinics = Database.getInstance().getClinics(company);
+		 
 
 		int i = 1;
 		if (clinics != null) {
@@ -186,15 +137,15 @@ public class Employee extends JFrame {
 			}
 		}
 	}
-	
+
 	private void setParamenters(ResultSet rs) {
 		try {
 			rs.next();
-			fiscalcode = rs.getString("fiscalcode"); 
+			//fiscalcode = rs.getString("fiscalcode"); 
 			name = rs.getString("name");
-			clinic = rs.getString("clinic"); 
+			//clinic = rs.getString("clinic"); 
 			company = rs.getString("company");
-			job = rs.getString("job");
+			//job = rs.getString("job");
 			surname = rs.getString("surname"); 
 		}
 		catch (SQLException e) { 
@@ -204,6 +155,64 @@ public class Employee extends JFrame {
 
 	// ----------------------------------------------- EMPLOYEE SECTION -------------------------------------------------------------------
 	private void initializeView() {
+		/*
+		JTable tableVisitsFound;
+		JTextArea textAreaVisitResult;
+		JButton btnInsertNewVisitResult;
+		JTable tableUpdateClinics;
+		DefaultTableModel tableUpdateClinicsModel;
+		JPanel panelInsertClinic;
+	 
+		JTable tableHistoryVisits; 
+		JTextField textFieldInsertClinicStreet;
+		JTextField textFieldInsertClinicCity;
+		JTextField textFieldInsertClinicCAP;
+		JTextField textFieldInsertClinicName;
+		JTable tableVisitsPatientResults;
+		CardLayout clfrmHealhcareManagementSystem;
+
+		JLabel lblWelcomePatient;
+		ArrayList<Visit> patientVisits;
+
+		JComboBox<String> comboBoxSelectBookVisitMonth; 
+		JComboBox<String> comboBoxVisitsYear;
+		DefaultTableModel visitsHistoryModel;
+		JButton btnViewVisitsPatient;
+		CardLayout clpanelVisitPatient;
+		JPanel panelVisitPatient;
+
+		JList<String> listClinics;
+		ArrayList<String[]> companiesList;
+		JComboBox<String> comboBoxSelectCompany;
+
+		JTextPane txtpnVisitResultInfo;
+		JLabel lblWelcomeEmployee;
+
+		JComboBox<String> comboBoxSelectBookVisitType; 
+
+		JComboBox<Integer> comboBoxSelectBookVisitDay;
+
+		JComboBox<Integer> comboBoxSelectBookVisitYear;
+		ArrayList<String[]> serviceInfos;
+		JComboBox<String> comboBoxSelectBookVisitClinic;
+		JComboBox<Integer> comboBoxSelectBookVisitHour; 
+		JTextField textFieldRegime; 
+		int visitIndex;
+		JButton btnViewVisitSelectedResult;
+		CardLayout clpanelVisitsResultsPerPatientMaster;
+		JPanel panelVisitsResultsPerPatientMaster;
+		JTextPane textPanePatientVisitResult; 
+		JPanel panelInsertClinicButton; 
+		ArrayList<Clinic> editableClinics;
+		JFormattedTextField formattedTextFieldInsertClinicContractDate;
+		JComboBox<String> comboBoxInsertClinicProvince;
+		JTextArea textAreaInsertClinicDescription;
+		boolean isAddingNewClinic = false;
+		JButton btnEditClinic;
+		String currentClinicName;
+		*/
+		
+		
 		JPanel panelEmployee = new JPanel();
 		getContentPane().add(panelEmployee, "panelEmployee");
 		panelEmployee.setLayout(new BorderLayout(0, 0));
@@ -237,7 +246,7 @@ public class Employee extends JFrame {
 		panelInfovisitInsertionNorth.add(lblClinicVisitInsertion);
 
 		//components
-		
+
 
 
 		JComboBox<String> comboBoxClinicVisitInsertion = new JComboBox<String>();
@@ -268,7 +277,7 @@ public class Employee extends JFrame {
 					visits = Database.getInstance().getBookedVisits(company,
 							(String) comboBoxClinicVisitInsertion.getSelectedItem(),
 							new Date(sdf.parse(date).getTime()));
-				} catch (ParseException | ClassNotFoundException | SQLException e1) {
+				} catch (ParseException e1) {
 					formattedTextFieldVisitInsertion.setText("");
 					JOptionPane.showMessageDialog(null, "Inserire una data valida nel formato gg/MM/aaaa",
 							"Errore data", JOptionPane.WARNING_MESSAGE);
@@ -299,11 +308,12 @@ public class Employee extends JFrame {
 		JScrollPane scrollPaneInfoVisitInsertionCenter = new JScrollPane();
 		panelInfoVisitInsertion.add(scrollPaneInfoVisitInsertionCenter, BorderLayout.CENTER);
 
-		tableVisitsFound = new JTable();
+		JTable tableVisitsFound = new JTable();
 		tableVisitsFound.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tableVisitsFound.setModel(employeeInsertVisitModel);
 		tableVisitsFound.getTableHeader().setReorderingAllowed(false);
 		tableVisitsFound.getColumnModel().getColumn(0).setPreferredWidth(25);
+		JTextArea textAreaVisitResult = new JTextArea();
 		tableVisitsFound.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent event) {
 				if (!event.getValueIsAdjusting()) {
@@ -319,10 +329,10 @@ public class Employee extends JFrame {
 		scrollPaneInfoVisitInsertionSouth.setViewportBorder(
 				new TitledBorder(null, "Risultato visita", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panelInfoVisitInsertion.add(scrollPaneInfoVisitInsertionSouth, BorderLayout.SOUTH);
-
-		textAreaVisitResult = new JTextArea();
+ 
 		textAreaVisitResult.setEnabled(false);
 		textAreaVisitResult.setRows(3);
+		JButton btnInsertNewVisitResult = new JButton("Inserisci");
 		// Listen for changes in the text
 		textAreaVisitResult.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
@@ -350,7 +360,6 @@ public class Employee extends JFrame {
 		fl_panelInsertVisitButton.setAlignment(FlowLayout.RIGHT);
 		panelInsertVisitInfo.add(panelInsertVisitButton, BorderLayout.SOUTH);
 
-		btnInsertNewVisitResult = new JButton("Inserisci");
 		btnInsertNewVisitResult.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int selectedIndex = tableVisitsFound.getSelectedRow();
@@ -390,10 +399,10 @@ public class Employee extends JFrame {
 		panelInsertClinicMaster.add(scrollPaneClinicsTable, gbc_scrollPaneClinicsTable);
 
 		// tabella cliniche già presenti (visualizza per comodità o modifica)
-		tableUpdateClinics = new JTable();
+		JTable tableUpdateClinics = new JTable();
 		tableUpdateClinics.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tableUpdateClinics.getTableHeader().setReorderingAllowed(false);
-		tableUpdateClinicsModel = new DefaultTableModel(new String[] {"N\u00B0", "Nome", "Via", "CAP", "Citta'", "Provincia" },0) {
+		DefaultTableModel tableUpdateClinicsModel = new DefaultTableModel(new String[] {"N\u00B0", "Nome", "Via", "CAP", "Citta'", "Provincia" },0) {
 
 			private static final long serialVersionUID = 3L;
 
@@ -404,6 +413,8 @@ public class Employee extends JFrame {
 		};
 		tableUpdateClinics.setModel(tableUpdateClinicsModel);
 		tableUpdateClinics.getColumnModel().getColumn(0).setPreferredWidth(25);
+		JButton btnEditClinic = new JButton("Modifica ambulatorio");
+		final JPanel panelInsertClinic = new JPanel();
 		tableUpdateClinics.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent event) {
 				if (!event.getValueIsAdjusting() && !panelInsertClinic.isVisible()) {
@@ -425,10 +436,11 @@ public class Employee extends JFrame {
 
 		JButton btnAddNewClinic = new JButton("Aggiungi ambulatorio");
 		panelInsertEditClinicButtons.add(btnAddNewClinic);
-		btnEditClinic = new JButton("Modifica ambulatorio");
 		btnEditClinic.setEnabled(false);
 		panelInsertEditClinicButtons.add(btnEditClinic);
 
+		JTextField textFieldInsertClinicName = new JTextField();;
+		final JPanel panelInsertClinicButton = new JPanel();;
 		btnEditClinic.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				isAddingNewClinic = false;
@@ -479,8 +491,7 @@ public class Employee extends JFrame {
 			}
 		});
 
-		// Insert clinic data + description
-		panelInsertClinic = new JPanel();
+		// Insert clinic data + description 
 		GridBagConstraints gbc_panelInsertClinic = new GridBagConstraints();
 		gbc_panelInsertClinic.anchor = GridBagConstraints.NORTH;
 		gbc_panelInsertClinic.fill = GridBagConstraints.HORIZONTAL;
@@ -511,7 +522,6 @@ public class Employee extends JFrame {
 		gbc_lblInsertClinicName.gridy = 0;
 		panelInsertClinicData.add(lblInsertClinicName, gbc_lblInsertClinicName);
 
-		textFieldInsertClinicName = new JTextField();
 		GridBagConstraints gbc_textFieldInsertClinicName = new GridBagConstraints();
 		gbc_textFieldInsertClinicName.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textFieldInsertClinicName.insets = new Insets(0, 0, 5, 0);
@@ -615,7 +625,6 @@ public class Employee extends JFrame {
 		scrollPaneInsertClinicDescription.setViewportView(textAreaInsertClinicDescription);
 
 		// bottone inserisci clinica
-		panelInsertClinicButton = new JPanel();
 		GridBagConstraints gbc_panelInsertClinicButton = new GridBagConstraints();
 		gbc_panelInsertClinicButton.anchor = GridBagConstraints.NORTH;
 		gbc_panelInsertClinicButton.fill = GridBagConstraints.HORIZONTAL;
@@ -790,10 +799,10 @@ public class Employee extends JFrame {
 		// fine panel inserisci clinica
 
 		// INIZIO panel inserisci visit result
-		panelVisitsResultsPerPatientMaster = new JPanel();
+		JPanel panelVisitsResultsPerPatientMaster = new JPanel();
 		tabbedPaneEmployee.addTab("Storico visite", null, panelVisitsResultsPerPatientMaster, null);
 		panelVisitsResultsPerPatientMaster.setLayout(new CardLayout(0, 0));
-		clpanelVisitsResultsPerPatientMaster = (CardLayout) panelVisitsResultsPerPatientMaster.getLayout();
+		CardLayout clpanelVisitsResultsPerPatientMaster = (CardLayout) panelVisitsResultsPerPatientMaster.getLayout();
 
 		JPanel panelViewVisitPerPatient = new JPanel();
 		panelVisitsResultsPerPatientMaster.add(panelViewVisitPerPatient, "panelViewVisitPerPatient");
@@ -851,7 +860,11 @@ public class Employee extends JFrame {
 		JScrollPane scrollPaneViewVisitPerPatient = new JScrollPane();
 		panelViewVisitPerPatient.add(scrollPaneViewVisitPerPatient, BorderLayout.CENTER);
 
-		tableVisitsPatientResults = new JTable();
+
+		JButton btnViewVisitSelectedResult = new JButton("Visualizza");
+		btnViewVisitSelectedResult.setEnabled(false);
+		
+		JTable tableVisitsPatientResults = new JTable();
 		tableVisitsPatientResults.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tableVisitsPatientResults.setModel(employeeHistoryModel);
 		tableVisitsPatientResults.getColumnModel().getColumn(0).setPreferredWidth(25);
@@ -859,7 +872,7 @@ public class Employee extends JFrame {
 			public void valueChanged(ListSelectionEvent event) {
 				if (!event.getValueIsAdjusting()) {
 					System.out.println(tableVisitsPatientResults.getSelectedRow());
-					visitIndex = tableVisitsPatientResults.getSelectedRow();
+					visitIndex = tableVisitsPatientResults.getSelectedRow(); 
 					btnViewVisitSelectedResult.setEnabled(true);
 				}
 			}
@@ -871,13 +884,13 @@ public class Employee extends JFrame {
 		fl_panelViewVisitPerPatientSouth.setAlignment(FlowLayout.RIGHT);
 		panelViewVisitPerPatient.add(panelViewVisitPerPatientSouth, BorderLayout.SOUTH);
 
-		btnViewVisitSelectedResult = new JButton("Visualizza");
-		btnViewVisitSelectedResult.setEnabled(false);
+		JTextPane textPanePatientVisitResult = new JTextPane();
+		
 		btnViewVisitSelectedResult.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
 				System.out.println("Visit index : " + visitIndex);
-				Visit v = visits.get(visitIndex);
+				Visit v = visits.get(visitIndex); 
 				textPanePatientVisitResult.setText(v.toString());
 				// clpanelVisitsResultsPerPatientMaster = (CardLayout)
 				// panelVisitsResultsPerPatientMaster.getLayout();
@@ -894,7 +907,7 @@ public class Employee extends JFrame {
 		JScrollPane scrollPanepanelViewVisitResultsPerPatient = new JScrollPane();
 		panelViewVisitResultsPerPatient.add(scrollPanepanelViewVisitResultsPerPatient, BorderLayout.CENTER);
 
-		textPanePatientVisitResult = new JTextPane();
+		
 		textPanePatientVisitResult.setContentType("text/html");
 		scrollPanepanelViewVisitResultsPerPatient.setViewportView(textPanePatientVisitResult);
 
@@ -920,7 +933,7 @@ public class Employee extends JFrame {
 		panelEmployee.add(panelEmployeeNorth, BorderLayout.NORTH);
 		panelEmployeeNorth.setLayout(new BorderLayout(0, 0));
 
-		lblWelcomeEmployee = new JLabel("Benvenuto " + name + " " + surname);
+		JLabel lblWelcomeEmployee = new JLabel("Benvenuto " + name + " " + surname);
 		lblWelcomeEmployee.setHorizontalAlignment(SwingConstants.CENTER);
 		lblWelcomeEmployee.setFont(new Font("Tahoma", Font.BOLD, 22));
 		panelEmployeeNorth.add(lblWelcomeEmployee, BorderLayout.CENTER);
@@ -938,7 +951,7 @@ public class Employee extends JFrame {
 				System.out.println("Employee clicked on Logout");
 
 				OpenLoginWindow();
-				frmHealthcareManagementSystem.dispose();
+				dispose();
 			}
 
 			@Override
@@ -952,7 +965,7 @@ public class Employee extends JFrame {
 		panelEmployeeNorthRightLabels.add(lblLogoutEmployee);
 
 		JPanel panelClinicsAndServices = new JPanel();
-		frmHealthcareManagementSystem.getContentPane().add(panelClinicsAndServices, "panelClinicsAndServices");
+		getContentPane().add(panelClinicsAndServices, "panelClinicsAndServices");
 		panelClinicsAndServices.setLayout(new BorderLayout(0, 0));
 
 		JPanel panelClinicsAndServicesNorth = new JPanel();
@@ -964,14 +977,13 @@ public class Employee extends JFrame {
 		JLabel lblSelectCompany = new JLabel("Seleziona azienda:");
 		panelClinicsAndServicesNorth.add(lblSelectCompany);
 
-		comboBoxSelectCompany = new JComboBox<String>();
+		JComboBox<String> comboBoxSelectCompany = new JComboBox<String>();
 		comboBoxSelectCompany.setPreferredSize(new Dimension(150, 27));
-		listClinics = new JList<String>();
+		JList<String> listClinics = new JList<String>();
 
 		comboBoxSelectCompany.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int comboBoxIndex = comboBoxSelectCompany.getSelectedIndex();
-				String companyID = companiesList.get(comboBoxIndex)[0];
+				String companyID = (String) comboBoxSelectCompany.getSelectedItem(); 
 				ArrayList<Clinic> clinics = Database.getInstance().getClinics(companyID);
 				listClinics.setModel(new AbstractListModel<String>() {
 					private static final long serialVersionUID = 4L;
@@ -996,9 +1008,9 @@ public class Employee extends JFrame {
 		for (Clinic c : editableClinics)
 			comboBoxClinicVisitInsertion.addItem(c.getName());
 
-		clfrmHealhcareManagementSystem.show(frmHealthcareManagementSystem.getContentPane(),"panelEmployee");
-		
-		
+		//clfrmHealhcareManagementSystem.show(getContentPane(),"panelEmployee");
+
+
 	}
 
 }
