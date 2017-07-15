@@ -133,12 +133,12 @@ public class Database {
 				ResultSet rs = pst.executeQuery(); 
 				
 				if(rs.next()){
-				m.put("fiscalCode", rs.getString("fiscalcode"));
-				m.put("name", rs.getString("name"));
-				m.put("surname", rs.getString("surname"));
-				m.put("clinic", rs.getString("clinic"));
-				m.put("company", rs.getString("company"));
-				m.put("job", rs.getString("job"));
+					m.put("fiscalCode", rs.getString("fiscalcode"));
+					m.put("name", rs.getString("name"));
+					m.put("surname", rs.getString("surname"));
+					m.put("clinic", rs.getString("clinic"));
+					m.put("company", rs.getString("company"));
+					m.put("job", rs.getString("job"));
 				    
 				return m;
 				}
