@@ -209,7 +209,7 @@ public class Patient extends JFrame{
 		JTable tableHistoryVisits = new JTable();
 		tableHistoryVisits.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		DefaultTableModel visitsHistoryModel = new DefaultTableModel(
-			new String[] { "N\u00B0", "Data", "Ora", "Tipo Visita", "Urgenza", "Stato"}, 0) {																// da togliere il campo stato
+			new String[] { "N\u00B0", "Data", "Ora", "Tipo Visita", "Urgenza"}, 0) {
 			private static final long serialVersionUID = 5L;
 
 			@Override
@@ -521,11 +521,6 @@ public class Patient extends JFrame{
 				row.add(c.getHour());
 				row.add(c.getServiceName());
 				row.add(c.getUrgency());
-				
-				if(c.getResult() != null)
-					row.add("Risultato disponibile");
-				else
-					row.add("In attesa del risultato");
 				
 				visitsHistoryModel.addRow(row);
 			}
