@@ -199,7 +199,7 @@ public class Database {
 				
 				ResultSet rs = pst.executeQuery(); 
 				rs.next();
-				m.put("fiscalCode", rs.getString("fiscalcode"));
+				m.put("fiscalcode", rs.getString("fiscalcode"));
 				m.put("healthcarecompany", rs.getString("healthcarecompany")); 
 				m.put("name", rs.getString("name"));
 				m.put("surname", rs.getString("surname"));
@@ -327,7 +327,7 @@ public class Database {
 				ResultSet rs = pst.executeQuery();
 				ArrayList<Integer> years = new ArrayList<Integer>();
 				while(rs.next()) 
-					years.add(rs.getInt("year")); 
+					years.add(rs.getInt("year"));
 				return years;
 			} 
 

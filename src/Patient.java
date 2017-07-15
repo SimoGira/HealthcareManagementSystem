@@ -504,8 +504,11 @@ public class Patient extends JFrame{
 
 		// get years
 		ArrayList<Integer> years = Database.getInstance().getVisitsHistoryYears(fiscalcode);
-		for (Integer y : years)
+		System.out.println("BEFORE YEAR ------------");
+		for (Integer y : years){
 			comboBoxVisitsYear.addItem(y.toString());
+			System.out.println("YEAR ------------" + y.toString());
+		}
 
 		// fill table (visits history)
 		int i = 1;
