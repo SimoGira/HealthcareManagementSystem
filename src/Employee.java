@@ -15,8 +15,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -73,7 +71,8 @@ public class Employee extends JFrame {
 	protected int visitIndex;
 	protected boolean isAddingNewClinic;
 	protected String currentClinicName;
-	protected ArrayList<Clinic> editableClinics;
+	protected ArrayList<Clinic> editableClinics = new ArrayList<Clinic>();
+	private DefaultTableModel tableUpdateClinicsModel;
 	
 	public Employee(Map<String, Object> map) { 
 
@@ -107,20 +106,18 @@ public class Employee extends JFrame {
 		});
 	}
 
-	private void refreshEditableClinics(DefaultTableModel model, ArrayList<Clinic> clinics) {
-		// clear
-		while (model.getRowCount() > 0)
-			model.removeRow(0);
+	private void refreshEditableClinics() {
+		// clear 
+		while (tableUpdateClinicsModel.getRowCount() > 0)
+			tableUpdateClinicsModel.removeRow(0);
 
-		// QUESTA DIVENTERA UNA FUNZIONE PER RIEMPIRE LA TABELLA DI CLINICHE IN
-		// INSERISCI AMBULATORIO___________________
 		 
-		clinics = Database.getInstance().getClinics(company);
+		editableClinics = Database.getInstance().getClinics(company);
 		 
 
 		int i = 1;
-		if (clinics != null) {
-			for (Clinic c : clinics) {
+		if (editableClinics != null) {
+			for (Clinic c : editableClinics) {
 
 				Vector<Object> vector = new Vector<Object>();
 
@@ -130,7 +127,7 @@ public class Employee extends JFrame {
 				vector.add(c.getCAP());
 				vector.add(c.getCity());
 				vector.add(c.getProvince());
-				model.addRow(vector);
+				tableUpdateClinicsModel.addRow(vector);
 
 				System.out.println("clinica " + c.getName());
 
@@ -208,8 +205,8 @@ public class Employee extends JFrame {
 		
 		
 		JPanel panelEmployee = new JPanel();
-		getContentPane().add(panelEmployee, "panelEmployee");
 		panelEmployee.setLayout(new BorderLayout(0, 0));
+		getContentPane().add(panelEmployee, BorderLayout.CENTER);
 
 		JTabbedPane tabbedPaneEmployee = new JTabbedPane(JTabbedPane.TOP);
 		panelEmployee.add(tabbedPaneEmployee, BorderLayout.CENTER);
@@ -396,7 +393,7 @@ public class Employee extends JFrame {
 		JTable tableUpdateClinics = new JTable();
 		tableUpdateClinics.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tableUpdateClinics.getTableHeader().setReorderingAllowed(false);
-		DefaultTableModel tableUpdateClinicsModel = new DefaultTableModel(new String[] {"N\u00B0", "Nome", "Via", "CAP", "Citta'", "Provincia" },0) {
+		tableUpdateClinicsModel = new DefaultTableModel(new String[] {"N\u00B0", "Nome", "Via", "CAP", "Citta'", "Provincia" },0) {
 
 			private static final long serialVersionUID = 3L;
 
@@ -958,19 +955,6 @@ public class Employee extends JFrame {
 		lblLogoutEmployee.setHorizontalAlignment(SwingConstants.CENTER);
 		panelEmployeeNorthRightLabels.add(lblLogoutEmployee);
 
-		JPanel panelClinicsAndServices = new JPanel();
-		getContentPane().add(panelClinicsAndServices, "panelClinicsAndServices");
-		panelClinicsAndServices.setLayout(new BorderLayout(0, 0));
-
-		JPanel panelClinicsAndServicesNorth = new JPanel();
-		// sezione nord, combo box companies
-		FlowLayout fl_panelClinicsAndServicesNorth = (FlowLayout) panelClinicsAndServicesNorth.getLayout();
-		fl_panelClinicsAndServicesNorth.setAlignment(FlowLayout.LEFT);
-		panelClinicsAndServices.add(panelClinicsAndServicesNorth, BorderLayout.NORTH);
-
-		JLabel lblSelectCompany = new JLabel("Seleziona azienda:");
-		panelClinicsAndServicesNorth.add(lblSelectCompany);
-
 		JComboBox<String> comboBoxSelectCompany = new JComboBox<String>();
 		comboBoxSelectCompany.setPreferredSize(new Dimension(150, 27));
 		JList<String> listClinics = new JList<String>();
@@ -996,8 +980,8 @@ public class Employee extends JFrame {
 			}
 		});
 
-		refreshEditableClinics(tableUpdateClinicsModel, editableClinics);
-
+		refreshEditableClinics();
+ 
 		// add clinics
 		for (Clinic c : editableClinics)
 			comboBoxClinicVisitInsertion.addItem(c.getName());
