@@ -290,7 +290,7 @@ public class Patient extends JFrame{
 		JLabel lblSelectBookVisitType = new JLabel("Tipo visita:");
 		lblSelectBookVisitType.setHorizontalAlignment(SwingConstants.RIGHT);
 
-		JComboBox<String>comboBoxSelectBookVisitType = new JComboBox<String>();
+		comboBoxSelectBookVisitType = new JComboBox<String>();
 		comboBoxSelectBookVisitType.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				comboBoxSelectBookVisitClinic.removeAllItems();
@@ -530,7 +530,6 @@ public class Patient extends JFrame{
 
 		// initialize book visit panel
 		ArrayList<String> services = Database.getInstance().getServices(healthcarecompany);
-
 		for (String s : services)
 			comboBoxSelectBookVisitType.addItem(s);
 
