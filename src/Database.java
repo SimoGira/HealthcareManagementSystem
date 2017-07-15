@@ -151,39 +151,6 @@ public class Database {
 		return null;
 	}
 	
-	/*
-	public boolean checkEmployee(Employee e, String employeeCode, String password)
-	{
-		try(Connection con = DriverManager.getConnection(this.url, this.user, this.password))
-		{
-
-			String query = "SELECT * FROM employee WHERE employeeCode = ? AND password = ?";
-			try(PreparedStatement pst = con.prepareStatement(query)){
-				pst.clearParameters();
-				pst.setString(1, employeeCode); 
-				pst.setString(2, password); 
-				ResultSet rs = pst.executeQuery();  
-				while(rs.next())
-				{ 
-					e.setFiscalcode(rs.getString("fiscalcode")); 
-					e.setName(rs.getString("name"));  
-					e.setClinic(rs.getString("clinic"));
-					System.out.println("company " + rs.getString("company"));
-					e.setCompany(rs.getString("company"));
-					e.setJob(rs.getString("job"));
-					e.setSurname(rs.getString("surname")); 
-					return true;
-				
-				} 
-			} 
-
-		} catch (SQLException e1) {
-			System.out.println( "Errore durante connessione al database: " + e1.getMessage() );
-		}
-
-		return false;
-	}
-	*/
 
 	public Map<String, Object> checkPatient(String fiscalCode, String pin)
 	{
@@ -219,40 +186,7 @@ public class Database {
 		return null;
 	}
 	
-	/*
-	public boolean checkPatient(Patient p, String fiscalCode, String pin)
-	{
-		try(Connection con = DriverManager.getConnection(url, user, password))
-		{
-			String query = "SELECT * FROM patient WHERE fiscalCode = ? AND pin = ?";
-			try(PreparedStatement pst = con.prepareStatement(query)){
-				pst.clearParameters();
-				pst.setString(1, fiscalCode); 
-				pst.setString(2, pin); 
-				ResultSet rs = pst.executeQuery(); 
- 
-				while(rs.next())
-				{
-					p.setFiscalcode(rs.getString("fiscalcode"));
-					p.setHealthcarecompany(rs.getString("healthcarecompany"));
-					p.setPin(rs.getString("pin"));
-					p.setName(rs.getString("name"));  
-					p.setSurname(rs.getString("surname"));
-					p.setBirthdate(rs.getDate("birthdate"));
-					p.setBirthplace(rs.getString("birthplace")); 
-					p.setProvince(rs.getString("province"));
-					p.setEmail(rs.getString("email"));
-					return true;
-				}
-			}
-
-		} catch (SQLException e1) {
-			System.out.println( "Errore durante connessione al database: " + e1.getMessage() );
-		}
-
-		return false;
-	}
-	*/
+	
 	
 	public void bookVisit(Visit v)
 	{
