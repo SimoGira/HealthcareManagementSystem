@@ -131,7 +131,8 @@ public class Database {
 				Map<String, Object> m = new HashMap<String, Object>();
 				
 				ResultSet rs = pst.executeQuery(); 
-				rs.next();
+				
+				if(rs.next()){
 				m.put("fiscalCode", rs.getString("fiscalcode"));
 				m.put("name", rs.getString("name"));
 				m.put("surname", rs.getString("surname"));
@@ -140,8 +141,7 @@ public class Database {
 				m.put("job", rs.getString("job"));
 				    
 				return m;
-			
-				
+				}
 			} 
 
 		} catch (SQLException e1) {
