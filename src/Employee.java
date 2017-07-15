@@ -81,7 +81,7 @@ public class Employee extends JFrame {
 		 
 		initializeView();
 
-		setSize(700, 600);
+		setSize(800, 700);
 		setLocationRelativeTo(null);
 		setVisible(true);
 	}
@@ -137,6 +137,10 @@ public class Employee extends JFrame {
 		//fiscalcode = (String) map.get("fiscalcode"); 
 		//clinic = (String) map.get("clinic"); 
 	}
+	
+	private String capitalizeString(String s){
+		return s.substring(0, 1).toUpperCase() + s.substring(1);
+	}
 
 	// ----------------------------------------------- EMPLOYEE SECTION -------------------------------------------------------------------
 	private void initializeView() {
@@ -152,7 +156,7 @@ public class Employee extends JFrame {
 		panelEmployee.add(tabbedPaneEmployee, BorderLayout.CENTER);
 
 		JPanel panelInsertVisitInfo = new JPanel();
-		tabbedPaneEmployee.addTab("Risultati visite", null, panelInsertVisitInfo, null);
+		tabbedPaneEmployee.addTab("Gestione visite", null, panelInsertVisitInfo, null);
 		panelInsertVisitInfo.setLayout(new BorderLayout(0, 0));
 
 		JPanel panelInfoVisitInsertion = new JPanel();
@@ -181,7 +185,7 @@ public class Employee extends JFrame {
 
 
 		JComboBox<String> comboBoxClinicVisitInsertion = new JComboBox<String>();
-		comboBoxClinicVisitInsertion.setPreferredSize(new Dimension(150, 27));
+		comboBoxClinicVisitInsertion.setPreferredSize(new Dimension(250, 27));
 		comboBoxClinicVisitInsertion.setMaximumRowCount(10);
 		panelInfovisitInsertionNorth.add(comboBoxClinicVisitInsertion);
 
@@ -215,7 +219,7 @@ public class Employee extends JFrame {
 				}
 				if (visits != null) {
 					if (visits.size() == 0) {
-						JOptionPane.showMessageDialog(null, "Nessuna visita trovata in data:" + date, "Infomazione",
+						JOptionPane.showMessageDialog(null, "Nessuna visita trovata in data: " + date, "Infomazione",
 								JOptionPane.INFORMATION_MESSAGE);
 					} else {
 						int i = 1;
@@ -315,9 +319,9 @@ public class Employee extends JFrame {
 		tabbedPaneEmployee.addTab("Gestione ambulatori", null, panelInsertClinicMaster, null);
 		GridBagLayout gbl_panelInsertClinicMaster = new GridBagLayout();
 		gbl_panelInsertClinicMaster.columnWidths = new int[] { 579, 0 };
-		gbl_panelInsertClinicMaster.rowHeights = new int[] { 147, 0, 288, 33, 0 };
+		gbl_panelInsertClinicMaster.rowHeights = new int[] { 200, 0, 288, 33, 0 };
 		gbl_panelInsertClinicMaster.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
-		gbl_panelInsertClinicMaster.rowWeights = new double[] { 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_panelInsertClinicMaster.rowWeights = new double[] { 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE };
 		panelInsertClinicMaster.setLayout(gbl_panelInsertClinicMaster);
 
 		JScrollPane scrollPaneClinicsTable = new JScrollPane();
@@ -357,6 +361,7 @@ public class Employee extends JFrame {
 
 		JPanel panelInsertEditClinicButtons = new JPanel();
 		GridBagConstraints gbc_panelInsertEditClinicButtons = new GridBagConstraints();
+		gbc_panelInsertEditClinicButtons.anchor = GridBagConstraints.NORTH;
 		gbc_panelInsertEditClinicButtons.insets = new Insets(0, 0, 5, 0);
 		gbc_panelInsertEditClinicButtons.fill = GridBagConstraints.HORIZONTAL;
 		gbc_panelInsertEditClinicButtons.gridx = 0;
@@ -417,8 +422,7 @@ public class Employee extends JFrame {
 
 		// Insert clinic data + description 
 		GridBagConstraints gbc_panelInsertClinic = new GridBagConstraints();
-		gbc_panelInsertClinic.anchor = GridBagConstraints.NORTH;
-		gbc_panelInsertClinic.fill = GridBagConstraints.HORIZONTAL;
+		gbc_panelInsertClinic.fill = GridBagConstraints.BOTH;
 		gbc_panelInsertClinic.insets = new Insets(0, 0, 5, 0);
 		gbc_panelInsertClinic.gridx = 0;
 		gbc_panelInsertClinic.gridy = 2;
@@ -550,7 +554,7 @@ public class Employee extends JFrame {
 
 		// add new clinic
 		GridBagConstraints gbc_panelInsertClinicButton = new GridBagConstraints();
-		gbc_panelInsertClinicButton.anchor = GridBagConstraints.NORTH;
+		gbc_panelInsertClinicButton.anchor = GridBagConstraints.SOUTH;
 		gbc_panelInsertClinicButton.fill = GridBagConstraints.HORIZONTAL;
 		gbc_panelInsertClinicButton.gridx = 0;
 		gbc_panelInsertClinicButton.gridy = 3;
@@ -709,7 +713,7 @@ public class Employee extends JFrame {
  
  
 		JPanel panelVisitsResultsPerPatientMaster = new JPanel();
-		tabbedPaneEmployee.addTab("Storico visite", null, panelVisitsResultsPerPatientMaster, null);
+		tabbedPaneEmployee.addTab("Storico visite paziente", null, panelVisitsResultsPerPatientMaster, null);
 		panelVisitsResultsPerPatientMaster.setLayout(new CardLayout(0, 0));
 		CardLayout clpanelVisitsResultsPerPatientMaster = (CardLayout) panelVisitsResultsPerPatientMaster.getLayout();
 
@@ -836,7 +840,7 @@ public class Employee extends JFrame {
 		panelEmployee.add(panelEmployeeNorth, BorderLayout.NORTH);
 		panelEmployeeNorth.setLayout(new BorderLayout(0, 0));
 
-		JLabel lblWelcomeEmployee = new JLabel("Benvenuto " + name + " " + surname);
+		JLabel lblWelcomeEmployee = new JLabel("Benvenuto " + capitalizeString(name) + " " + capitalizeString(surname));
 		lblWelcomeEmployee.setHorizontalAlignment(SwingConstants.CENTER);
 		lblWelcomeEmployee.setFont(new Font("Tahoma", Font.BOLD, 22));
 		panelEmployeeNorth.add(lblWelcomeEmployee, BorderLayout.CENTER);

@@ -165,18 +165,18 @@ public class Database {
 				Map<String, Object> m = new HashMap<String, Object>();
 				
 				ResultSet rs = pst.executeQuery(); 
-				rs.next();
-				m.put("fiscalcode", rs.getString("fiscalcode"));
-				m.put("healthcarecompany", rs.getString("healthcarecompany")); 
-				m.put("name", rs.getString("name"));
-				m.put("surname", rs.getString("surname"));
-				m.put("birthdate", rs.getDate("birthdate"));
-				m.put("birthplace", rs.getString("birthplace"));
-				m.put("province", rs.getString("province")); 
-				m.put("email", rs.getString("email"));  
-				
-				return m;
-				
+				if(rs.next()){
+					m.put("fiscalcode", rs.getString("fiscalcode"));
+					m.put("healthcarecompany", rs.getString("healthcarecompany")); 
+					m.put("name", rs.getString("name"));
+					m.put("surname", rs.getString("surname"));
+					m.put("birthdate", rs.getDate("birthdate"));
+					m.put("birthplace", rs.getString("birthplace"));
+					m.put("province", rs.getString("province")); 
+					m.put("email", rs.getString("email"));  
+					
+					return m;
+				}
 			}
 
 		} catch (SQLException e1) {

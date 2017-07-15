@@ -1,4 +1,4 @@
-check
+﻿check by Combi
 - use case rispecchiano contenuto app
 - schemi corretti (costrutti)
 - corrispondenze tra diagrammi
