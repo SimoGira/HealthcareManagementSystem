@@ -20,15 +20,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Vector;
- 
-import javax.swing.AbstractListModel;
+
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -128,8 +126,6 @@ public class Employee extends JFrame {
 				vector.add(c.getCity());
 				vector.add(c.getProvince());
 				tableUpdateClinicsModel.addRow(vector);
-
-				System.out.println("clinica " + c.getName());
 
 			}
 		}
@@ -310,7 +306,6 @@ public class Employee extends JFrame {
 		tableVisitsFound.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent event) {
 				if (!event.getValueIsAdjusting()) {
-					System.out.println("selected row:" + tableVisitsFound.getSelectedRow());
 					textAreaVisitResult.setEnabled(true);
 				}
 			}
@@ -411,7 +406,6 @@ public class Employee extends JFrame {
 		tableUpdateClinics.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent event) {
 				if (!event.getValueIsAdjusting() && !panelInsertClinic.isVisible()) {
-					System.out.println(tableUpdateClinics.getSelectedRow());
 					visitIndex = tableUpdateClinics.getSelectedRow();
 					btnEditClinic.setEnabled(true);
 				}
@@ -661,14 +655,11 @@ public class Employee extends JFrame {
 
 				// add new
 				if (isAddingNewClinic) {
-
 					Database.getInstance().insertClinic(c);
-					System.out.println("clinic added");
 				}
 				// edit
 				else {
 					Database.getInstance().updateClinic(c);
-					System.out.println("clinic updated");
 				}
 
 				refreshEditableClinics();
@@ -697,9 +688,6 @@ public class Employee extends JFrame {
 						vector.add(c.getCity());
 						vector.add(c.getProvince());
 						tableUpdateClinicsModel.addRow(vector);
-
-						System.out.println("clinica " + c.getName());
-
 					}
 				}
 			}
@@ -864,7 +852,6 @@ public class Employee extends JFrame {
 		tableVisitsPatientResults.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent event) {
 				if (!event.getValueIsAdjusting()) {
-					System.out.println(tableVisitsPatientResults.getSelectedRow());
 					visitIndex = tableVisitsPatientResults.getSelectedRow(); 
 					btnViewVisitSelectedResult.setEnabled(true);
 				}
@@ -882,7 +869,6 @@ public class Employee extends JFrame {
 		btnViewVisitSelectedResult.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Visit index : " + visitIndex);
 				Visit v = visits.get(visitIndex); 
 				textPanePatientVisitResult.setText(v.toString());
 				// clpanelVisitsResultsPerPatientMaster = (CardLayout)
@@ -913,7 +899,6 @@ public class Employee extends JFrame {
 		JButton btnBackToViewVisitPerPatient = new JButton("Indietro");
 		btnBackToViewVisitPerPatient.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Clcked back buttoon");
 				clpanelVisitsResultsPerPatientMaster.previous(panelVisitsResultsPerPatientMaster);
 			}
 		});
@@ -941,8 +926,6 @@ public class Employee extends JFrame {
 		lblLogoutEmployee.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				System.out.println("Employee clicked on Logout");
-
 				OpenLoginWindow();
 				dispose();
 			}
@@ -958,6 +941,7 @@ public class Employee extends JFrame {
 		panelEmployeeNorthRightLabels.add(lblLogoutEmployee);
 
 
+		/*
 		JPanel panelClinicsAndServices = new JPanel();
 		getContentPane().add(panelClinicsAndServices, BorderLayout.CENTER);
 		panelClinicsAndServices.setLayout(new BorderLayout(0, 0));
@@ -970,7 +954,7 @@ public class Employee extends JFrame {
 
 		JLabel lblSelectCompany = new JLabel("Seleziona azienda:");
 		panelClinicsAndServicesNorth.add(lblSelectCompany);
-
+		
 
 		JComboBox<String> comboBoxSelectCompany = new JComboBox<String>();
 		comboBoxSelectCompany.setPreferredSize(new Dimension(150, 27));
@@ -996,8 +980,9 @@ public class Employee extends JFrame {
 				listClinics.setSelectedIndex(0);
 			}
 		});
-
+		*/
 		refreshEditableClinics();
+		
  
 		// add clinics
 		for (Clinic c : editableClinics)
