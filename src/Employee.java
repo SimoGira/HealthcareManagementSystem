@@ -208,7 +208,7 @@ public class Employee extends JFrame {
 		
 		
 		JPanel panelEmployee = new JPanel();
-		getContentPane().add(panelEmployee, "panelEmployee");
+		getContentPane().add(panelEmployee, BorderLayout.CENTER);
 		panelEmployee.setLayout(new BorderLayout(0, 0));
 
 		JTabbedPane tabbedPaneEmployee = new JTabbedPane(JTabbedPane.TOP);
@@ -959,7 +959,7 @@ public class Employee extends JFrame {
 		panelEmployeeNorthRightLabels.add(lblLogoutEmployee);
 
 		JPanel panelClinicsAndServices = new JPanel();
-		getContentPane().add(panelClinicsAndServices, "panelClinicsAndServices");
+		getContentPane().add(panelClinicsAndServices, BorderLayout.CENTER);
 		panelClinicsAndServices.setLayout(new BorderLayout(0, 0));
 
 		JPanel panelClinicsAndServicesNorth = new JPanel();
