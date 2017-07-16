@@ -126,7 +126,7 @@ public class Login extends JFrame {
 		gbc_lblFiscalCode.gridy = 0;
 		panelCenterPatientLogin.add(lblFiscalCode, gbc_lblFiscalCode);
 
-		JFormattedTextField formattedTextFieldFiscalCode = new JFormattedTextField("MTBMHM93M51D251I");
+		JFormattedTextField formattedTextFieldFiscalCode = new JFormattedTextField();
 		GridBagConstraints gbc_formattedTextFieldFiscalCode = new GridBagConstraints();
 		gbc_formattedTextFieldFiscalCode.insets = new Insets(0, 0, 5, 0);
 		gbc_formattedTextFieldFiscalCode.fill = GridBagConstraints.HORIZONTAL;
@@ -207,7 +207,6 @@ public class Login extends JFrame {
 		lblUsername.setAlignmentX(Component.RIGHT_ALIGNMENT);
 
 		JTextField textField_username = new JTextField(16);
-		textField_username.setText("JOBIT0001");
 		GridBagConstraints gbc_textField_usr = new GridBagConstraints();
 		gbc_textField_usr.fill = GridBagConstraints.BOTH;
 		gbc_textField_usr.insets = new Insets(0, 0, 5, 0);

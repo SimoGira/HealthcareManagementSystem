@@ -310,7 +310,7 @@ public class Patient extends User{
 		lblSelectBookVisitUrgency.setHorizontalAlignment(SwingConstants.TRAILING);
 
 		JComboBox<String> comboBoxSelectBookVisitUrgency = new JComboBox<String>();
-		comboBoxSelectBookVisitUrgency.setModel(new DefaultComboBoxModel<String>(new String[] { "Bassa", "Medio", "Alta" }));
+		comboBoxSelectBookVisitUrgency.setModel(new DefaultComboBoxModel<String>(new String[] { "bassa", "medio", "alta" }));
 
 		JLabel lblSelectBookVisitRegime = new JLabel("Regime:");
 		lblSelectBookVisitRegime.setHorizontalAlignment(SwingConstants.TRAILING);
