@@ -3,7 +3,6 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
-import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Toolkit;
@@ -37,20 +36,16 @@ import javax.swing.JTextPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
-import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
-public class Patient extends JFrame{
+public class Patient extends User{
 
 	private static final long serialVersionUID = 123L;
-	private String fiscalcode;
 	private String healthcarecompany;
-	private String name;  
-	private String surname;
 	private Date birthdate;
 	private String birthplace; 
 	private String province;
@@ -66,6 +61,7 @@ public class Patient extends JFrame{
 	private int visitIndex;
 	private JButton btnViewVisitsPatient;
 	private JButton btnBookVisit;
+	private JComboBox<Integer> comboBoxSelectBookVisitHour;
 
 	public Patient(Map<String, Object> map) {
 		setParamenters(map);
@@ -79,7 +75,8 @@ public class Patient extends JFrame{
 		setLocationRelativeTo(null);
 		setVisible(true);
 	}
-	private void setParamenters(Map<String, Object> map) {
+	
+	protected void setParamenters(Map<String, Object> map) {
 
 		fiscalcode = (String) map.get("fiscalcode");
 		healthcarecompany = (String) map.get("healthcarecompany");
@@ -90,12 +87,9 @@ public class Patient extends JFrame{
 		province=(String) map.get("province");
 		email=(String) map.get("email");
 	}
+ 
 
-	private String capitalizeString(String s){
-		return s.substring(0, 1).toUpperCase() + s.substring(1);
-	}
-
-	private void initializeView() {
+	protected void initializeView() {
 		JPanel panelPatient = new JPanel();
 		getContentPane().add(panelPatient, BorderLayout.CENTER);
 		panelPatient.setLayout(new BorderLayout(0, 0));
@@ -288,7 +282,7 @@ public class Patient extends JFrame{
 
 		JLabel lblSelectBookVisitHour = new JLabel("Ora:");
 		lblSelectBookVisitHour.setHorizontalAlignment(SwingConstants.TRAILING);
-		JComboBox<Integer> comboBoxSelectBookVisitHour = new JComboBox<Integer>();
+		comboBoxSelectBookVisitHour = new JComboBox<Integer>();
 
 		comboBoxSelectBookVisitDay = new JComboBox<Integer>();
 		comboBoxSelectBookVisitDay.addActionListener(new ActionListener() {
@@ -476,21 +470,6 @@ public class Patient extends JFrame{
 
 	}
 
-	private void OpenLoginWindow() {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					// Set System L&F
-					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-					Login frame = new Login();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
 	private void updateBookingDays() {
 		int year = (int) comboBoxSelectBookVisitYear.getSelectedItem();
 		int month = (int) comboBoxSelectBookVisitMonth.getSelectedIndex() + 1;
@@ -504,14 +483,13 @@ public class Patient extends JFrame{
 		int maxDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 		
 		comboBoxSelectBookVisitDay.removeAllItems();
+		comboBoxSelectBookVisitHour.removeAllItems();
 
 		int currentYear = Calendar.getInstance().get(Calendar.YEAR);
 		int currentMonth = Calendar.getInstance().get(Calendar.MONTH) + 1;
 		int currentDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-		System.out.println("month:"+currentMonth + " - " + maxDay);
 
 		try {
- 
 			Date d1 = new Date(sdf.parse( currentDay+ "/" + currentMonth  + "/" +  currentYear).getTime()); 
 			for (int i = 1; i < 32; i++) {
 				Date d2 = new Date(sdf.parse(i + "/" + month + "/" + year).getTime()); 
@@ -521,7 +499,8 @@ public class Patient extends JFrame{
 		}
 		catch (ParseException e) { }
  
-		btnBookVisit.setEnabled(comboBoxSelectBookVisitDay.getItemCount() > 0);
+		boolean active = comboBoxSelectBookVisitDay.getItemCount() > 0 || comboBoxSelectBookVisitHour.getItemCount() > 0;
+		btnBookVisit.setEnabled(active);
 		 
 	}
 

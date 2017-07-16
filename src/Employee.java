@@ -2,8 +2,7 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.EventQueue;
+import java.awt.Dimension; 
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -46,17 +45,13 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 @SuppressWarnings("serial")
-public class Employee extends JFrame { 
-	
-	private String name;
-	private String surname;
-	private String company;
+public class Employee extends User { 
+
+
 	//private String fiscalcode;
 	//private String employeeCode;
 	//private String job;
 	//private String clinic;
-
-
 
 	// interface variables
 	private ArrayList<Visit> visits;
@@ -71,14 +66,14 @@ public class Employee extends JFrame {
 	protected String currentClinicName;
 	protected ArrayList<Clinic> editableClinics = new ArrayList<Clinic>();
 	private DefaultTableModel tableUpdateClinicsModel;
-	
+
 	public Employee(Map<String, Object> map) { 
 
 		setParamenters(map);
 		setTitle("HEALTHCARE MANAGEMENT SYSTEM");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Employee.class.getResource("/img/healthcare-icon.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		 
+
 		initializeView();
 
 		setSize(800, 700);
@@ -86,30 +81,14 @@ public class Employee extends JFrame {
 		setVisible(true);
 	}
 
-
-	private void OpenLoginWindow() {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					// Set System L&F
-					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-					Login frame = new Login();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
 	private void refreshEditableClinics() {
 		// clear 
 		while (tableUpdateClinicsModel.getRowCount() > 0)
 			tableUpdateClinicsModel.removeRow(0);
 
-		 
+
 		editableClinics = Database.getInstance().getClinics(company);
-		 
+
 
 		int i = 1;
 		if (editableClinics != null) {
@@ -129,7 +108,7 @@ public class Employee extends JFrame {
 		}
 	}
 
-	private void setParamenters(Map<String, Object> map) {
+	protected void setParamenters(Map<String, Object> map) {
 		name = (String) map.get("name");
 		company = (String) map.get("company");
 		surname = (String) map.get("surname");
@@ -137,15 +116,10 @@ public class Employee extends JFrame {
 		//fiscalcode = (String) map.get("fiscalcode"); 
 		//clinic = (String) map.get("clinic"); 
 	}
-	
-	private String capitalizeString(String s){
-		return s.substring(0, 1).toUpperCase() + s.substring(1);
-	}
 
-	// ----------------------------------------------- EMPLOYEE SECTION -------------------------------------------------------------------
-	private void initializeView() {
-		
-		
+	protected void initializeView() {
+
+
 		JPanel panelEmployee = new JPanel();
 		getContentPane().add(panelEmployee, BorderLayout.CENTER);
 
@@ -263,7 +237,7 @@ public class Employee extends JFrame {
 		scrollPaneInfoVisitInsertionSouth.setViewportBorder(
 				new TitledBorder(null, "Risultato visita", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panelInfoVisitInsertion.add(scrollPaneInfoVisitInsertionSouth, BorderLayout.SOUTH);
- 
+
 		textAreaVisitResult.setEnabled(false);
 		textAreaVisitResult.setRows(3);
 		JButton btnInsertNewVisitResult = new JButton("Inserisci");
@@ -381,7 +355,7 @@ public class Employee extends JFrame {
 				int row = tableUpdateClinics.getSelectedRow();
 				if (row == -1)
 					return;
- 
+
 				tableUpdateClinics.setEnabled(false);
 				btnEditClinic.setEnabled(false);
 				btnAddNewClinic.setEnabled(false);
@@ -704,14 +678,14 @@ public class Employee extends JFrame {
 			public void changedUpdate(DocumentEvent e) {}
 
 		};
- 
+
 		textFieldInsertClinicName.getDocument().addDocumentListener(textFieldListener);  
 		textFieldInsertClinicStreet.getDocument().addDocumentListener(textFieldListener);
 		textFieldInsertClinicCity.getDocument().addDocumentListener(textFieldListener);
 		textFieldInsertClinicCAP.getDocument().addDocumentListener(textFieldListener);
 		textAreaInsertClinicDescription.getDocument().addDocumentListener(textFieldListener);
- 
- 
+
+
 		JPanel panelVisitsResultsPerPatientMaster = new JPanel();
 		tabbedPaneEmployee.addTab("Storico visite paziente", null, panelVisitsResultsPerPatientMaster, null);
 		panelVisitsResultsPerPatientMaster.setLayout(new CardLayout(0, 0));
@@ -776,7 +750,7 @@ public class Employee extends JFrame {
 
 		JButton btnViewVisitSelectedResult = new JButton("Visualizza");
 		btnViewVisitSelectedResult.setEnabled(false);
-		
+
 		JTable tableVisitsPatientResults = new JTable();
 		tableVisitsPatientResults.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tableVisitsPatientResults.setModel(employeeHistoryModel);
@@ -797,7 +771,7 @@ public class Employee extends JFrame {
 		panelViewVisitPerPatient.add(panelViewVisitPerPatientSouth, BorderLayout.SOUTH);
 
 		JTextPane textPanePatientVisitResult = new JTextPane();
-		
+
 		btnViewVisitSelectedResult.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
@@ -815,7 +789,7 @@ public class Employee extends JFrame {
 		JScrollPane scrollPanepanelViewVisitResultsPerPatient = new JScrollPane();
 		panelViewVisitResultsPerPatient.add(scrollPanepanelViewVisitResultsPerPatient, BorderLayout.CENTER);
 
-		
+
 		textPanePatientVisitResult.setContentType("text/html");
 		scrollPanepanelViewVisitResultsPerPatient.setViewportView(textPanePatientVisitResult);
 
@@ -871,12 +845,12 @@ public class Employee extends JFrame {
 
 
 		refreshEditableClinics();
-		
- 
+
+
 		// add clinics
 		for (Clinic c : editableClinics)
 			comboBoxClinicVisitInsertion.addItem(c.getName());
- 
+
 
 
 	}
