@@ -131,17 +131,17 @@ public class Database {
 				Map<String, Object> m = new HashMap<String, Object>();
 				
 				ResultSet rs = pst.executeQuery(); 
-				rs.next();
-				m.put("fiscalCode", rs.getString("fiscalcode"));
-				m.put("name", rs.getString("name"));
-				m.put("surname", rs.getString("surname"));
-				m.put("clinic", rs.getString("clinic"));
-				m.put("company", rs.getString("company"));
-				m.put("job", rs.getString("job"));
+				
+				if(rs.next()){
+					m.put("fiscalCode", rs.getString("fiscalcode"));
+					m.put("name", rs.getString("name"));
+					m.put("surname", rs.getString("surname"));
+					m.put("clinic", rs.getString("clinic"));
+					m.put("company", rs.getString("company"));
+					m.put("job", rs.getString("job"));
 				    
 				return m;
-			
-				
+				}
 			} 
 
 		} catch (SQLException e1) {
@@ -165,18 +165,18 @@ public class Database {
 				Map<String, Object> m = new HashMap<String, Object>();
 				
 				ResultSet rs = pst.executeQuery(); 
-				rs.next();
-				m.put("fiscalcode", rs.getString("fiscalcode"));
-				m.put("healthcarecompany", rs.getString("healthcarecompany")); 
-				m.put("name", rs.getString("name"));
-				m.put("surname", rs.getString("surname"));
-				m.put("birthdate", rs.getDate("birthdate"));
-				m.put("birthplace", rs.getString("birthplace"));
-				m.put("province", rs.getString("province")); 
-				m.put("email", rs.getString("email"));  
-				
-				return m;
-				
+				if(rs.next()){
+					m.put("fiscalcode", rs.getString("fiscalcode"));
+					m.put("healthcarecompany", rs.getString("healthcarecompany")); 
+					m.put("name", rs.getString("name"));
+					m.put("surname", rs.getString("surname"));
+					m.put("birthdate", rs.getDate("birthdate"));
+					m.put("birthplace", rs.getString("birthplace"));
+					m.put("province", rs.getString("province")); 
+					m.put("email", rs.getString("email"));  
+					
+					return m;
+				}
 			}
 
 		} catch (SQLException e1) {

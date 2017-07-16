@@ -166,14 +166,13 @@ public class Login extends JFrame {
 				String PIN = new String(passwordFieldPIN.getPassword());
 
 				// CHECK LOGIN
-
 				Map<String, Object> patientInfo = Database.getInstance().checkPatient(fiscalCode, PIN);
 				if (patientInfo != null) {
 
 					new Patient(patientInfo);
 					dispose(); 																														// valutare un possibile set visible false
 				} else
-					JOptionPane.showMessageDialog(null, "Codice fiscale o PIN errati o mancanti", "Errore accesso",
+					JOptionPane.showMessageDialog(null, "Codice fiscale o PIN errati o inesistenti", "Errore accesso",
 							JOptionPane.WARNING_MESSAGE);
 			}
 		});
