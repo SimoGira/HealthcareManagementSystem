@@ -42,7 +42,7 @@ create table patient(
 
 create table employee(
     fiscalcode varchar primary key check(fiscalcode similar to '[A-Z]{6}[0-9]{2}[A-Z][0-9]{2}[A-Z][0-9]{3}[A-Z]'),
-    employeeCode varchar(9) check(employeeCode similar to 'JOBIT[0-9]{4}'),
+    employeeCode varchar(9) check(employeeCode similar to 'EMP[0-9]{4}'),
 	password varchar(30) NOT NULL,
     name varchar(50) not null,
     surname varchar(50) not null,
