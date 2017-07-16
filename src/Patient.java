@@ -432,7 +432,7 @@ public class Patient extends User{
 				v.setUrgency(comboBoxSelectBookVisitUrgency.getSelectedItem().toString());
 				Database.getInstance().bookVisit(v);
 				updateBookingDays();
-				JOptionPane.showMessageDialog(null, "Prenotazione effettuta con successo", "Informazione",JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Prenotazione effettuta con successo.\nUna mail di conferma e' stata inviata all'indirizzo: " + email, "Informazione",JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 		btnBookVisit.setToolTipText("Clicca per prenotare");
