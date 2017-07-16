@@ -218,7 +218,7 @@ public class Database {
 	{
 		try(Connection con = DriverManager.getConnection(url, user, password))
 		{
-			String query = "SELECT * FROM visit WHERE company = ? AND clinic = ? AND result IS NULL AND date = ? ORDER BY patient";
+			String query = "SELECT * FROM visit WHERE company = ? AND clinic = ? AND result IS NULL AND date = ? AND date < NOW() ORDER BY patient";
 			try(PreparedStatement pst = con.prepareStatement(query)){
 				pst.clearParameters();
 				pst.setString(1, company); 
