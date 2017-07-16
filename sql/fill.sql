@@ -30,7 +30,7 @@ VALUES
  ('GENETICA MEDICA', 'cp01', 'via alighieri 8', '02235', 'Verona', 'VR', '12/12/1990', ' '),
  ('ANGIOEDEMA EREDITARIO ED ALTRE FORME DI ANGIOEDEMA', 'cp01', 'via alighieri 8', '02235', 'Verona', 'VR', '12/12/1990','descrizoine_temp'),
  ('IMMUNODEFICIENZE CONGENITE E ACQUISITE (DIVISIONALE)', 'cp01', 'via alighieri 8', '02235', 'Verona', 'VR', '12/12/1990','descrizoine_temp'),
- ('PATOLOGIA RICOSTRUTTIVA DELLA MAMMELLA', 'cp01', 'via alighieri 8', '02235', 'Verona', 'VR', '12/12/1990','descrizoine_temp'),
+ ('PATOLOGIA RICOSTRUTTIVA DEI TESSUTI', 'cp01', 'via alighieri 8', '02235', 'Verona', 'VR', '12/12/1990','descrizoine_temp'),
  ('NEOPLASIE POLMONARI E TRATTO GASTROENTERICO', 'cp02', 'via alighieri 8', '02235', 'Verona', 'VR', '12/12/1990','descrizoine_temp'),
  ('NEOPLASIE VARIE', 'cp02', 'via alighieri 8', '02235', 'Verona', 'VR', '12/12/1990','descrizoine_temp'),
  ('AMBULATORIO CELIACHIA', 'cp03', 'via alighieri 8', '02235', 'Verona', 'VR', '12/12/1990','descrizoine_temp'),
@@ -46,7 +46,7 @@ VALUES
 ('GENETICA MEDICA', 'cp01', 'visita geriatrica', 'privata'),
 ('ANGIOEDEMA EREDITARIO ED ALTRE FORME DI ANGIOEDEMA', 'cp01', 'visita angiodema', 'rimborsata dal sistema sanitario'),
 ('IMMUNODEFICIENZE CONGENITE E ACQUISITE (DIVISIONALE)', 'cp01', 'visita polmonare', 'privata'),
-('PATOLOGIA RICOSTRUTTIVA DELLA MAMMELLA', 'cp01', 'ricostruzione tessuti', 'privata'),
+('PATOLOGIA RICOSTRUTTIVA DEI TESSUTI', 'cp01', 'ricostruzione tessuti', 'privata'),
 ('NEOPLASIE POLMONARI E TRATTO GASTROENTERICO', 'cp02', 'visita gastroenterica', 'privata'),
 ('NEOPLASIE POLMONARI E TRATTO GASTROENTERICO', 'cp02', 'visita polmonare', 'privata'),
 ('OCULISTICA', 'cp01', 'visita oculistica fotorecettori', 'privata'),
@@ -57,12 +57,12 @@ VALUES
 
 INSERT INTO employee(fiscalcode, employeeCode,password, name, surname, job, clinic, company)
 VALUES
-('RFCVCV85A42E952E', 'JOBIT0001', 'cane', 'enrico', 'gregorio', 'dermatologo', 'GENETICA MEDICA', 'cp01'),
-('NDRMSN85A42E952E', 'JOBIT0002', 'gatto', 'andrea', 'masini', 'oncologo', 'GENETICA MEDICA', 'cp01'),
-('MRCNRR85A42E952E', 'JOBIT0003', 'occhio', 'marco', 'nero', 'oculista', 'NEOPLASIE POLMONARI E TRATTO GASTROENTERICO', 'cp02'),
-('PCCDFG85A42E952E', 'JOBIT0004', 'asd', 'piero', 'verdi', 'dentista', 'NEOPLASIE POLMONARI E TRATTO GASTROENTERICO', 'cp02'),
-('CMBCRL74R10L781B', 'JOBIT0005', 'ingegneria', 'carlo', 'combi', 'oculista', 'OCULISTICA', 'cp01'),
-('CSBCRL74R10L781B', 'JOBIT0006', 'pelo', 'carolo', 'casabassa', 'oculista', 'OCULISTICA', 'cp01');
+('RFCVCV85A42E952E', 'EMP0001', 'cane', 'enrico', 'verdi', 'dermatologo', 'GENETICA MEDICA', 'cp01'),
+('NDRMSN85A42E952E', 'EMP0002', 'gatto', 'aldo', 'masini', 'oncologo', 'GENETICA MEDICA', 'cp01'),
+('MRCNRR85A42E952E', 'EMP0003', 'occhio', 'marco', 'neri', 'oculista', 'NEOPLASIE POLMONARI E TRATTO GASTROENTERICO', 'cp02'),
+('PCCDFG85A42E952E', 'EMP0004', 'asd', 'piero', 'verdi', 'dentista', 'NEOPLASIE POLMONARI E TRATTO GASTROENTERICO', 'cp02'),
+('CMBCRL74R10L781B', 'EMP0005', 'ingegneria', 'carlo', 'rossi', 'oculista', 'OCULISTICA', 'cp01'),
+('CSBCRL74R10L781B', 'EMP0006', 'pelo', 'silvio', 'gialli', 'oculista', 'OCULISTICA', 'cp01');
 
 INSERT INTO visit (patient, clinic, company, serviceName, doctor, date, hour, urgency, result)
 VALUES
