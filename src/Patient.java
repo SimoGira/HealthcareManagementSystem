@@ -44,7 +44,6 @@ import javax.swing.table.DefaultTableModel;
 
 public class Patient extends User{
 
-	private static final long serialVersionUID = 123L;
 	private String healthcarecompany;
 	private Date birthdate;
 	private String birthplace; 

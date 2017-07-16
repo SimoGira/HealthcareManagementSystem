@@ -41,7 +41,6 @@ import javax.swing.event.ListSelectionListener;
 
 public class Login extends JFrame {
 
-	private static final long serialVersionUID = 1234L;
 	private CardLayout clLogin;
 	private ArrayList<String[]> companiesList; // forse da mettere locale
 	private JComboBox<String> comboBoxSelectCompany; // forse da mettere locale
