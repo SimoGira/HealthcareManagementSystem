@@ -87,7 +87,6 @@ VALUES
 ('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'visita oncologica', 'RFCVCV85A42E952E', '01/03/2018', 13, 'media', NULL),
 ('ZGZMXP52L08F208P', 'GENETICA MEDICA', 'cp01', 'visita oncologica', 'RFCVCV85A42E952E', '01/03/2018', 14, 'bassa', NULL),
 ('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'visita oncologica', 'RFCVCV85A42E952E', '01/03/2018', 15, 'bassa', NULL),
-
 ('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'visita oncologica', 'RFCVCV85A42E952E', '02/03/2017', 8, 'bassa', NULL),
 ('CCLNQL28P46B570U', 'GENETICA MEDICA', 'cp01', 'visita oncologica', 'RFCVCV85A42E952E', '02/03/2017', 9, 'media', NULL),
 ('MTBMHM93M51D251I', 'GENETICA MEDICA', 'cp01', 'visita oncologica', 'RFCVCV85A42E952E', '03/03/2017', 10, 'bassa', NULL),
