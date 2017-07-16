@@ -61,10 +61,10 @@ public class Employee extends User {
 	private JComboBox<String> comboBoxInsertClinicProvince;
 	private JFormattedTextField formattedTextFieldInsertClinicContractDate;
 	private JTextArea textAreaInsertClinicDescription;
-	protected int visitIndex;
-	protected boolean isAddingNewClinic;
-	protected String currentClinicName;
-	protected ArrayList<Clinic> editableClinics = new ArrayList<Clinic>();
+	private int visitIndex;
+	private boolean isAddingNewClinic;
+	private String currentClinicName;
+	private ArrayList<Clinic> editableClinics = new ArrayList<Clinic>();
 	private DefaultTableModel tableUpdateClinicsModel;
 
 	public Employee(Map<String, Object> map) { 
