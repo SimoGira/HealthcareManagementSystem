@@ -278,9 +278,9 @@ public class Employee extends User {
 				textAreaVisitResult.setText(null);
 
 				if(email != null)
-					JOptionPane.showMessageDialog(null, "Il risultato della vista è stato inserito correttamente.\nUna mail di notifica e' stata inviata all'indirizzo: " + email,"Informazione", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Il risultato della vista ï¿½ stato inserito correttamente.\nUna mail di notifica e' stata inviata all'indirizzo: " + email,"Informazione", JOptionPane.INFORMATION_MESSAGE);
 				else
-					JOptionPane.showMessageDialog(null, "Il risultato della vista è stato inserito correttamente.","Informazione", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Il risultato della vista ï¿½ stato inserito correttamente.","Informazione", JOptionPane.INFORMATION_MESSAGE);
 
 				btnFindVisits.doClick();
 			}
@@ -293,7 +293,7 @@ public class Employee extends User {
 		tabbedPaneEmployee.addTab("Gestione ambulatori", null, panelInsertClinicMaster, null);
 		GridBagLayout gbl_panelInsertClinicMaster = new GridBagLayout();
 		gbl_panelInsertClinicMaster.columnWidths = new int[] { 579, 0 };
-		gbl_panelInsertClinicMaster.rowHeights = new int[] { 200, 0, 288, 33, 0 };
+		gbl_panelInsertClinicMaster.rowHeights = new int[] { 185, 27, 288, 33, 0 };
 		gbl_panelInsertClinicMaster.columnWeights = new double[] { 1.0, Double.MIN_VALUE };
 		gbl_panelInsertClinicMaster.rowWeights = new double[] { 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE };
 		panelInsertClinicMaster.setLayout(gbl_panelInsertClinicMaster);
@@ -362,6 +362,7 @@ public class Employee extends User {
 				panelInsertClinic.setVisible(true);
 				panelInsertClinicButton.setVisible(true);
 				Clinic clinic = editableClinics.get(row);
+				currentClinicName = clinic.getName();
 				textFieldInsertClinicName.setText(clinic.getName());
 				textFieldInsertClinicCity.setText(clinic.getCity());
 				textFieldInsertClinicStreet.setText(clinic.getStreet());
@@ -369,8 +370,6 @@ public class Employee extends User {
 				formattedTextFieldInsertClinicContractDate.setValue(clinic.getContractDate());
 				comboBoxInsertClinicProvince.setSelectedItem(clinic.getProvince());
 				textAreaInsertClinicDescription.setText(clinic.getDescription());
-				currentClinicName = clinic.getName();
-
 			}
 		});
 		btnAddNewClinic.addActionListener(new ActionListener() {
@@ -808,6 +807,12 @@ public class Employee extends User {
 		panelpanelViewVisitResultsPerPatientSouth.add(btnBackToViewVisitPerPatient);
 
 		JButton btnPrintReaultVisitPatient = new JButton("Stampa");
+		btnPrintReaultVisitPatient.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null, "Stampa in corso",
+						"Informazione", JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
 		panelpanelViewVisitResultsPerPatientSouth.add(btnPrintReaultVisitPatient);
 
 		JPanel panelEmployeeNorth = new JPanel();
