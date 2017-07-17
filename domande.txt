@@ -1,10 +1,10 @@
-﻿check by Combi
+check by Combi
 - use case rispecchiano contenuto app
 - schemi corretti (costrutti)
 - corrispondenze tra diagrammi
 - subtyping					// esempio funzione max(x as numero, y as numero), se "int" "float" sono di tipo numero allora max accetta entrambi
 - ereditarietà
-- abstract vs interface				// esempio classe uomo exetends mammifero vs esempio interface ICalc (utile sia per una calcolatrice che per punto geometrico)
+- abstract vs interface			// esempio classe uomo exetends mammifero vs esempio interface ICalc (utile sia per una calcolatrice che per punto geometrico)
 - incapsulamento				// esempio information hiding (attributi e metodi "private")
 - legacy					// sono sistemi datati che continua ad essere usato poiché l'utente non intende o non può rimpiazzarlo (esempio fortran con le banche)
 - come avete fatto i test?
