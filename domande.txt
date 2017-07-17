@@ -39,11 +39,11 @@ RISPOSTE PRIMO INTERROGATO
 3. <<include>>: La relazione di inclusione fra use case, rappresentata da una linea tratteggiata con indicazione dello stereotipo «include», indica che la funzione rappresentata da uno dei due use case
 		(quello alla base della freccia) include completamente la funzione rappresentata dall'altro (quello alla punta).
    
-   <<extend>>: La relazione di estensione fra use case, rappresentata da una linea tratteggiata con indicazione dello stereotipo «extend», indica che la funzione rappresentata dallo use case "estendente"
-	       (alla base della freccia) può essere impiegata nel contesto della funzione "estesa" (lo use case alla punta), ovvero ne rappresenta una sorta di arricchimento.
+<<extend>>: La relazione di estensione fra use case, rappresentata da una linea tratteggiata con indicazione dello stereotipo «extend», indica che la funzione rappresentata dallo use case "estendente"
+	   (alla base della freccia) può essere impiegata nel contesto della funzione "estesa" (lo use case alla punta), ovvero ne rappresenta una sorta di arricchimento.
 
-   NB:  «include» indica un frammento che viene sempre eseguito durante l'esecuzione del caso d'uso alla base della freccia.
-	«extend»  indica un frammento che può essere eseguito in determinate circostanze del caso d'uso alla punta della freccia.
+NB:  «include» indica un frammento che viene sempre eseguito durante l'esecuzione del caso d'uso alla base della freccia.
+«extend»  indica un frammento che può essere eseguito in determinate circostanze del caso d'uso alla punta della freccia.
 
 
 
