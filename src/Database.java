@@ -307,6 +307,43 @@ public class Database {
 
 		return null;
 	}
+	
+	public ArrayList<Visit> getVisitsHistory(String fiscalCode, int year)
+	{
+		try(Connection con = DriverManager.getConnection(url, user, password))
+		{
+			String query = "SELECT * FROM visit WHERE patient = ? AND NOT result IS NULL AND EXTRACT(YEAR FROM(date)) = ? ORDER BY date";
+			try(PreparedStatement pst = con.prepareStatement(query))
+			{
+				pst.clearParameters();
+				pst.setString(1, fiscalCode); 
+				pst.setLong(2, year); 
+				ResultSet rs = pst.executeQuery();
+				ArrayList<Visit> visits = new ArrayList<Visit>();
+				while(rs.next())
+				{
+					System.out.println("adding");
+					Visit v = new Visit();
+					v.setClinicName(rs.getString("clinic"));
+					v.setPatient(rs.getString("patient")); 
+					v.setCompanyId(rs.getString("company"));
+					v.setServiceName(rs.getString("servicename"));
+					v.setDoctor(rs.getString("doctor"));
+					v.setDate(rs.getDate("date"));
+					v.setHour(rs.getInt("hour"));
+					v.setUrgency(rs.getString("urgency")); 
+					v.setResult(rs.getString("result"));
+					visits.add(v);
+				}
+				return visits;
+			} 
+
+		} catch (SQLException e1) {
+			System.out.println( "Errore durante connessione al database: " + e1.getMessage() );
+		}
+
+		return null;
+	}
 
 
 	public ArrayList<Clinic> getClinics(String company)

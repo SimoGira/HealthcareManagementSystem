@@ -41,6 +41,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 public class Patient extends User{
 
@@ -61,6 +62,7 @@ public class Patient extends User{
 	private JButton btnViewVisitsPatient;
 	private JButton btnBookVisit;
 	private JComboBox<Integer> comboBoxSelectBookVisitHour;
+	private DefaultTableModel visitsHistoryModel;
 
 	public Patient(Map<String, Object> map) {
 		setParamenters(map);
@@ -147,7 +149,31 @@ public class Patient extends User{
 		JLabel lblSelectYearPatientVisit = new JLabel("Seleziona anno:");
 		panelHistoryNorth.add(lblSelectYearPatientVisit);
 
-		JComboBox<String> comboBoxVisitsYear = new JComboBox<String>();
+		JComboBox<Integer> comboBoxVisitsYear = new JComboBox<Integer>();
+		 
+		comboBoxVisitsYear.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				 int year = (Integer) comboBoxVisitsYear.getSelectedItem();
+				 while(visitsHistoryModel.getRowCount() > 0)
+					 visitsHistoryModel.removeRow(0);
+				 // fill table (visits history)
+				int i = 1;
+				patientVisits = Database.getInstance().getVisitsHistory(fiscalcode, year);
+				if (patientVisits != null) {
+					for (Visit c : patientVisits) {
+						Vector<Object> row = new Vector<Object>();
+						row.add(i++);
+						row.add(c.getDate().toString());
+						row.add(c.getHour());
+						row.add(c.getServiceName());
+						row.add(c.getUrgency());
+
+						visitsHistoryModel.addRow(row);
+					}
+				}
+			}
+		});
+
 		panelHistoryNorth.add(comboBoxVisitsYear);
 
 		JScrollPane scrollPaneHistory = new JScrollPane();
@@ -155,7 +181,7 @@ public class Patient extends User{
 
 		JTable tableHistoryVisits = new JTable();
 		tableHistoryVisits.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		DefaultTableModel visitsHistoryModel = new DefaultTableModel(
+		visitsHistoryModel = new DefaultTableModel(
 				new String[] { "N\u00B0", "Data", "Ora", "Tipo Visita", "Urgenza"}, 0) {
 			private static final long serialVersionUID = 5L;
 
@@ -439,16 +465,16 @@ public class Patient extends User{
 		bookVisitSouthButtonPanel.add(btnBookVisit);
 
 		// get years
-		ArrayList<Integer> years = Database.getInstance().getVisitsHistoryYears(fiscalcode);
-		System.out.println("BEFORE YEAR ------------");
+		ArrayList<Integer> years = Database.getInstance().getVisitsHistoryYears(fiscalcode); 
 		for (Integer y : years){
-			comboBoxVisitsYear.addItem(y.toString());
-			System.out.println("YEAR ------------" + y.toString());
+			comboBoxVisitsYear.addItem(y); 
 		}
 
 		// fill table (visits history)
+		while(visitsHistoryModel.getRowCount() > 0)
+			 visitsHistoryModel.removeRow(0);
 		int i = 1;
-		patientVisits = Database.getInstance().getVisitsHistory(fiscalcode);
+		patientVisits = Database.getInstance().getVisitsHistory(fiscalcode, years.get(0));
 		if (patientVisits != null) {
 			for (Visit c : patientVisits) {
 				Vector<Object> row = new Vector<Object>();
