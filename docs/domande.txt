@@ -1,10 +1,10 @@
-check by Combi
+﻿check by Combi
 - use case rispecchiano contenuto app
 - schemi corretti (costrutti)
 - corrispondenze tra diagrammi
 - subtyping					// esempio funzione max(x as numero, y as numero), se "int" "float" sono di tipo numero allora max accetta entrambi
 - ereditarietà
-- abstract vs interface			// esempio classe uomo exetends mammifero vs esempio interface ICalc (utile sia per una calcolatrice che per punto geometrico)
+- abstract vs interface				// esempio classe uomo exetends mammifero vs esempio interface ICalc (utile sia per una calcolatrice che per punto geometrico)
 - incapsulamento				// esempio information hiding (attributi e metodi "private")
 - legacy					// sono sistemi datati che continua ad essere usato poiché l'utente non intende o non può rimpiazzarlo (esempio fortran con le banche)
 - come avete fatto i test?
@@ -39,11 +39,18 @@ RISPOSTE PRIMO INTERROGATO
 3. <<include>>: La relazione di inclusione fra use case, rappresentata da una linea tratteggiata con indicazione dello stereotipo «include», indica che la funzione rappresentata da uno dei due use case
 		(quello alla base della freccia) include completamente la funzione rappresentata dall'altro (quello alla punta).
    
-<<extend>>: La relazione di estensione fra use case, rappresentata da una linea tratteggiata con indicazione dello stereotipo «extend», indica che la funzione rappresentata dallo use case "estendente"
-	   (alla base della freccia) può essere impiegata nel contesto della funzione "estesa" (lo use case alla punta), ovvero ne rappresenta una sorta di arricchimento.
+   <<extend>>: La relazione di estensione fra use case, rappresentata da una linea tratteggiata con indicazione dello stereotipo «extend», indica che la funzione rappresentata dallo use case "estendente"
+	       (alla base della freccia) può essere impiegata nel contesto della funzione "estesa" (lo use case alla punta), ovvero ne rappresenta una sorta di arricchimento.
 
-NB:  «include» indica un frammento che viene sempre eseguito durante l'esecuzione del caso d'uso alla base della freccia.
-«extend»  indica un frammento che può essere eseguito in determinate circostanze del caso d'uso alla punta della freccia.
+   NB:  «include» indica un frammento che viene sempre eseguito durante l'esecuzione del caso d'uso alla base della freccia.
+	«extend»  indica un frammento che può essere eseguito in determinate circostanze del caso d'uso alla punta della freccia.
+
+
+
+Plan driven: Più complesso del medoto Agile ....
+	-modello a cascada
+	-modello incrementale
+	-modello con riuso
 
 
 
